@@ -243,7 +243,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
 
                 {/* Bio & Current Work */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Bio</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Bio <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                   <div className="relative">
                     <FileText className="absolute left-4 top-4 text-gray-600" size={14} />
                     <textarea
@@ -257,7 +257,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Currently Building</label>
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Currently Building <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                   <div className="relative">
                     <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                     <input
@@ -273,7 +273,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                 {/* Socials */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">GitHub</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">GitHub <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
                       <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                       <input
@@ -286,7 +286,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Twitter</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Twitter <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
                       <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                       <input
@@ -299,7 +299,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Website</label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Website <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
                       <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                       <input

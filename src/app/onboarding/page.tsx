@@ -220,7 +220,7 @@ export default function Onboarding() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Building</label>
+                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Building <span className="text-gray-700">(Optional)</span></label>
                 <div className="relative group">
                   <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-silver transition-colors" size={16} />
                   <input
@@ -235,7 +235,7 @@ export default function Onboarding() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Bio</label>
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Bio <span className="text-gray-700">(Optional)</span></label>
               <div className="relative group">
                 <FileText className="absolute left-4 top-5 text-gray-600 group-focus-within:text-silver transition-colors" size={16} />
                 <textarea
