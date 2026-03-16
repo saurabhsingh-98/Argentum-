@@ -42,9 +42,9 @@ export default async function Home() {
         </ScrollReveal>
 
         <ScrollReveal delay={400}>
-            <p className="text-gray-400 text-lg md:text-xl max-w-2xl leading-relaxed">
-                The ultimate protocol for builders to verify their progress on-chain. 
-                Secure your legacy with immutable cryptographic proofs.
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+              The social platform for developers to share their daily builds. 
+              Secure your shipping logs and build your brand with proof-of-work.
             </p>
         </ScrollReveal>
 

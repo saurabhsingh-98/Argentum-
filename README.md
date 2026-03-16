@@ -1,11 +1,19 @@
 # Argentum [Ag]
-### *Build in public. Prove it forever.*
+**Build in public. Prove it forever.**
 
-**Argentum** is a social platform for developers to share what they are currently building. It's a "Twitter for Devs" where builders can ship quick logs of their progress and have their contributions saved as proof of work.
+> **Argentum is a "Twitter for Devs"** — a social space for builders to share real-time build logs and secure their work using blockchain.
+
 
 ---
 
-## 🚀 Purpose
+## 🛡️ Secure Your Uploads with Blockchain
+We use blockchain technology specifically to **make your uploads more secure**. By anchoring your build logs on a public ledger, Argentum provides unique security benefits:
+
+- **Anti-Theft Protection**: Once you ship a log, its unique fingerprint is stored on the blockchain. This makes it impossible for anyone else to steal your ideas or claim your work as their own.
+- **Unalterable Security**: Your uploads are cryptographically secured. No one can alter, delete, or tamper with your shipping history.
+- **Mathematically Verified Ownership**: Your "Proof of Build" serves as a permanent, explorer-accessible certificate of ownership that stays with you forever.
+
+
 The goal of Argentum is to provide a dedicated space for builders to upload and talk about their projects. It's built for developers who want to share their journey and for people who want to see what's being made in real-time.
 
 ## ✨ Features
