@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Github, Mail, Lock, LogIn, ArrowRight, UserPlus, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -84,16 +85,31 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="glass-card p-10 border-silver/20 bg-[#0a0a0a]/50 backdrop-blur-2xl shadow-2xl relative group/card">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="glass-card p-10 border-silver/20 bg-[#0a0a0a]/50 backdrop-blur-2xl shadow-2xl relative group/card"
+        >
           {/* Decorative Corner */}
           <div className="absolute -top-1 -right-1 w-8 h-8 border-t border-r border-silver/40 rounded-tr-xl" />
           
-          <h1 className="text-xl font-bold text-white mb-2 tracking-tight">
-            {isLogin ? 'Welcome back, Builder' : 'Join the Protocol'}
-          </h1>
-          <p className="text-sm text-gray-500 mb-8 font-medium">
-            {isLogin ? 'Sign in to capture your ship logs.' : 'Create an account to start your build streak.'}
-          </p>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isLogin ? 'login' : 'signup'}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <h1 className="text-xl font-bold text-white mb-2 tracking-tight">
+                {isLogin ? 'Welcome back, Builder' : 'Join the Protocol'}
+              </h1>
+              <p className="text-sm text-gray-500 mb-8 font-medium">
+                {isLogin ? 'Sign in to capture your ship logs.' : 'Create an account to start your build streak.'}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-red-500 text-xs font-bold animate-shake">
@@ -169,8 +185,19 @@ export default function LoginPage() {
                 ${isLoading ? 'bg-gray-800 text-gray-400 cursor-not-allowed' : 'silver-metallic shadow-glow hover:brightness-110'}
               `}
             >
-              {isLoading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
-              {isLogin ? <LogIn size={16} /> : <UserPlus size={16} />}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isLogin ? 'signin-btn' : 'signup-btn'}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-2"
+                >
+                  {isLoading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
+                  {isLogin ? <LogIn size={16} /> : <UserPlus size={16} />}
+                </motion.div>
+              </AnimatePresence>
             </button>
           </form>
 
@@ -185,7 +212,7 @@ export default function LoginPage() {
               {isLogin ? 'Sign Up' : 'Log In'}
             </button>
           </div>
-        </div>
+        </motion.div>
         
         <p className="mt-12 text-center text-[10px] text-gray-600 font-bold uppercase tracking-[0.2em] leading-relaxed">
           SECURE BLOCKCHAIN-BACKED AUTHENTICATION <br />
