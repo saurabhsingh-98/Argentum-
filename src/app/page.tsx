@@ -33,6 +33,12 @@ export default async function Home() {
     <div className="flex flex-col gap-24 py-12 md:py-24 relative overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="mesh-gradient-bg opacity-30 pointer-events-none" />
+      
+      {/* Animated Glow Blobs */}
+      <div className="glow-blob -top-24 -left-20 opacity-40 animate-blob" />
+      <div className="glow-blob top-1/2 -right-40 opacity-30 animate-blob" style={{ animationDelay: '2s' }} />
+      <div className="glow-blob -bottom-40 left-1/2 opacity-20 animate-blob" style={{ animationDelay: '4s' }} />
+
       <div className="absolute top-0 left-0 w-full h-[1000px] bg-gradient-to-b from-accent/5 to-transparent pointer-events-none" />
       
       {/* Decorative Particles */}
@@ -42,7 +48,7 @@ export default async function Home() {
 
       <section className="container mx-auto px-4 text-center flex flex-col items-center gap-8 relative z-10">
         <ScrollReveal direction="down">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-white silver-glow"></span>

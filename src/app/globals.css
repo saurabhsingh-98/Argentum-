@@ -18,6 +18,7 @@
 
   --animate-shimmer: shimmer 2s linear infinite;
   --animate-mesh: mesh 10s ease-in-out infinite;
+  --animate-blob: blob 7s infinite;
 
   @keyframes shimmer {
     0% { background-position: -200% 0; }
@@ -27,6 +28,13 @@
   @keyframes mesh {
     0%, 100% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-20px) scale(1.05); }
+  }
+
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
   }
 }
 
@@ -140,7 +148,14 @@ body::before {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+}
+
+.silver-text-subtle {
+  background: linear-gradient(to bottom, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .shimmer-text {
@@ -192,6 +207,18 @@ body::before {
     radial-gradient(at 0% 100%, rgba(255, 255, 255, 0.01) 0, transparent 50%);
   filter: blur(80px);
   animation: mesh 15s ease-in-out infinite alternate;
+}
+
+.glow-blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: blob 15s infinite alternate;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Custom scrollbar */
