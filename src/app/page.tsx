@@ -30,9 +30,17 @@ export default async function Home() {
   ])
 
   return (
-    <div className="flex flex-col gap-24 py-12 md:py-24">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 text-center flex flex-col items-center gap-8 relative">
+    <div className="flex flex-col gap-24 py-12 md:py-24 relative overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="mesh-gradient-bg opacity-30 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[1000px] bg-gradient-to-b from-accent/5 to-transparent pointer-events-none" />
+      
+      {/* Decorative Particles */}
+      <div className="absolute top-1/4 left-10 w-24 h-24 border border-white/5 rounded-full animate-bounce opacity-20 hidden lg:block" style={{ animationDuration: '6s' }} />
+      <div className="absolute top-1/3 right-20 w-32 h-32 border border-white/5 rotate-45 animate-pulse opacity-10 hidden lg:block" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-1/4 left-1/4 w-16 h-16 border border-white/5 animate-spin opacity-10 hidden lg:block" style={{ animationDuration: '10s' }} />
+
+      <section className="container mx-auto px-4 text-center flex flex-col items-center gap-8 relative z-10">
         <ScrollReveal direction="down">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase tracking-widest mb-4">
                 <span className="relative flex h-2 w-2">
@@ -46,7 +54,11 @@ export default async function Home() {
         <ScrollReveal delay={200}>
             <h1 className="text-5xl md:text-8xl font-black tracking-tight text-white max-w-4xl leading-[1.05]">
                 Build in public. <br />
-                <span className="silver-glow-text italic">Prove it forever.</span>
+                <span className="silver-glow-text italic relative inline-block">
+                  Prove it forever.
+                  {/* Subtle shimmer overlay */}
+                  <span className="absolute inset-0 shimmer-text pointer-events-none opacity-50">Prove it forever.</span>
+                </span>
             </h1>
         </ScrollReveal>
 
@@ -59,11 +71,11 @@ export default async function Home() {
 
         <ScrollReveal delay={600}>
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <Link href="/new" className="silver-metallic px-8 py-4 rounded-2xl font-bold hover:brightness-110 transition-all flex items-center gap-2 group shadow-glow">
-                    Start building free
-                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <Link href="/new" className="silver-shimmer-btn px-10 py-5 rounded-2xl font-black text-black hover:brightness-110 transition-all flex items-center gap-3 group shadow-glow relative overflow-hidden">
+                    <span className="relative z-10">Start building free</span>
+                    <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link href="/explore" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-bold hover:bg-white/10 transition-all">
+                <Link href="/explore" className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-bold hover:bg-white/10 transition-all backdrop-blur-sm">
                     Explore builds
                 </Link>
             </div>

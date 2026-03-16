@@ -15,6 +15,19 @@
   --radius-lg: 0.85rem;
   --radius-md: calc(0.85rem - 2px);
   --radius-sm: calc(0.85rem - 4px);
+
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-mesh: mesh 10s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes mesh {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+  }
 }
 
 :root {
@@ -111,6 +124,74 @@ body::before {
 
 .blue-glow {
   box-shadow: 0 0 25px 2px rgba(37, 99, 235, 0.15);
+}
+
+.silver-glow-text {
+  background: linear-gradient(
+    to bottom right,
+    #ffffff 20%,
+    #a1a1aa 40%,
+    #ffffff 50%,
+    #a1a1aa 60%,
+    #ffffff 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 3s infinite;
+}
+
+.silver-shimmer-btn {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #d4d4d8 25%,
+    #ffffff 50%,
+    #d4d4d8 75%,
+    #ffffff 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+  transition: all 0.3s ease;
+}
+
+.silver-shimmer-btn:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+.mesh-gradient-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: #050505;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.03) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(255, 255, 255, 0.02) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 255, 255, 0.03) 0, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.01) 0, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(255, 255, 255, 0.01) 0, transparent 50%);
+  filter: blur(80px);
+  animation: mesh 15s ease-in-out infinite alternate;
 }
 
 /* Custom scrollbar */
