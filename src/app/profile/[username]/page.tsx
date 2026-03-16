@@ -10,10 +10,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     notFound()
   }
 
-  // Fetch user profile
+  // Fetch user profile - resilient select
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('*')
+    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count')
     .eq('username', username.toLowerCase())
     .single()
 

@@ -47,7 +47,7 @@ export default function Settings() {
         setBio(profile.bio || '')
         setCurrentlyBuilding(profile.currently_building || '')
         setGithubUsername(profile.github_username || '')
-        setTwitterUsername(profile.twitter_username || '')
+        setTwitterUsername(profile.x_handle || '')
         setWebsiteUrl(profile.website_url || '')
       }
       setLoading(false)
@@ -107,7 +107,7 @@ export default function Settings() {
           bio,
           currently_building: currentlyBuilding,
           github_username: githubUsername,
-          twitter_username: twitterUsername,
+          x_handle: twitterUsername,
           website_url: websiteUrl,
         })
         .eq('id', user.id)
@@ -237,7 +237,7 @@ export default function Settings() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Twitter Handle</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">X / Twitter Handle <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                 <div className="relative">
                   <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                   <input

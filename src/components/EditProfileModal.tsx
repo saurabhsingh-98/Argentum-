@@ -19,7 +19,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [bio, setBio] = useState(profile.bio || '')
   const [currentlyBuilding, setCurrentlyBuilding] = useState(profile.currently_building || '')
   const [githubUsername, setGithubUsername] = useState(profile.github_username || '')
-  const [twitterUsername, setTwitterUsername] = useState(profile.twitter_username || '')
+  const [twitterUsername, setTwitterUsername] = useState(profile.x_handle || '')
   const [websiteUrl, setWebsiteUrl] = useState(profile.website_url || '')
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || '')
   
@@ -110,7 +110,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
           bio,
           currently_building: currentlyBuilding,
           github_username: githubUsername,
-          twitter_username: twitterUsername,
+          x_handle: twitterUsername,
           website_url: websiteUrl,
           avatar_url: avatarUrl,
         })
@@ -125,7 +125,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         bio,
         currently_building: currentlyBuilding,
         github_username: githubUsername,
-        twitter_username: twitterUsername,
+        x_handle: twitterUsername,
         website_url: websiteUrl,
         avatar_url: avatarUrl,
       })
@@ -286,7 +286,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Twitter <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">X / Twitter <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
                       <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                       <input

@@ -150,13 +150,13 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                       <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">GitHub</span>
                     </Link>
                   )}
-                  {profile.twitter_username && (
-                    <Link href={`https://twitter.com/${profile.twitter_username.replace('@', '')}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group/social">
+                  {profile.x_handle && (
+                    <Link href={`https://x.com/${profile.x_handle.replace('@', '')}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group/social">
                       <div className="flex items-center gap-3">
-                        <Twitter size={16} className="text-[#1DA1F2]" />
-                        <span className="text-xs text-gray-400 group-hover/social:text-white font-medium">{profile.twitter_username}</span>
+                        <Twitter size={16} className="text-white" />
+                        <span className="text-xs text-gray-400 group-hover/social:text-white font-medium">{profile.x_handle}</span>
                       </div>
-                      <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">Twitter</span>
+                      <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">X / Twitter</span>
                     </Link>
                   )}
                   {profile.website_url && (
