@@ -104,11 +104,11 @@ export default function Settings() {
         .update({
           username: username.toLowerCase(),
           display_name: displayName,
-          bio,
-          currently_building: currentlyBuilding,
-          github_username: githubUsername,
-          x_handle: twitterUsername,
-          website_url: websiteUrl,
+          bio: bio || null,
+          currently_building: currentlyBuilding || null,
+          github_username: githubUsername || null,
+          x_handle: twitterUsername || null,
+          website_url: websiteUrl || null,
         })
         .eq('id', user.id)
 

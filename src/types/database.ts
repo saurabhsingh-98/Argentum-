@@ -31,7 +31,7 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          twitter_username?: string | null
+          x_handle?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
           streak_count?: number
@@ -45,7 +45,7 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          twitter_username?: string | null
+          x_handle?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
           streak_count?: number

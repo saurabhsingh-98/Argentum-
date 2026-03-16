@@ -113,8 +113,8 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
               </div>
 
               <Link 
-                href={profileUsername ? `/profile/${profileUsername}` : '#'} 
-                className={`group relative ${!profileUsername ? 'cursor-wait' : ''}`}
+                href={profileUsername ? `/profile/${profileUsername}` : user?.user_metadata?.username ? `/profile/${user.user_metadata.username}` : user ? '/onboarding' : '#'} 
+                className={`group relative ${!profileUsername && !user?.user_metadata?.username && user ? 'cursor-wait' : ''}`}
               >
                 <div className="w-10 h-10 rounded-xl border border-white/10 overflow-hidden bg-[#0d0d0d] flex items-center justify-center text-xs font-bold text-silver group-hover:border-white/40 group-hover:silver-glow transition-all duration-500">
                   {!profileUsername && user ? (
