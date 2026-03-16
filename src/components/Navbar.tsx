@@ -11,6 +11,8 @@ export default function Navbar() {
   const [showAuthModal, setShowAuthModal] = useState(false)
 
   useEffect(() => {
+    if (!supabase) return
+
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
@@ -22,9 +24,10 @@ export default function Navbar() {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [supabase])
 
   const handleSignIn = (provider: 'github' | 'google') => {
+    if (!supabase) return
     supabase.auth.signInWithOAuth({
       provider,
       options: {

@@ -17,6 +17,8 @@ export default function Onboarding() {
   const supabase = createClient()
 
   useEffect(() => {
+    if (!supabase) return
+
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -30,7 +32,7 @@ export default function Onboarding() {
       setUsername(user.user_metadata.user_name || '')
     }
     checkUser()
-  }, [])
+  }, [supabase, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

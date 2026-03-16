@@ -15,6 +15,11 @@ export default function ShipCard() {
     if (!content.trim()) return
     
     setIsShipping(true)
+    if (!supabase) {
+      alert("System offline: API Keys missing.")
+      setIsShipping(false)
+      return
+    }
     const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {

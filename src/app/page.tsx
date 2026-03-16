@@ -7,6 +7,15 @@ import ScrollReveal from '@/components/ScrollReveal'
 export default async function Home() {
   const supabase = await createClient()
 
+  if (!supabase) {
+    return (
+      <div className="flex flex-col gap-24 py-12 md:py-24 items-center">
+        <h1 className="text-2xl font-bold">Launch configuration incomplete.</h1>
+        <p className="text-gray-500">Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.</p>
+      </div>
+    )
+  }
+
   // Parallel fetching of stats
   const [
     { count: postCount },

@@ -23,6 +23,8 @@ export default function NewPost() {
   const supabase = createClient()
 
   useEffect(() => {
+    if (!supabase) return
+
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
@@ -32,7 +34,7 @@ export default function NewPost() {
       setUser(user)
     }
     checkUser()
-  }, [])
+  }, [supabase, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

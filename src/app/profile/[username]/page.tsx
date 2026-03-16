@@ -8,6 +8,10 @@ import Link from 'next/link'
 export default async function ProfilePage({ params }: { params: { username: string } }) {
   const supabase = await createClient()
   
+  if (!supabase) {
+    notFound()
+  }
+
   // Fetch user profile
   const { data: profile, error: profileError } = await supabase
     .from('users')
