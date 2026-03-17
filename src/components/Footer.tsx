@@ -53,10 +53,6 @@ export default function Footer() {
           <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest">
             © {new Date().getFullYear()} ARGENTUM PROTOCOL. ALL RIGHTS RESERVED.
           </p>
-          <div className="flex items-center gap-1.5 opacity-50 grayscale hover:grayscale-0 transition-all cursor-crosshair">
-            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Powered by</span>
-            <span className="text-silver text-[11px] font-black italic">Hedera Hashgraph</span>
-          </div>
         </div>
       </div>
     </footer>
