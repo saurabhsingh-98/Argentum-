@@ -11,6 +11,7 @@ import FollowButton from '@/components/FollowButton'
 import { createClient } from '@/lib/supabase/client'
 import ReportModal from './ReportModal'
 import StreakModal from './StreakModal'
+import FollowListModal from './FollowListModal'
 import { motion, useSpring, useTransform, animate } from 'framer-motion'
 
 interface ProfileContentProps {
@@ -30,6 +31,8 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [reportingPostId, setReportingPostId] = useState<string | null>(null)
   const [isStreakModalOpen, setIsStreakModalOpen] = useState(false)
+  const [isFollowModalOpen, setIsFollowModalOpen] = useState(false)
+  const [followModalTab, setFollowModalTab] = useState<'followers' | 'following'>('followers')
   const supabase = createClient()
   const router = useRouter()
 
@@ -262,15 +265,21 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
 
                   {/* Follower Stats */}
                   <div className="flex items-center gap-4 mt-1 font-mono">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-black text-white">{followCounts.followers}</span>
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest">Followers</span>
-                    </div>
+                    <button 
+                      onClick={() => { setFollowModalTab('followers'); setIsFollowModalOpen(true); }}
+                      className="flex items-center gap-1.5 hover:opacity-80 transition-all group"
+                    >
+                      <span className="text-sm font-black text-white group-hover:silver-glow-text">{followCounts.followers}</span>
+                      <span className="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-gray-300">Followers</span>
+                    </button>
                     <div className="w-1 h-1 rounded-full bg-gray-800" />
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-black text-white">{followCounts.following}</span>
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest">Following</span>
-                    </div>
+                    <button 
+                      onClick={() => { setFollowModalTab('following'); setIsFollowModalOpen(true); }}
+                      className="flex items-center gap-1.5 hover:opacity-80 transition-all group"
+                    >
+                      <span className="text-sm font-black text-white group-hover:silver-glow-text">{followCounts.following}</span>
+                      <span className="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-gray-300">Following</span>
+                    </button>
                   </div>
                 </div>
                 <div 
@@ -508,7 +517,14 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
         isOpen={isStreakModalOpen}
         onClose={() => setIsStreakModalOpen(false)}
         userId={profile.id}
+      />
+
+      <FollowListModal 
+        isOpen={isFollowModalOpen}
+        onClose={() => setIsFollowModalOpen(false)}
+        userId={profile.id}
         username={profile.username}
+        initialTab={followModalTab}
       />
     </div>
   )

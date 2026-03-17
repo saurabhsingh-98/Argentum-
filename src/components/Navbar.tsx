@@ -26,7 +26,11 @@ import AccountSwitcher from './AccountSwitcher'
 import { motion, AnimatePresence } from 'framer-motion'
 import StreakModal from './StreakModal'
 
-export default function Navbar() {
+interface NavbarProps {
+  onSearchClick?: () => void
+}
+
+export default function Navbar({ onSearchClick }: NavbarProps) {
   const supabase = createClient()
   const router = useRouter()
   const pathname = usePathname()
