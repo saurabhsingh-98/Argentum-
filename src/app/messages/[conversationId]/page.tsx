@@ -383,6 +383,14 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       setBgContextMenu(null)
   }
 
+  if (loading || !otherParticipant || !currentUser) {
+    return (
+      <div className="h-screen bg-[#050505] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-silver animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="flex h-screen bg-[#050505] text-white overflow-hidden relative selection:bg-silver/30" onContextMenu={handleBgContextMenu}>
       <div className="noise-bg absolute inset-0 pointer-events-none opacity-[0.03]" />

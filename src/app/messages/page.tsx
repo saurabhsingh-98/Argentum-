@@ -27,8 +27,12 @@ export default function MessagesPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         router.push('/auth/login')
-        return
       }
+      setUser(user)
+
+      const status = await initializeEncryption()
+      setEncryptionStatus(status?.status || 'ready')
+
       const { data: prof } = await supabase
         .from('users')
         .select('*')
