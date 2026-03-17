@@ -10,8 +10,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import AccountSwitcher from '@/components/AccountSwitcher'
 import { Settings, Users, LogOut, User } from 'lucide-react'
 
+const supabase = createClient()
+
 export default function MessagesPage() {
-  const supabase = createClient()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [conversations, setConversations] = useState<any[]>([])

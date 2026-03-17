@@ -50,9 +50,10 @@ import { decryptMessage, encryptMessage, getStoredSecretKey, initializeEncryptio
 import { motion, AnimatePresence } from 'framer-motion'
 import AccountSwitcher from '@/components/AccountSwitcher'
 
+const supabase = createClient()
+
 export default function ChatPage({ params }: { params: Promise<{ conversationId: string }> }) {
   const { conversationId } = use(params)
-  const supabase = createClient()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState<any[]>([])
