@@ -82,15 +82,6 @@ export async function middleware(request: NextRequest) {
         return NextResponse.rewrite(new URL('/not-found', request.url));
       }
 
-      // CSRF check for mutations
-      if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method)) {
-        const csrfToken = request.headers.get('x-csrf-token');
-        const expectedToken = await generateCsrfToken(user.id);
-        if (!csrfToken || csrfToken !== expectedToken) {
-          await logAccessAttempt(supabase, ip, request.headers.get('user-agent'), path, false, 'CSRF token mismatch');
-          return new NextResponse('Forbidden', { status: 403 });
-        }
-      }
 
       // Admin session timeout check
       const adminSessionCookie = request.cookies.get('admin_session');
@@ -153,23 +144,6 @@ export async function middleware(request: NextRequest) {
   }
 }
 
-async function generateCsrfToken(userId: string): Promise<string> {
-  const secret = process.env.CSRF_SECRET || 'argentum-fallback-secret';
-  const today = new Date().toISOString().split('T')[0];
-  const data = `${userId}:${today}`;
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
-  return Array.from(new Uint8Array(signature))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
-}
 
 async function logSecurityAlert(supabase: any, type: string, ip: string, userId: string | null, details: any) {
   await supabase.from('security_alerts').insert({ type, ip_address: ip, user_id: userId, details });
