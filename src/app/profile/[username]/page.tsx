@@ -13,7 +13,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   // Fetch user profile - resilient select
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, x_handle, website_url')
+    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, twitter_username, instagram_username, website_url, is_public, skills, open_to_work, looking_for, pinned_post_id')
     .eq('username', username.toLowerCase())
     .single()
 
@@ -37,7 +37,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   // Fetch published posts for this user
   const { data: posts } = await supabase
     .from('posts')
-    .select('*, users(id, username, display_name, avatar_url, bio, currently_building, x_handle)')
+    .select('*, users(id, username, display_name, avatar_url, bio, currently_building, twitter_username)')
     .eq('user_id', profile.id)
     .eq('status', 'published')
     .order('created_at', { ascending: false })

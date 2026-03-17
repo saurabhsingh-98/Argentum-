@@ -26,7 +26,7 @@ export default async function Home() {
     supabase.from('posts').select('*', { count: 'exact', head: true }),
     supabase.from('users').select('*', { count: 'exact', head: true }),
     supabase.from('posts').select('*', { count: 'exact', head: true }).eq('verification_status', 'verified'),
-    supabase.from('posts').select('*, users(id, username, display_name, avatar_url, bio, currently_building, x_handle)').eq('status', 'published').order('created_at', { ascending: false }).limit(20)
+    supabase.from('posts').select('*, users(id, username, display_name, avatar_url, bio, currently_building, twitter_username)').eq('status', 'published').order('created_at', { ascending: false }).limit(20)
   ])
 
   return (
