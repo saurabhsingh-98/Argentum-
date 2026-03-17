@@ -56,16 +56,15 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Skip middleware for specific paths
   const { pathname } = request.nextUrl
-  if (
-    pathname.startsWith('/onboarding') ||
-    pathname.startsWith('/auth') ||
-    pathname.startsWith('/_next') ||
-    pathname === '/favicon.ico' ||
-    pathname.includes('.') // for static files
-  ) {
-    return response
+
+  // Protected routes
+  const isProtectedPath = pathname.startsWith('/new') || pathname.startsWith('/settings')
+  
+  if (isProtectedPath && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/auth/login'
+    return NextResponse.redirect(url)
   }
 
   if (user) {
@@ -76,7 +75,7 @@ export async function middleware(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (!profile?.username) {
+    if (!profile?.username && !pathname.startsWith('/onboarding')) {
       const url = request.nextUrl.clone()
       url.pathname = '/onboarding'
       return NextResponse.redirect(url)
