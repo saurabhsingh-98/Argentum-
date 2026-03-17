@@ -41,6 +41,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         .from('users')
         .select('id, username, display_name, avatar_url')
         .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
+        .eq('is_public', true)
         .limit(5)
     ])
 

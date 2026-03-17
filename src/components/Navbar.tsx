@@ -65,13 +65,16 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
           </Link>
 
           <div className="hidden md:flex items-center gap-8 font-mono tracking-tighter">
-            {['Feed', 'Explore', 'Challenges'].map((item) => (
+            {[
+              { name: 'Feed', href: '/feed' },
+              { name: 'Explore', href: '/explore' }
+            ].map((item) => (
               <Link 
-                key={item} 
-                href={item === 'Feed' ? '/' : `/${item.toLowerCase()}`} 
+                key={item.name} 
+                href={item.href} 
                 className="text-[11px] text-gray-500 hover:text-white transition-all duration-300 uppercase font-bold relative group/link"
               >
-                {item}
+                {item.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-silver transition-all duration-300 group-hover/link:w-full" />
               </Link>
             ))}

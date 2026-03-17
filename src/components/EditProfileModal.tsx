@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Camera, AtSign, User, FileText, Rocket, Github, Twitter, Globe, Save, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { X, Camera, AtSign, User, FileText, Rocket, Github, Twitter, Instagram, Globe, Save, Loader2, AlertCircle, CheckCircle2, Lock, Globe2, Search, Briefcase, ChevronDown } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface EditProfileModalProps {
@@ -19,9 +19,14 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [bio, setBio] = useState(profile.bio || '')
   const [currentlyBuilding, setCurrentlyBuilding] = useState(profile.currently_building || '')
   const [githubUsername, setGithubUsername] = useState(profile.github_username || '')
-  const [twitterUsername, setTwitterUsername] = useState(profile.x_handle || '')
+  const [twitterUsername, setTwitterUsername] = useState(profile.twitter_username || '')
+  const [instagramUsername, setInstagramUsername] = useState(profile.instagram_username || '')
   const [websiteUrl, setWebsiteUrl] = useState(profile.website_url || '')
+  const [isPublic, setIsPublic] = useState(profile.is_public !== false)
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || '')
+  const [skills, setSkills] = useState(profile.skills?.join(', ') || '')
+  const [isOpenToWork, setIsOpenToWork] = useState(profile.open_to_work || false)
+  const [lookingFor, setLookingFor] = useState(profile.looking_for || '')
   
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
@@ -110,9 +115,14 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
           bio: bio || null,
           currently_building: currentlyBuilding || null,
           github_username: githubUsername || null,
-          x_handle: twitterUsername || null,
+          twitter_username: twitterUsername || null,
+          instagram_username: instagramUsername || null,
           website_url: websiteUrl || null,
+          is_public: isPublic,
           avatar_url: avatarUrl,
+          skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
+          open_to_work: isOpenToWork,
+          looking_for: lookingFor || null,
         })
         .eq('id', profile.id)
 
@@ -125,9 +135,14 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         bio: bio || null,
         currently_building: currentlyBuilding || null,
         github_username: githubUsername || null,
-        x_handle: twitterUsername || null,
+        twitter_username: twitterUsername || null,
+        instagram_username: instagramUsername || null,
         website_url: websiteUrl || null,
+        is_public: isPublic,
         avatar_url: avatarUrl,
+        skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
+        open_to_work: isOpenToWork,
+        looking_for: lookingFor || null,
       })
 
       setStatus({ type: 'success', message: 'Profile updated!' })
@@ -214,7 +229,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                         type="text"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
-                        placeholder="Project Name / Founder"
+                        placeholder="Your full name or preferred name"
                         className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
                       />
                     </div>
@@ -231,6 +246,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                         className={`w-full bg-white/5 border rounded-xl py-3 pl-10 pr-10 text-sm text-white focus:outline-none transition-all ${
                           usernameStatus === 'taken' ? 'border-red-500/50' : 'border-white/5 focus:border-silver/40'
                         }`}
+                        placeholder="yourhandle"
                       />
                       <div className="absolute right-4 top-1/2 -translate-y-1/2">
                         {usernameStatus === 'checking' && <Loader2 size={14} className="animate-spin text-gray-600" />}
@@ -271,7 +287,8 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                 </div>
 
                 {/* Socials */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Socials */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
                     <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">GitHub <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
@@ -280,20 +297,33 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                         type="text"
                         value={githubUsername}
                         onChange={(e) => setGithubUsername(e.target.value)}
-                        placeholder="username"
+                        placeholder="yourhandle"
                         className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
                       />
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">X / Twitter <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Twitter / X <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
                       <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                       <input
                         type="text"
                         value={twitterUsername}
                         onChange={(e) => setTwitterUsername(e.target.value)}
-                        placeholder="@handle"
+                        placeholder="yourhandle"
+                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Instagram <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <div className="relative">
+                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <input
+                        type="text"
+                        value={instagramUsername}
+                        onChange={(e) => setInstagramUsername(e.target.value)}
+                        placeholder="yourhandle"
                         className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
                       />
                     </div>
@@ -309,6 +339,42 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                         placeholder="https://..."
                         className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
                       />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visibility Toggle */}
+                <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
+                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Profile Visibility</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div 
+                      onClick={() => setIsPublic(true)}
+                      className={`cursor-pointer p-4 rounded-2xl border transition-all ${
+                        isPublic 
+                          ? 'bg-green-500/5 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' 
+                          : 'bg-white/5 border-white/5 hover:border-white/10'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <Globe2 size={18} className={isPublic ? 'text-green-500' : 'text-gray-400'} />
+                        <span className={`text-sm font-bold ${isPublic ? 'text-green-500' : 'text-white'}`}>Public</span>
+                      </div>
+                      <p className="text-[10px] text-gray-500 leading-relaxed">Anyone can view your profile and builds</p>
+                    </div>
+
+                    <div 
+                      onClick={() => setIsPublic(false)}
+                      className={`cursor-pointer p-4 rounded-2xl border transition-all ${
+                        !isPublic 
+                          ? 'bg-green-500/5 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' 
+                          : 'bg-white/5 border-white/5 hover:border-white/10'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <Lock size={18} className={!isPublic ? 'text-green-500' : 'text-gray-400'} />
+                        <span className={`text-sm font-bold ${!isPublic ? 'text-green-500' : 'text-white'}`}>Private</span>
+                      </div>
+                      <p className="text-[10px] text-gray-500 leading-relaxed">Only you can see your profile</p>
                     </div>
                   </div>
                 </div>

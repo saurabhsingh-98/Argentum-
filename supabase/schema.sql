@@ -5,10 +5,13 @@ CREATE TABLE public.users (
   avatar_url TEXT,
   bio TEXT,
   github_username TEXT,
+  twitter_username TEXT,
+  instagram_username TEXT,
   website_url TEXT,
   hbar_wallet TEXT,
   streak_count INT DEFAULT 0,
   currently_building TEXT,
+  is_public BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

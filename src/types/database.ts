@@ -17,11 +17,17 @@ export interface Database {
           avatar_url: string | null
           bio: string | null
           github_username: string | null
-          x_handle: string | null
+          twitter_username: string | null
+          instagram_username: string | null
           website_url: string | null
           hbar_wallet: string | null
           streak_count: number
           currently_building: string | null
+          is_public: boolean
+          skills: string[]
+          open_to_work: boolean
+          looking_for: string | null
+          pinned_post_id: string | null
           created_at: string
         }
         Insert: {
@@ -31,11 +37,17 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          x_handle?: string | null
+          twitter_username?: string | null
+          instagram_username?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
           streak_count?: number
           currently_building?: string | null
+          is_public?: boolean
+          skills?: string[]
+          open_to_work?: boolean
+          looking_for?: string | null
+          pinned_post_id?: string | null
           created_at?: string
         }
         Update: {
@@ -45,11 +57,17 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          x_handle?: string | null
+          twitter_username?: string | null
+          instagram_username?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
           streak_count?: number
           currently_building?: string | null
+          is_public?: boolean
+          skills?: string[]
+          open_to_work?: boolean
+          looking_for?: string | null
+          pinned_post_id?: string | null
           created_at?: string
         }
       }
@@ -143,6 +161,26 @@ export interface Database {
           user_id?: string
           post_id?: string
           content?: string
+          created_at?: string
+        }
+      }
+      follows: {
+        Row: {
+          id: string
+          follower_id: string
+          following_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          follower_id: string
+          following_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          follower_id?: string
+          following_id?: string
           created_at?: string
         }
       }

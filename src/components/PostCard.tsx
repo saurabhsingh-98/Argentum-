@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CheckCircle2, ArrowUpRight, User } from 'lucide-react'
+import { CheckCircle2, ArrowUpRight, User, Pin } from 'lucide-react'
 import { Database } from '@/types/database'
 
 type Post = Database['public']['Tables']['posts']['Row'] & {
@@ -15,14 +15,48 @@ const CATEGORY_STYLES: Record<string, string> = {
   Other: 'bg-white/10 text-white border-white/20',
 }
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ 
+  post, 
+  isOwner, 
+  isPinned, 
+  onPin 
+}: { 
+  post: Post, 
+  isOwner?: boolean, 
+  isPinned?: boolean,
+  onPin?: (postId: string) => void 
+}) {
   const categoryStyle = CATEGORY_STYLES[post.category as keyof typeof CATEGORY_STYLES] || CATEGORY_STYLES.Other
 
   return (
-    <Link 
-      href={`/post/${post.id}`}
-      className="glass-card flex flex-col h-full group animate-fade-in-up"
-    >
+    <div className="relative group">
+      {isOwner && (
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            if (onPin) onPin(post.id)
+          }}
+          className={`
+            absolute top-4 right-4 z-20 p-2 rounded-xl backdrop-blur-md border transition-all
+            ${isPinned 
+              ? 'bg-silver/20 border-silver text-white' 
+              : 'bg-white/5 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100'
+            }
+          `}
+          title={isPinned ? "Unpin post" : "Pin to top"}
+        >
+          <Pin size={14} className={isPinned ? 'fill-white' : ''} />
+        </button>
+      )}
+
+      <Link 
+        href={`/post/${post.id}`}
+        className={`
+          glass-card flex flex-col h-full group animate-fade-in-up transition-all
+          ${isPinned ? 'ring-1 ring-silver/30 border-silver/20' : ''}
+        `}
+      >
       <div className="p-6 flex flex-col gap-5 h-full relative z-10">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -42,9 +76,16 @@ export default function PostCard({ post }: { post: Post }) {
               </span>
             </div>
           </div>
-          <span className={`px-2.5 py-1 rounded-md text-[9px] font-bold border uppercase tracking-widest ${categoryStyle}`}>
-            {post.category}
-          </span>
+          <div className="flex items-center gap-2">
+            {isPinned && (
+              <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-silver/10 border border-silver/20">
+                <span className="text-[9px] font-black text-silver uppercase tracking-widest italic">📌 Pinned</span>
+              </div>
+            )}
+            <span className={`px-2.5 py-1 rounded-md text-[9px] font-bold border uppercase tracking-widest ${categoryStyle}`}>
+              {post.category}
+            </span>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -86,6 +127,7 @@ export default function PostCard({ post }: { post: Post }) {
       
       {/* Visual Depth Detail */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-[60px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
-    </Link>
+      </Link>
+    </div>
   )
 }
