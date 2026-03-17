@@ -636,30 +636,40 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                     <button onClick={() => setShowProfilePanel(false)}><X size={24} /></button>
                 </div>
                 {/* Profile implementation mostly same as before, simplified for space */}
-                <div className="flex flex-col items-center text-center gap-6">
-                    <div className="w-24 h-24 rounded-[2rem] bg-[#111] border border-white/10 flex items-center justify-center text-3xl font-black text-silver">
-                        {otherParticipant.avatar_url ? <img src={otherParticipant.avatar_url} className="w-full h-full object-cover rounded-[2rem]" /> : otherParticipant.username[0].toUpperCase()}
+                <div className="flex flex-col items-center text-center gap-8">
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-silver/10 blur-2xl group-hover:bg-silver/20 transition-all rounded-full" />
+                        <div className="w-28 h-28 rounded-[2.5rem] bg-[#111] border border-white/10 flex items-center justify-center text-4xl font-black text-silver relative z-10 transition-transform group-hover:scale-105">
+                            {otherParticipant.avatar_url ? <img src={otherParticipant.avatar_url} className="w-full h-full object-cover rounded-[2.5rem]" /> : otherParticipant.username[0].toUpperCase()}
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                        <h4 className="text-xl font-bold">{nickname || otherParticipant.display_name || otherParticipant.username}</h4>
-                        <span className="text-xs text-gray-500 font-mono tracking-widest">@{otherParticipant.username}</span>
+                    <div className="flex flex-col gap-2">
+                        <h4 className="text-2xl font-black tracking-tighter text-white">{nickname || otherParticipant.display_name || otherParticipant.username}</h4>
+                        <span className="text-[10px] text-gray-500 font-mono font-bold tracking-[0.3em] uppercase opacity-70">@{otherParticipant.username}</span>
                     </div>
                     
-                    <div className="w-full space-y-4">
-                        <div className="flex flex-col gap-2">
-                            <span className="text-[10px] text-gray-600 font-black uppercase text-left">Set Nickname</span>
-                            <div className="flex gap-2">
+                    <div className="w-full space-y-6 mt-4">
+                        <div className="flex flex-col gap-3">
+                            <span className="text-[9px] text-gray-500 font-black uppercase tracking-[0.2em] text-left opacity-60">Identity Management</span>
+                            <div className="flex gap-2 p-1.5 bg-white/[0.02] border border-white/5 rounded-2xl focus-within:border-white/20 transition-all">
                                 <input 
                                     value={nickname} onChange={(e) => setNickname(e.target.value)}
-                                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm"
-                                    placeholder="Enter nickname..."
+                                    className="flex-1 bg-transparent border-none rounded-xl px-4 py-2 text-xs focus:ring-0 placeholder:text-gray-700 font-bold"
+                                    placeholder="Assign nickname..."
                                 />
-                                <button onClick={() => localStorage.setItem(`nickname_${otherParticipant.id}`, nickname)} className="px-4 bg-silver text-black rounded-xl text-xs font-black uppercase">Save</button>
+                                <button 
+                                    onClick={() => localStorage.setItem(`nickname_${otherParticipant.id}`, nickname)} 
+                                    className="px-5 bg-silver text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-glow-sm"
+                                >
+                                    Update
+                                </button>
                             </div>
                         </div>
                     </div>
                     
-                    <Link href={`/profile/${otherParticipant.username}`} className="w-full mt-auto py-4 rounded-xl silver-metallic text-black font-black uppercase text-xs tracking-widest text-center">View Full Profile</Link>
+                    <Link href={`/profile/${otherParticipant.username}`} className="w-full mt-auto py-4 rounded-2xl silver-metallic text-white font-black uppercase text-[10px] tracking-[0.2em] shadow-glow hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all text-center">
+                        Secure Profile Access
+                    </Link>
                 </div>
             </motion.div>
         )}

@@ -184,23 +184,31 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
                         onClick={(e) => e.stopPropagation()}
                         className="absolute right-0 mt-3 w-56 p-2 bg-[#0d0d0d] border border-white/10 rounded-2xl shadow-3xl z-[100]"
                     >
-                        <div className="p-3 border-b border-white/5 mb-1 px-4">
-                            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-none mb-1">Signed in as</p>
-                            <p className="text-xs font-bold truncate">{profile?.username || user.email}</p>
+                        <div className="px-4 py-3 border-b border-white/[0.03] mb-2 bg-white/[0.02] rounded-t-xl">
+                            <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] leading-none mb-1.5 opacity-60">Architect</p>
+                            <p className="text-xs font-bold truncate text-silver group-hover:text-white transition-colors">{profile?.username || user.email}</p>
                         </div>
-                        <Link href={`/profile/${profile?.username}`} className="nav-dropdown-btn">
-                            <UserIcon size={14} /> Profile
-                        </Link>
-                        <Link href="/settings" className="nav-dropdown-btn">
-                            <Settings size={14} /> Settings
-                        </Link>
-                        <button onClick={() => setShowAccountSwitcher(true)} className="nav-dropdown-btn">
-                            <Users size={14} /> Switch Account
-                        </button>
-                        <div className="h-px bg-white/5 my-1" />
-                        <button onClick={async () => { await supabase.auth.signOut(); router.push('/'); }} className="nav-dropdown-btn text-red-500/80 hover:text-red-500">
-                            <LogOut size={14} /> Sign Out
-                        </button>
+                        <div className="p-1 space-y-0.5">
+                          <Link href={`/profile/${profile?.username}`} className="nav-dropdown-btn">
+                              <UserIcon size={14} className="opacity-50" /> 
+                              <span>Profile</span>
+                          </Link>
+                          <Link href="/settings" className="nav-dropdown-btn">
+                              <Settings size={14} className="opacity-50" /> 
+                              <span>Settings</span>
+                          </Link>
+                          <button onClick={() => setShowAccountSwitcher(true)} className="nav-dropdown-btn">
+                              <Users size={14} className="opacity-50" /> 
+                              <span>Switch Account</span>
+                          </button>
+                        </div>
+                        <div className="h-px bg-white/[0.03] my-2" />
+                        <div className="p-1">
+                          <button onClick={async () => { await supabase.auth.signOut(); router.push('/'); }} className="nav-dropdown-btn text-red-500/60 hover:text-red-500 hover:bg-red-500/5">
+                              <LogOut size={14} className="opacity-50" /> 
+                              <span>Sign Out</span>
+                          </button>
+                        </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -221,8 +229,8 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
       </div>
       <AccountSwitcher isOpen={showAccountSwitcher} onClose={() => setShowAccountSwitcher(false)} />
       <style jsx>{`
-        .nav-dropdown-btn { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #a1a1a1; transition: all 0.2s; }
-        .nav-dropdown-btn:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .nav-dropdown-btn { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #a1a1a1; transition: all 0.2s; }
+        .nav-dropdown-btn:hover { background: rgba(255, 255, 255, 0.04); color: white; scale: 1.01; }
       `}</style>
     </nav>
   )
