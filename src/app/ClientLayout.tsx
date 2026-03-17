@@ -8,6 +8,8 @@ import CommandPalette from '@/components/CommandPalette'
 import PresenceHandler from '@/components/PresenceHandler'
 import { useEffect, useState } from 'react'
 
+import { SearchProvider } from '@/context/SearchContext'
+
 export default function ClientLayout({
   children,
 }: {
@@ -15,7 +17,6 @@ export default function ClientLayout({
 }) {
   const pathname = usePathname()
   const [isPageMounted, setIsPageMounted] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   useEffect(() => {
     setIsPageMounted(true)
@@ -23,15 +24,15 @@ export default function ClientLayout({
   }, [pathname])
 
   return (
-    <>
+    <SearchProvider>
       <BootLoader />
-      <Navbar onSearchClick={() => setIsSearchOpen(true)} />
+      <Navbar />
       <main className={`min-h-screen pt-4 transition-all duration-700 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         {children}
       </main>
       <Footer />
-      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <CommandPalette />
       <PresenceHandler />
-    </>
+    </SearchProvider>
   )
 }

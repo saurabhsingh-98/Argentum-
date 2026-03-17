@@ -1,18 +1,22 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import PostCard from '@/components/PostCard'
 import BuilderCard from '@/components/BuilderCard'
-import { Search, Zap, Users, Loader2, Clock, TrendingUp, Filter, Sparkles, Code2, Globe } from 'lucide-react'
+import { Search, Zap, Users, Loader2, Filter, Sparkles, Code2, Globe } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 
-export default function ExplorePage() {
+function ExploreContent() {
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get('q') || searchParams.get('query') || ''
+  
   const [activeTab, setActiveTab] = useState<'builds' | 'builders'>('builds')
   const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState<any[]>([])
   const [users, setUsers] = useState<any[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState('All')
   
   const supabase = createClient()
@@ -202,13 +206,14 @@ export default function ExplorePage() {
   )
 }
 
-function EmptyStateMsg({ message }: { message: string }) {
+export default function ExplorePage() {
   return (
-    <div className="col-span-full py-32 text-center flex flex-col items-center gap-4 animate-fade-in text-gray-600 font-mono text-sm uppercase tracking-widest">
-      <div className="w-16 h-16 rounded-full border border-white/5 flex items-center justify-center opacity-20">
-          //
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center py-32 gap-6 bg-[#050505] min-h-screen">
+        <Loader2 className="animate-spin text-green-500" size={40} />
       </div>
-      <p className="max-w-xs">{message}</p>
-    </div>
+    }>
+      <ExploreContent />
+    </Suspense>
   )
 }

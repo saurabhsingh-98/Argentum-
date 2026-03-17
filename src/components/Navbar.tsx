@@ -25,6 +25,7 @@ import NotificationBell from './NotificationBell'
 import AccountSwitcher from './AccountSwitcher'
 import { motion, AnimatePresence } from 'framer-motion'
 import StreakModal from './StreakModal'
+import { useSearch } from '@/context/SearchContext'
 
 interface NavbarProps {
   onSearchClick?: () => void
@@ -39,7 +40,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [showStreakModal, setShowStreakModal] = useState(false)
-  const [searchFocused, setSearchFocused] = useState(false)
+  const { setIsOpen: setIsSearchOpen } = useSearch()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -124,19 +125,13 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             </div>
 
             {/* YouTube-style Search Bar */}
-            <div className="flex-1 max-w-xl relative hidden md:block group">
-              <div className={`
-                flex items-center gap-3 px-4 py-2 rounded-full border bg-white/[0.02] transition-all
-                ${searchFocused ? 'border-white/40 ring-4 ring-white/5 bg-white/[0.05]' : 'border-white/10 group-hover:border-white/20'}
-              `}>
-                <Search size={16} className={searchFocused ? 'text-white' : 'text-white/20'} />
-                <input 
-                  type="text" 
-                  placeholder="Search builds, builders, tags..."
-                  onFocus={() => setSearchFocused(true)}
-                  onBlur={() => setSearchFocused(false)}
-                  className="bg-transparent border-none outline-none text-sm text-white w-full placeholder:text-white/10"
-                />
+            <div 
+              onClick={() => setIsSearchOpen(true)}
+              className="flex-1 max-w-xl relative hidden md:block group cursor-text"
+            >
+              <div className="flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] group-hover:border-white/20 transition-all">
+                <Search size={16} className="text-white/20" />
+                <div className="text-sm text-white/30 flex-1">Search builds, builders, tags...</div>
                 <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded border border-white/10 bg-white/5">
                   <span className="text-[8px] font-black text-white/30 tracking-widest uppercase">Cmd+K</span>
                 </div>
@@ -146,6 +141,14 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
           {/* Right Section: Actions */}
           <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
+            {/* Mobile Search Trigger (Always Visible) */}
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="w-9 h-9 flex md:hidden items-center justify-center text-white/40 hover:text-white hover:bg-white/5 rounded-full transition-all mr-1"
+            >
+              <Search size={18} />
+            </button>
+
             {user ? (
               <>
                 <div className="flex items-center gap-1 md:gap-3">
