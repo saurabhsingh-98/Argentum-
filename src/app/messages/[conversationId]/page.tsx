@@ -356,7 +356,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
       try {
           const encrypted = encryptMessage(editContent, otherParticipant.public_key, secretKey)
-          await supabase.from('messages').update({ content: encrypted }).eq('id', editingId)
+          await supabase.from('messages').update({ content: encrypted, is_edited: true }).eq('id', editingId)
           setEditingId(null)
           setEditContent('')
       } catch (err) {
@@ -567,7 +567,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                       ) : (
                           <div className="flex flex-col gap-0.5">
                             {msg.decryptedContent}
-                            {msg.created_at !== msg.updated_at && (
+                            {msg.is_edited && (
                                 <span className="text-[8px] opacity-40 lowercase">(edited)</span>
                             )}
                           </div>

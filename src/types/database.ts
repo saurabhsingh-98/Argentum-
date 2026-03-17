@@ -228,6 +228,7 @@ export interface Database {
           expires_at: string | null
           read_at: string | null
           deleted_for: string[]
+          is_edited: boolean
           created_at: string
         }
         Insert: {
@@ -238,6 +239,7 @@ export interface Database {
           expires_at?: string | null
           read_at?: string | null
           deleted_for?: string[]
+          is_edited?: boolean
           created_at?: string
         }
         Update: {
@@ -248,6 +250,7 @@ export interface Database {
           expires_at?: string | null
           read_at?: string | null
           deleted_for?: string[]
+          is_edited?: boolean
           created_at?: string
         }
       }
