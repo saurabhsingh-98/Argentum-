@@ -19,7 +19,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [bio, setBio] = useState(profile.bio || '')
   const [currentlyBuilding, setCurrentlyBuilding] = useState(profile.currently_building || '')
   const [githubUsername, setGithubUsername] = useState(profile.github_username || '')
-  const [twitterUsername, setTwitterUsername] = useState(profile.x_handle || profile.twitter_username || '')
+  const [twitterUsername, setTwitterUsername] = useState(profile.x_handle || '')
   const [websiteUrl, setWebsiteUrl] = useState(profile.website_url || '')
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || '')
   
