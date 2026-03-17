@@ -31,7 +31,7 @@ export default function Footer() {
           <div className="flex flex-col gap-6">
             <h4 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">Product</h4>
             <div className="flex flex-col gap-3">
-              <FooterLink href="/">Feed</FooterLink>
+              <FooterLink href="/feed">Feed</FooterLink>
               <FooterLink href="/explore">Explore</FooterLink>
               <FooterLink href="/challenges">Challenges</FooterLink>
               <FooterLink href="/verified">Verified Builds</FooterLink>

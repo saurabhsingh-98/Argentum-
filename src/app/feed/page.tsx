@@ -1,3 +1,4 @@
+// Build trigger: standardized routing and visibility updates
 import { createClient } from '@/lib/supabase/server'
 import FeedWithFilter from '@/components/FeedWithFilter'
 import ScrollReveal from '@/components/ScrollReveal'
