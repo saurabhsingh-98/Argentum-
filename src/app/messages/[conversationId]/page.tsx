@@ -138,33 +138,38 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         .neq('sender_id', user.id)
         .is('read_at', null)
 
-      // Subscribe to real-time updates
+      // Subscribe to real-time updates as per user request
       const channel = supabase
-        .channel(`chat:${conversationId}`)
+        .channel(`messages:${conversationId}`)
         .on(
           'postgres_changes',
-          { event: '*', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+          { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
           async (payload: any) => {
-            if (payload.eventType === 'INSERT') {
-                const processed = processMessage(payload.new, conv, user.id)
-                if (processed) {
-                  setMessages((prev: any[]) => [...prev, processed])
-                  setTimeout(() => scrollToBottom(), 50)
-                }
-
-                if (payload.new.sender_id !== user.id) {
-                    await supabase.from('messages').update({ read_at: new Date().toISOString() }).eq('id', payload.new.id)
-                }
-            } else if (payload.eventType === 'UPDATE') {
-                const processed = processMessage(payload.new, conv, user.id)
-                if (processed) {
-                  setMessages((prev: any[]) => prev.map(m => m.id === payload.new.id ? { ...m, ...processed } : m))
-                } else {
-                  setMessages((prev: any[]) => prev.filter(m => m.id !== payload.new.id))
-                }
-            } else if (payload.eventType === 'DELETE') {
-                setMessages((prev: any[]) => prev.filter(m => m.id !== payload.old.id))
+            const processed = processMessage(payload.new, conv, user.id)
+            if (processed) {
+              setMessages((prev: any[]) => [...prev, processed])
+              setTimeout(() => scrollToBottom(), 50)
             }
+          }
+        )
+        // Keep existing UPDATE/DELETE handlers for receipts and unsends
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+          async (payload: any) => {
+            const processed = processMessage(payload.new, conv, user.id)
+            if (processed) {
+              setMessages((prev: any[]) => prev.map(m => m.id === payload.new.id ? { ...m, ...processed } : m))
+            } else {
+              setMessages((prev: any[]) => prev.filter(m => m.id !== payload.new.id))
+            }
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: 'DELETE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+          (payload: any) => {
+            setMessages((prev: any[]) => prev.filter(m => m.id !== payload.old.id))
           }
         )
         .on(
@@ -181,9 +186,9 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                 setConversation((prev: any) => ({ ...prev, ...payload.new }))
             }
         )
-        .subscribe()
+        .subscribe();
 
-      return channel
+      return channel;
     }
 
     let channel: any

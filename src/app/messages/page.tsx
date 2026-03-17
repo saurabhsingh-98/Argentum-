@@ -41,6 +41,21 @@ export default function MessagesPage() {
       setProfile(prof)
 
       await fetchConversations(user.id)
+      
+      const channel = supabase
+        .channel('public:messages')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'messages' },
+          () => {
+            fetchConversations(user.id)
+          }
+        )
+        .subscribe()
+
+      return () => {
+        supabase.removeChannel(channel)
+      }
     }
 
     checkAuth()
