@@ -3,13 +3,14 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
-import { Github, Plus, LogIn, ChevronDown, Search, Loader2 } from 'lucide-react'
+import { Github, Plus, LogIn, ChevronDown, Search, Loader2, MessageCircle } from 'lucide-react'
 
 export default function Navbar({ onSearchClick }: { onSearchClick: () => void }) {
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [profileUsername, setProfileUsername] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [unreadMessages, setUnreadMessages] = useState(false)
 
   useEffect(() => {
     if (!supabase) return
@@ -27,6 +28,16 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
         
         if (profile) {
           setProfileUsername(profile.username)
+        }
+
+        // Check for conversations (any conversation counts as unread for now as requested)
+        const { count } = await supabase
+          .from('conversations')
+          .select('*', { count: 'exact', head: true })
+          .or(`participant_1.eq.${user.id},participant_2.eq.${user.id}`)
+        
+        if (count && count > 0) {
+          setUnreadMessages(true)
         }
       }
     }
@@ -88,6 +99,18 @@ export default function Navbar({ onSearchClick }: { onSearchClick: () => void })
           >
             <Search size={16} className="group-hover/search:text-silver transition-colors" />
           </button>
+
+          {user && (
+            <Link 
+              href="/messages"
+              className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-white/40 transition-all active:scale-95 group/messages relative"
+            >
+              <MessageCircle size={16} className="group-hover/messages:text-silver transition-colors" />
+              {unreadMessages && (
+                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-green-500 rounded-full border-2 border-[#050505] animate-pulse" />
+              )}
+            </Link>
+          )}
 
           {user ? (
             <div className="flex items-center gap-5">

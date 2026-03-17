@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Github, Globe, Award, Flame, Zap, Twitter, Instagram, Edit3, Share2, Calendar, Rocket, Lock, Globe2, AtSign, Search, Pin } from 'lucide-react'
+import { Github, Globe, Award, Flame, Zap, Twitter, Instagram, Edit3, Share2, Calendar, Rocket, Lock, Globe2, AtSign, Search, Pin, MessageCircle, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import PostCard from '@/components/PostCard'
 import EmptyState from '@/components/EmptyState'
 import EditProfileModal from '@/components/EditProfileModal'
@@ -22,7 +23,9 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const [animate, setAnimate] = useState(false)
   const [followCounts, setFollowCounts] = useState({ followers: 0, following: 0 })
   const [isFollowing, setIsFollowing] = useState(false)
+  const [isMessagingLoading, setIsMessagingLoading] = useState(false)
   const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
@@ -106,6 +109,47 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     }
 
     return base
+  }
+
+  const handleMessageClick = async () => {
+    if (!profile.id) return
+    setIsMessagingLoading(true)
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/auth/login')
+        return
+      }
+
+      // Check if conversation exists
+      const { data: existing, error } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(`and(participant_1.eq.${user.id},participant_2.eq.${profile.id}),and(participant_1.eq.${profile.id},participant_2.eq.${user.id})`)
+        .single()
+
+      if (existing) {
+        router.push(`/messages/${existing.id}`)
+      } else {
+        // Create new conversation
+        const { data: newConv, error: createError } = await supabase
+          .from('conversations')
+          .insert({
+            participant_1: user.id,
+            participant_2: profile.id
+          })
+          .select()
+          .single()
+
+        if (createError) throw createError
+        router.push(`/messages/${newConv.id}`)
+      }
+    } catch (error) {
+      console.error('Error starting conversation:', error)
+    } finally {
+      setIsMessagingLoading(false)
+    }
   }
 
   return (
@@ -230,11 +274,25 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       <span>Edit Profile</span>
                   </button>
                 ) : (
-                  <FollowButton 
-                    followingId={profile.id} 
-                    initialIsFollowing={isFollowing} 
-                    onCountChange={(delta) => setFollowCounts(prev => ({ ...prev, followers: prev.followers + delta }))}
-                  />
+                  <div className="flex-1 flex gap-3">
+                    <FollowButton 
+                      followingId={profile.id} 
+                      initialIsFollowing={isFollowing} 
+                      onCountChange={(delta) => setFollowCounts(prev => ({ ...prev, followers: prev.followers + delta }))}
+                    />
+                    <button 
+                      onClick={handleMessageClick}
+                      disabled={isMessagingLoading}
+                      className="flex-1 bg-white/5 border border-white/10 flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all active:scale-[0.98] disabled:opacity-50"
+                    >
+                      {isMessagingLoading ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <MessageCircle size={14} />
+                      )}
+                      <span>Message</span>
+                    </button>
+                  </div>
                 )}
                   <button className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white transition-all">
                     <Share2 size={18} />

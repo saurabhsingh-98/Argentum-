@@ -28,6 +28,7 @@ export interface Database {
           open_to_work: boolean
           looking_for: string | null
           pinned_post_id: string | null
+          public_key: string | null
           created_at: string
         }
         Insert: {
@@ -48,6 +49,7 @@ export interface Database {
           open_to_work?: boolean
           looking_for?: string | null
           pinned_post_id?: string | null
+          public_key?: string | null
           created_at?: string
         }
         Update: {
@@ -68,6 +70,7 @@ export interface Database {
           open_to_work?: boolean
           looking_for?: string | null
           pinned_post_id?: string | null
+          public_key?: string | null
           created_at?: string
         }
       }
@@ -181,6 +184,49 @@ export interface Database {
           id?: string
           follower_id?: string
           following_id?: string
+          created_at?: string
+        }
+      }
+      conversations: {
+        Row: {
+          id: string
+          participant_1: string
+          participant_2: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          participant_1: string
+          participant_2: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          participant_1?: string
+          participant_2?: string
+          created_at?: string
+        }
+      }
+      messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          sender_id: string
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          sender_id: string
+          content: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          sender_id?: string
+          content?: string
           created_at?: string
         }
       }
