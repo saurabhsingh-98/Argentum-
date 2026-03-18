@@ -135,12 +135,17 @@ export async function decryptPrivateKey(encryptedData: string, password: string)
   }
 }
 
-export const initializeEncryption = async () => {
+export const initializeEncryption = async (forceReset: boolean = false) => {
   const supabase = createClient()
   if (!supabase) return
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
+
+  if (forceReset) {
+    await resetKeys();
+    return { status: 'ready' }
+  }
 
   let secretKey = localStorage.getItem(PRIVATE_KEY_STORAGE_KEY)
   
@@ -159,6 +164,7 @@ export const initializeEncryption = async () => {
 
     if (profile?.public_key) {
       // User has keys on another device but no backup set up
+      // We allow a reset if the user is stuck
       return { status: 'missing_private_key' }
     }
 
@@ -176,4 +182,26 @@ export const initializeEncryption = async () => {
   }
 
   return { status: 'ready' }
+}
+
+export const resetKeys = async () => {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const newKeyPair = generateKeyPair()
+  saveSecretKey(newKeyPair.secretKey)
+  
+  await supabase
+    .from('users')
+    .update({ 
+      public_key: newKeyPair.publicKey,
+      encrypted_private_key: null,
+      key_backup_method: 'none',
+      key_backup_hint: null,
+      key_backup_created_at: null
+    })
+    .eq('id', user.id)
+    
+  return newKeyPair.publicKey
 }

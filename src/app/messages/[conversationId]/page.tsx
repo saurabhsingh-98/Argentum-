@@ -50,7 +50,7 @@ import {
   ChevronUp
 } from 'lucide-react'
 import Link from 'next/link'
-import { decryptMessage, encryptMessage, getStoredSecretKey, initializeEncryption } from '@/lib/crypto'
+import { decryptMessage, encryptMessage, getStoredSecretKey, initializeEncryption, resetKeys } from '@/lib/crypto'
 import { motion, AnimatePresence } from 'framer-motion'
 import AccountSwitcher from '@/components/AccountSwitcher'
 import CameraCapture from '@/components/CameraCapture'
@@ -566,7 +566,15 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
               <div className="relative">
                 <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-[#111] flex items-center justify-center shadow-glow-sm">
                   {otherParticipant.avatar_url ? (
-                    <img src={otherParticipant.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                    <img 
+                      src={otherParticipant.avatar_url} 
+                      alt="avatar" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-sm font-black text-silver">${otherParticipant.username[0].toUpperCase()}</span>`;
+                      }}
+                    />
                   ) : (
                     <span className="text-sm font-black text-silver">{otherParticipant.username[0].toUpperCase()}</span>
                   )}
@@ -657,9 +665,17 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                   className={`flex items-end gap-3 ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}
                 >
                   {!isOwn && (
-                     <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden bg-[#111] flex-shrink-0 mb-5">
+                     <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden bg-[#111] flex-shrink-0 mb-5 flex items-center justify-center">
                         {otherParticipant.avatar_url ? (
-                          <img src={otherParticipant.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                          <img 
+                            src={otherParticipant.avatar_url} 
+                            alt="avatar" 
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                              (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-[10px] font-black">${otherParticipant.username[0].toUpperCase()}</span>`;
+                            }}
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-[10px] font-black">{otherParticipant.username[0].toUpperCase()}</div>
                         )}
@@ -792,6 +808,25 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
         {/* Input area */}
         <motion.div className="p-6 bg-[#111] border-t border-white/5 relative z-50">
+          {encryptionStatus === 'missing_private_key' && (
+            <div className="mb-4 p-4 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="text-red-500" size={18} />
+                <p className="text-xs text-red-500/80 font-medium">Encryption keys missing. Your messages are locked on this device.</p>
+              </div>
+              <button 
+                onClick={async () => {
+                   if (confirm("Resetting keys will make all existing messages unreadable on this device. Continue?")) {
+                      await resetKeys();
+                      window.location.reload();
+                    }
+                }}
+                className="px-4 py-2 bg-red-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-600 transition-all"
+              >
+                Reset Keys
+              </button>
+            </div>
+          )}
           {replyTo && (
               <div className="bg-white/5 p-3 rounded-t-2xl border-x border-t border-white/5 mb-[-1px] flex justify-between items-center animate-slide-up">
                   <div className="flex items-center gap-3">

@@ -189,7 +189,15 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                     className="w-9 h-9 rounded-full border border-white/10 overflow-hidden bg-[#111] flex items-center justify-center group/avatar hover:border-white/30 transition-all"
                   >
                     {profile?.avatar_url ? (
-                      <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                      <img 
+                        src={profile.avatar_url} 
+                        alt="avatar" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs font-black text-white/40 group-hover/avatar:text-white transition-colors uppercase">${profile?.username?.[0] || user.email?.[0]}</span>`;
+                        }}
+                      />
                     ) : (
                       <span className="text-xs font-black text-white/40 group-hover/avatar:text-white transition-colors uppercase">
                          {profile?.username?.[0] || user.email?.[0]}
@@ -208,7 +216,18 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                           <div className="p-4 bg-white/[0.02] border-b border-white/5">
                             <div className="flex items-center gap-3">
                                <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                                  {profile?.avatar_url ? <img src={profile.avatar_url} className="w-full h-full object-cover" /> : <span className="font-black text-xs">{profile?.username?.[0]}</span>}
+                                  {profile?.avatar_url ? (
+                                    <img 
+                                      src={profile.avatar_url} 
+                                      className="w-full h-full object-cover" 
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).style.display = 'none';
+                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="font-black text-xs">${profile?.username?.[0] || ''}</span>`;
+                                      }}
+                                    />
+                                  ) : (
+                                    <span className="font-black text-xs">{profile?.username?.[0]}</span>
+                                  )}
                                </div>
                                <div className="flex flex-col min-w-0">
                                   <span className="text-sm font-bold text-white truncate">{profile?.display_name || profile?.username}</span>

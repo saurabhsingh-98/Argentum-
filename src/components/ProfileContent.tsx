@@ -234,7 +234,15 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   <div className="absolute -inset-1 bg-gradient-to-br from-silver/40 to-white/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
                   <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-silver/20 bg-[#0d0d0d] overflow-hidden flex items-center justify-center relative">
                     {profile.avatar_url ? (
-                      <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                      <img 
+                        src={profile.avatar_url} 
+                        alt="avatar" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-5xl font-black text-silver drop-shadow-glow">${profile.username ? profile.username[0].toUpperCase() : '?'}</span>`;
+                        }}
+                      />
                     ) : (
                       <span className="text-5xl font-black text-silver drop-shadow-glow">
                         {profile.username ? profile.username[0].toUpperCase() : '?'}

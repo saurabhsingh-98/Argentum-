@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { MessageCircle, Search, Loader2, Plus, Lock, AtSign } from 'lucide-react'
 import Link from 'next/link'
-import { decryptMessage, getStoredSecretKey, initializeEncryption } from '@/lib/crypto'
+import { decryptMessage, getStoredSecretKey, initializeEncryption, resetKeys } from '@/lib/crypto'
 import { motion, AnimatePresence } from 'framer-motion'
 import AccountSwitcher from '@/components/AccountSwitcher'
 import { Settings, Users, LogOut, User, ShieldAlert, Key as KeyIcon } from 'lucide-react'
@@ -193,9 +193,20 @@ export default function MessagesPage() {
           <div className="p-4 mx-4 mb-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
              <div className="flex gap-3">
               <KeyIcon size={16} className="text-red-500 shrink-0" />
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-red-500">Messages Locked</p>
-                <p className="text-[11px] text-red-500/60 font-medium">This device doesn't have your keys. Set up backup on your other device to unlock.</p>
+                <p className="text-[11px] text-red-500/60 font-medium leading-relaxed">This device doesn't have your keys. Set up backup on your other device to unlock, or reset to start fresh.</p>
+                <button 
+                  onClick={async () => {
+                    if (confirm("Resetting keys will make all existing messages unreadable. You will only be able to read new messages sent after this reset. Continue?")) {
+                      await resetKeys();
+                      window.location.reload();
+                    }
+                  }}
+                  className="text-[10px] font-black uppercase tracking-widest text-white hover:text-red-500 transition-colors underline"
+                >
+                  Reset My Keys & Unlock Messaging →
+                </button>
               </div>
              </div>
           </div>
@@ -221,7 +232,15 @@ export default function MessagesPage() {
                   <div className="relative">
                     <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden bg-[#111] flex items-center justify-center text-silver group-hover:border-white/20 transition-all">
                       {conv.otherParticipant.avatar_url ? (
-                        <img src={conv.otherParticipant.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                        <img 
+                          src={conv.otherParticipant.avatar_url} 
+                          alt="avatar" 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-sm font-black">${conv.otherParticipant.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || conv.otherParticipant.username?.[0].toUpperCase()}</span>`;
+                          }}
+                        />
                       ) : (
                         <span className="text-sm font-black">
                           {conv.otherParticipant.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || conv.otherParticipant.username?.[0].toUpperCase()}
@@ -259,7 +278,16 @@ export default function MessagesPage() {
            <div className="p-4 border-t border-white/5 bg-[#0d0d0d]/50 backdrop-blur-xl">
              <div className="flex items-center gap-3 mb-4 px-2">
                <div className="w-9 h-9 rounded-xl border border-white/10 overflow-hidden bg-[#111] flex items-center justify-center text-silver font-black text-xs">
-                 {profile?.avatar_url ? <img src={profile.avatar_url} className="w-full h-full object-cover" /> : user.email?.[0].toUpperCase()}
+                 {profile?.avatar_url ? (
+                   <img 
+                    src={profile.avatar_url} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).parentElement!.innerHTML = user.email?.[0].toUpperCase();
+                    }}
+                  />
+                 ) : user.email?.[0].toUpperCase()}
                </div>
                <div className="flex-1 min-w-0">
                  <p className="text-xs font-bold truncate text-white">{profile?.display_name || profile?.username || user.email}</p>
