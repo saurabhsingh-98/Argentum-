@@ -33,6 +33,9 @@ export default function ClientLayout({
     <ThemeProvider>
       <SearchProvider>
         <BootLoader />
+        <div className="mesh-gradient-bg" />
+        <div className="glow-blob" />
+        <div className="glow-blob" style={{ animationDelay: '-5s', left: '60%', top: '40%' }} />
         {!isMessages && !isAuth && <Navbar />}
         <main className={`min-h-screen ${!isMessages && !isAuth ? 'pt-4' : ''} transition-all duration-700 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           {children}

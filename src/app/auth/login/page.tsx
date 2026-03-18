@@ -80,7 +80,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Background Glows */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
@@ -111,6 +111,8 @@ export default function LoginPage() {
         <motion.div 
           initial={{ opacity: 0, y: 40, scale: 0.95, rotateX: -10 }}
           animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           transition={{ 
             type: "spring",
             stiffness: 100,
@@ -118,7 +120,7 @@ export default function LoginPage() {
             mass: 1,
             delay: 0.1
           }}
-          className="glass-card p-10 border-silver/20 bg-[#0a0a0a]/50 backdrop-blur-2xl shadow-2xl relative group/card"
+          className="glass-card p-10 border-border bg-card/50 backdrop-blur-2xl shadow-2xl relative group/card cursor-default"
           style={{ perspective: "1000px" }}
         >
           {/* Decorative Corner */}
@@ -171,7 +173,7 @@ export default function LoginPage() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/5"></div>
             </div>
-            <span className="relative z-10 bg-[#0a0a0a] px-4 text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em]">
+            <span className="relative z-10 bg-background px-4 text-[10px] font-bold text-foreground/40 uppercase tracking-[0.2em]">
               OR USE EMAIL
             </span>
           </div>

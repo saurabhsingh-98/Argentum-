@@ -2,45 +2,43 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark' | 'glass'
 
 interface ThemeContextType {
   theme: Theme
+  setTheme: (theme: Theme) => void
   toggleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setThemeState] = useState<Theme>('dark')
+
+  const applyTheme = (newTheme: Theme) => {
+    document.documentElement.classList.remove('light', 'dark', 'glass')
+    document.documentElement.classList.add(newTheme)
+    setThemeState(newTheme)
+    localStorage.setItem('ag_theme', newTheme)
+  }
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('ag_theme') as Theme
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     const initialTheme = savedTheme || systemTheme
     
-    setTheme(initialTheme)
-    if (initialTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    applyTheme(initialTheme)
   }, [])
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    localStorage.setItem('ag_theme', newTheme)
-    
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    const nextTheme: Theme = 
+      theme === 'light' ? 'dark' : 
+      theme === 'dark' ? 'glass' : 'light'
+    applyTheme(nextTheme)
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme: applyTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   )

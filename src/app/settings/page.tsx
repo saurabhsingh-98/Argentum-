@@ -450,9 +450,9 @@ export default function SettingsPage() {
                           </div>
                           <button 
                             onClick={toggleTheme}
-                            className="px-4 py-2 bg-card border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
+                            className="px-4 py-2 bg-card border border-border rounded-xl text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all min-w-[80px]"
                           >
-                            {theme === 'dark' ? 'Dark' : 'Light'}
+                            {theme.charAt(0).toUpperCase() + theme.slice(1)}
                           </button>
                        </div>
 
