@@ -19,7 +19,9 @@ import {
   ChevronDown,
   LayoutGrid,
   Home,
-  Compass
+  Compass,
+  Rocket,
+  Edit3
 } from 'lucide-react'
 import NotificationBell from './NotificationBell'
 import AccountSwitcher from './AccountSwitcher'
@@ -236,12 +238,12 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                             </div>
                           </div>
                    
-                          <div className="p-1">
-                            <DropdownItem icon={<UserIcon size={14} />} label="View Profile" href={`/profile/${profile?.username}`} />
-                            <DropdownItem icon={<Settings size={14} />} label="Edit Profile" href="/settings" />
+                           <div className="p-1">
+                            <DropdownItem icon={<UserIcon size={14} />} label="View Profile" href={profile?.username ? `/profile/${profile.username}` : '#'} />
+                            <DropdownItem icon={<Edit3 size={14} />} label="Edit Profile" href={profile?.username ? `/profile/${profile.username}?edit=true` : '/settings'} />
                             <DropdownItem icon={<Bell size={14} />} label="Notifications" href="/notifications" />
                             <DropdownItem icon={<MessageCircle size={14} />} label="Messages" href="/messages" />
-                            <DropdownItem icon={<LayoutGrid size={14} />} label="Settings" href="/settings" />
+                            <DropdownItem icon={<Settings size={14} />} label="Account Settings" href="/settings" />
                             
                             <div className="h-px bg-white/5 my-1" />
                             <button 

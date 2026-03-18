@@ -28,50 +28,55 @@ export default function MessagesPage() {
   const [showRecoveryModal, setShowRecoveryModal] = useState(false)
 
   useEffect(() => {
+    let channel: any
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/login')
-      }
-      setUser(user)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth/login')
+          return
+        }
+        setUser(user)
 
-       const status = await initializeEncryption()
-      setEncryptionStatus(status?.status || 'ready')
-      
-      if (status?.status === 'needs_recovery') {
-        setShowRecoveryModal(true)
-      } else if (status?.status === 'initialized' && !localStorage.getItem('ag_backup_prompted')) {
-        // First time initialization, prompt backup
-        setShowBackupModal(true)
-        localStorage.setItem('ag_backup_prompted', 'true')
-      }
+        const status = await initializeEncryption()
+        setEncryptionStatus(status?.status || 'ready')
+        
+        if (status?.status === 'needs_recovery') {
+          setShowRecoveryModal(true)
+        } else if (status?.status === 'initialized' && !localStorage.getItem('ag_backup_prompted')) {
+          setShowBackupModal(true)
+          localStorage.setItem('ag_backup_prompted', 'true')
+        }
 
-      const { data: prof } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-      setProfile(prof)
+        const { data: prof } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        setProfile(prof)
 
-      await fetchConversations(user.id)
-      
-      const channel = supabase
-        .channel('public:messages')
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'messages' },
-          () => {
-            fetchConversations(user.id)
-          }
-        )
-        .subscribe()
-
-      return () => {
-        supabase.removeChannel(channel)
+        await fetchConversations(user.id)
+        
+        channel = supabase
+          .channel('public:messages')
+          .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'messages' },
+            () => {
+              fetchConversations(user.id)
+            }
+          )
+          .subscribe()
+      } catch (err) {
+        console.error('MessagesPage critical error:', err)
+        setLoading(false)
       }
     }
 
     checkAuth()
+    return () => {
+      if (channel) supabase.removeChannel(channel)
+    }
   }, [])
 
   useEffect(() => {
@@ -182,7 +187,7 @@ export default function MessagesPage() {
               <ShieldAlert size={16} className="text-orange-500 shrink-0" />
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-orange-500">Unprotected Account</p>
-                <p className="text-[11px] text-orange-500/60 font-medium leading-relaxed">Your messages aren't backed up. You'll lose access if you lose this device.</p>
+                <p className="text-[11px] text-orange-500/60 font-medium leading-relaxed">Your messages aren&apos;t backed up. You&apos;ll lose access if you lose this device.</p>
                 <button 
                   onClick={() => setShowBackupModal(true)}
                   className="text-[10px] font-black uppercase tracking-widest text-white hover:text-orange-500 transition-colors"
@@ -200,7 +205,7 @@ export default function MessagesPage() {
               <KeyIcon size={16} className="text-red-500 shrink-0" />
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-red-500">Messages Locked</p>
-                <p className="text-[11px] text-red-500/60 font-medium leading-relaxed">This device doesn't have your keys. Set up backup on your other device to unlock, or reset to start fresh.</p>
+                <p className="text-[11px] text-red-500/60 font-medium leading-relaxed">This device doesn&apos;t have your keys. Set up backup on your other device to unlock, or reset to start fresh.</p>
                 <button 
                   onClick={async () => {
                     if (confirm("Resetting keys will make all existing messages unreadable. You will only be able to read new messages sent after this reset. Continue?")) {

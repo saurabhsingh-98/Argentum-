@@ -33,11 +33,11 @@ export default function ClientLayout({
     <ThemeProvider>
       <SearchProvider>
         <BootLoader />
-        {!isMessages && !isProfile && !isAuth && <Navbar />}
-        <main className={`min-h-screen ${!isMessages && !isProfile && !isAuth ? 'pt-4' : ''} transition-all duration-700 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        {!isMessages && !isAuth && <Navbar />}
+        <main className={`min-h-screen ${!isMessages && !isAuth ? 'pt-4' : ''} transition-all duration-700 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           {children}
         </main>
-        {!isMessages && !isProfile && !isAuth && <Footer />}
+        {!isMessages && !isAuth && <Footer />}
         <CommandPalette />
         <PresenceHandler />
         <SessionManager />

@@ -15,6 +15,7 @@ const categories = ['Speak', 'Web3', 'AI', 'Mobile', 'DevTools', 'Game', 'Other'
 export default function NewPost() {
   const [loading, setLoading] = useState(false)
   const [postType, setPostType] = useState<'log' | 'speak'>('log')
+  const [isPriority, setIsPriority] = useState(false)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [category, setCategory] = useState('Other')
@@ -60,6 +61,7 @@ export default function NewPost() {
           content_hash: hash,
           category: finalCategory as any,
           status,
+          is_priority: isPriority,
           tags: tags.split(',').map(t => t.trim()).filter(Boolean),
           verification_status: 'unverified'
         })
@@ -277,27 +279,65 @@ export default function NewPost() {
               />
             </div>
 
-            {/* Premium Info Panel */}
-            <motion.div 
-               layout
-               className={`border rounded-[2rem] p-6 flex gap-6 items-start mb-12 transition-all duration-700 ${
-                 isSpeak ? 'bg-amber-500/10 border-amber-500/20' : 'bg-foreground/[0.02] border-border'
-               }`}
-            >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isSpeak ? 'bg-amber-500/20 text-amber-500' : 'bg-foreground/5 text-foreground/40'}`}>
-                <Info size={18} />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                  <span className={`text-[10px] font-black uppercase tracking-widest ${isSpeak ? 'text-amber-500' : 'text-foreground/60'}`}>
-                    {isSpeak ? 'Hyper-priority Transmission' : 'Proof of Knowledge'}
+            {/* Hyper-Priority Toggle */}
+            <div className={`p-8 rounded-[2rem] border transition-all duration-500 overflow-hidden relative group ${
+              isPriority 
+                ? 'bg-amber-500/10 border-amber-500/50 shadow-[0_0_30px_rgba(245,158,11,0.1)]' 
+                : 'bg-card/50 border-border hover:border-gray-800'
+            }`}>
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+                <div className="flex gap-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
+                    isPriority ? 'bg-amber-500 text-black shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'bg-white/5 text-gray-500'
+                  }`}>
+                    <Zap size={24} className={isPriority ? 'animate-pulse' : ''} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-3">
+                       <h3 className={`text-xs font-black uppercase tracking-[0.2em] ${isPriority ? 'text-amber-500' : 'text-foreground'}`}>
+                        Hyper-Priority Transmission
+                      </h3>
+                      <div className="px-2 py-0.5 rounded bg-red-500/20 border border-red-500/30">
+                        <span className="text-[8px] font-black text-red-500 uppercase tracking-tighter animate-pulse">Important</span>
+                      </div>
+                    </div>
+                    <p className={`text-[11px] leading-relaxed max-w-sm ${isPriority ? 'text-amber-500/60' : 'text-gray-500'}`}>
+                      Broadcasts bypass standard filters for subscribers and appear with high-intensity visual signatures on the global network.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${isPriority ? 'text-amber-500' : 'text-foreground/20'}`}>
+                    {isPriority ? 'Activated' : 'Disabled'}
                   </span>
-                  <p className="text-[11px] text-foreground/40 font-medium leading-relaxed max-w-xl">
-                      {isSpeak 
-                        ? "Broadcasts bypass standard filters for subscribers and appear with high-intensity visual signatures on the global network."
-                        : "Post-signature verified. Your content will be hashed and indexed for perpetual discovery within the Argentum Protocol."}
-                  </p>
+                  <button 
+                    type="button"
+                    onClick={() => setIsPriority(!isPriority)}
+                    className={`relative w-16 h-8 rounded-full transition-all duration-500 outline-none ${
+                      isPriority ? 'bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)]' : 'bg-white/5 border border-border'
+                    }`}
+                  >
+                    <motion.div 
+                      animate={{ x: isPriority ? 36 : 4 }}
+                      className={`absolute top-1 w-6 h-6 rounded-[0.6rem] shadow-xl ${
+                        isPriority ? 'bg-black' : 'bg-gray-600'
+                      }`}
+                    />
+                  </button>
+                </div>
               </div>
-            </motion.div>
+              
+              {isPriority && (
+                 <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-amber-500/5 pointer-events-none"
+                 />
+              )}
+            </div>
+
+            {/* Old Info Box removed as it is now the toggle above */}
 
             {/* Action */}
             <button

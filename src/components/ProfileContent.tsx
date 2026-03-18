@@ -40,7 +40,16 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     supabase.auth.getUser().then(({ data: { user } }: any) => {
       if (user) setCurrentUserId(user.id)
     })
-  }, [])
+    
+    // Handle ?edit=true query param
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.get('edit') === 'true' && (isOwner || currentUserId === profile.id)) {
+      setIsEditModalOpen(true)
+      // Clean up URL
+      const newUrl = window.location.pathname
+      window.history.replaceState({ ...window.history.state }, '', newUrl)
+    }
+  }, [isOwner, currentUserId, profile.id])
 
   useEffect(() => {
     setIsMounted(true)
@@ -166,6 +175,8 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
       setIsMessagingLoading(false)
     }
   }
+
+  const computedIsOwner = isOwner || (currentUserId === profile.id)
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-silver/30 relative">
@@ -356,7 +367,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       className="text-gray-400 text-sm leading-relaxed italic"
                       style={getAnimationStyle('slideLeft', 200)}
                     >
-                      "{profile.bio}"
+                      &quot;{profile.bio}&quot;
                     </p>
                   )}
 
@@ -495,7 +506,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       >
                         <PostCard 
                             post={post} 
-                            isOwner={isOwner}
+                            isOwner={computedIsOwner}
                             isPinned={post.id === profile.pinned_post_id}
                             onPin={handlePin}
                             currentUserId={currentUserId || undefined}

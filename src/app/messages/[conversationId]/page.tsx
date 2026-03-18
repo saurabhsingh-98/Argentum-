@@ -139,125 +139,126 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
   useEffect(() => {
     const setup = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/login')
-        return
-      }
-      setCurrentUser(user)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth/login')
+          return
+        }
+        setCurrentUser(user)
 
-       const status = await initializeEncryption()
-      setEncryptionStatus(status?.status || 'ready')
-      
-      if (status?.status === 'needs_recovery') {
-        setShowRecoveryModal(true)
-      }
+        const status = await initializeEncryption()
+        setEncryptionStatus(status?.status || 'ready')
+        
+        if (status?.status === 'needs_recovery') {
+          setShowRecoveryModal(true)
+        }
 
-      const { data: conv, error: convError } = await supabase
-        .from('conversations')
-        .select(`
-          *,
-          participant_1_profile:users!conversations_participant_1_fkey(*),
-          participant_2_profile:users!conversations_participant_2_fkey(*)
-        `)
-        .eq('id', conversationId)
-        .single()
+        const { data: conv, error: convError } = await supabase
+          .from('conversations')
+          .select(`
+            *,
+            participant_1_profile:users!conversations_participant_1_fkey(*),
+            participant_2_profile:users!conversations_participant_2_fkey(*)
+          `)
+          .eq('id', conversationId)
+          .single()
 
-      if (convError || !conv) {
-        router.push('/messages')
-        return
-      }
+        if (convError || !conv) {
+          router.push('/messages')
+          return
+        }
 
-      const other = conv.participant_1 === user.id ? conv.participant_2_profile : conv.participant_1_profile
-      setConversation(conv)
-      setOtherParticipant(other)
+        const other = conv.participant_1 === user.id ? conv.participant_2_profile : conv.participant_1_profile
+        setConversation(conv)
+        setOtherParticipant(other)
 
-      const muted = localStorage.getItem(`muted_${conversationId}`) === 'true'
-      setIsMuted(muted)
-      const savedNickname = localStorage.getItem(`nickname_${other.id}`) || ''
-      setNickname(savedNickname)
+        const muted = localStorage.getItem(`muted_${conversationId}`) === 'true'
+        setIsMuted(muted)
+        const savedNickname = localStorage.getItem(`nickname_${other.id}`) || ''
+        setNickname(savedNickname)
 
-      await fetchMessages(conv, user.id)
-      setLoading(false)
-      setTimeout(() => scrollToBottom('auto'), 100)
+        await fetchMessages(conv, user.id)
+        
+        await supabase
+          .from('messages')
+          .update({ read_at: new Date().toISOString() })
+          .eq('conversation_id', conversationId)
+          .neq('sender_id', user.id)
+          .is('read_at', null)
 
-      await supabase
-        .from('messages')
-        .update({ read_at: new Date().toISOString() })
-        .eq('conversation_id', conversationId)
-        .neq('sender_id', user.id)
-        .is('read_at', null)
-
-      const channel = supabase
-        .channel(`messages:${conversationId}`)
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
-          (payload: any) => {
-            setMessages((prev: any[]) => {
-              const msg = payload.new
-              const processed = {
-                ...msg,
-                decryptedContent: decryptContent(msg.content, msg.sender_id === user.id, conv, user.id),
-                expired: msg.expires_at && new Date(msg.expires_at) < new Date()
-              }
-              return [...prev, processed]
-            })
-            setTimeout(() => scrollToBottom(), 50)
-          }
-        )
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
-          (payload: any) => {
-            setMessages((prev: any[]) => prev.map(m => {
-              if (m.id === payload.new.id) {
+        const channel = supabase
+          .channel(`messages:${conversationId}`)
+          .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+            (payload: any) => {
+              setMessages((prev: any[]) => {
                 const msg = payload.new
-                return {
-                  ...m,
+                const processed = {
                   ...msg,
                   decryptedContent: decryptContent(msg.content, msg.sender_id === user.id, conv, user.id),
                   expired: msg.expires_at && new Date(msg.expires_at) < new Date()
                 }
-              }
-              return m
-            }))
-          }
-        )
-        .on(
-          'postgres_changes',
-          { event: 'DELETE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
-          (payload: any) => {
-            setMessages((prev: any[]) => prev.filter(m => m.id !== payload.old.id))
-          }
-        )
-        .subscribe();
-
-      const reactionsChannel = supabase
-        .channel(`reactions:${conversationId}`)
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'message_reactions' },
-          async (payload: any) => {
-            const messageId = payload.new?.message_id || payload.old?.message_id;
-            if (messageId) {
-                const { data: reactions } = await supabase
-                  .from('message_reactions')
-                  .select('*')
-                  .eq('message_id', messageId);
-                
-                setMessages((prev: any[]) => prev.map(m => 
-                    m.id === messageId ? { ...m, message_reactions: reactions || [] } : m
-                ));
+                return [...prev, processed]
+              })
+              setTimeout(() => scrollToBottom(), 50)
             }
-          }
-        )
-        .subscribe();
+          )
+          .on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+            (payload: any) => {
+              setMessages((prev: any[]) => prev.map(m => {
+                if (m.id === payload.new.id) {
+                  const msg = payload.new
+                  return {
+                    ...m,
+                    ...msg,
+                    decryptedContent: decryptContent(msg.content, msg.sender_id === user.id, conv, user.id),
+                    expired: msg.expires_at && new Date(msg.expires_at) < new Date()
+                  }
+                }
+                return m
+              }))
+            }
+          )
+          .on(
+            'postgres_changes',
+            { event: 'DELETE', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
+            (payload: any) => {
+              setMessages((prev: any[]) => prev.filter(m => m.id !== payload.old.id))
+            }
+          )
+          .subscribe();
 
-      return () => {
-        supabase.removeChannel(channel);
-        supabase.removeChannel(reactionsChannel);
-      };
+        const reactionsChannel = supabase
+          .channel(`reactions:${conversationId}`)
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'message_reactions' },
+            async (payload: any) => {
+              const messageId = payload.new?.message_id || payload.old?.message_id;
+              if (messageId) {
+                  const { data: reactions } = await supabase
+                    .from('message_reactions')
+                    .select('*')
+                    .eq('message_id', messageId);
+                  
+                  setMessages((prev: any[]) => prev.map(m => 
+                      m.id === messageId ? { ...m, message_reactions: reactions || [] } : m
+                  ));
+              }
+            }
+          )
+          .subscribe();
+
+        setLoading(false)
+        setTimeout(() => scrollToBottom('auto'), 100)
+      } catch (err) {
+        console.error('ChatPage critical error:', err)
+        setLoading(false)
+      }
     }
 
     setup()
