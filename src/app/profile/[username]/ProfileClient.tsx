@@ -43,12 +43,12 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
   }
 
   return (
-    <div className="min-h-screen bg-[#050505]">
+    <div className="min-h-screen bg-background">
       {/* Hero Header Area */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-accent-blue/20 to-background" />
         <div className="mesh-gradient-bg opacity-40" />
-        <div className="absolute inset-0 bg-[#050505]/40 backdrop-blur-3xl" />
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-3xl" />
         
         {/* Animated Glows in Hero */}
         <motion.div 
@@ -76,8 +76,8 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
             <motion.div variants={item} className="flex flex-col items-center lg:items-start gap-6">
               {/* Avatar with Glow */}
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-br from-silver/40 to-white/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-silver/20 bg-[#0d0d0d] overflow-hidden flex items-center justify-center relative">
+                <div className="absolute -inset-1 bg-gradient-to-br from-silver/40 to-foreground/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-border bg-card overflow-hidden flex items-center justify-center relative">
                   {profile.avatar_url ? (
                     <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
@@ -90,7 +90,7 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
 
               {/* Identity */}
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-                <h1 className="text-4xl font-black text-white tracking-tight drop-shadow-sm">
+                <h1 className="text-4xl font-black text-foreground tracking-tight drop-shadow-sm">
                   {profile.display_name || profile.username}
                 </h1>
                 <div className="flex items-center gap-2 text-gray-500 font-mono mt-1">
@@ -121,7 +121,7 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
               </div>
 
               {/* Bio & Extended Meta */}
-              <div className="flex flex-col gap-6 w-full pt-4 border-t border-white/5">
+              <div className="flex flex-col gap-6 w-full pt-4 border-t border-border">
                 {profile.bio && (
                   <p className="text-gray-400 text-sm leading-relaxed italic">
                     "{profile.bio}"
@@ -142,30 +142,30 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                 {/* Social Links Grid */}
                 <div className="grid grid-cols-1 gap-2 mt-2">
                   {profile.github_username && (
-                    <Link href={`https://github.com/${profile.github_username}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group/social">
+                    <Link href={`https://github.com/${profile.github_username}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group/social">
                       <div className="flex items-center gap-3">
-                        <Github size={16} className="text-gray-400 group-hover/social:text-white" />
-                        <span className="text-xs text-gray-400 group-hover/social:text-white font-medium">{profile.github_username}</span>
+                        <Github size={16} className="text-foreground/40 group-hover/social:text-foreground" />
+                        <span className="text-xs text-foreground/40 group-hover/social:text-foreground font-medium">{profile.github_username}</span>
                       </div>
-                      <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">GitHub</span>
+                      <span className="text-[10px] text-foreground/40 font-bold tracking-widest uppercase">GitHub</span>
                     </Link>
                   )}
-                  {profile.x_handle && (
-                    <Link href={`https://x.com/${profile.x_handle.replace('@', '')}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group/social">
+                  {profile.twitter_username && (
+                    <Link href={`https://x.com/${profile.twitter_username.replace('@', '')}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group/social">
                       <div className="flex items-center gap-3">
-                        <Twitter size={16} className="text-white" />
-                        <span className="text-xs text-gray-400 group-hover/social:text-white font-medium">{profile.x_handle}</span>
+                        <Twitter size={16} className="text-accent-blue" />
+                        <span className="text-xs text-foreground/40 group-hover/social:text-foreground font-medium">{profile.twitter_username}</span>
                       </div>
-                      <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">X / Twitter</span>
+                      <span className="text-[10px] text-foreground/40 font-bold tracking-widest uppercase">X / Twitter</span>
                     </Link>
                   )}
                   {profile.website_url && (
-                    <Link href={profile.website_url.startsWith('http') ? profile.website_url : `https://${profile.website_url}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group/social">
+                    <Link href={profile.website_url.startsWith('http') ? profile.website_url : `https://${profile.website_url}`} target="_blank" className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 transition-all group/social">
                       <div className="flex items-center gap-3">
                         <Globe size={16} className="text-green-500" />
-                        <span className="text-xs text-gray-400 group-hover/social:text-white font-medium">{profile.website_url.replace(/^https?:\/\//, '')}</span>
+                        <span className="text-xs text-foreground/40 group-hover/social:text-foreground font-medium">{profile.website_url.replace(/^https?:\/\//, '')}</span>
                       </div>
-                      <span className="text-[10px] text-gray-600 font-bold tracking-widest uppercase">URL</span>
+                      <span className="text-[10px] text-foreground/40 font-bold tracking-widest uppercase">URL</span>
                     </Link>
                   )}
                 </div>
@@ -190,10 +190,10 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
             {/* Build Feed */}
             <div className="flex flex-col gap-8">
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <h2 className="text-xs font-black text-gray-500 uppercase tracking-[0.3em]">Build History</h2>
+                <h2 className="text-xs font-black text-foreground/40 uppercase tracking-[0.3em]">Build History</h2>
                 <div className="flex gap-4">
-                  <span className="text-[10px] font-bold text-white uppercase border-b border-white pb-1">All</span>
-                  <span className="text-[11px] font-bold text-gray-600 uppercase hover:text-gray-400 cursor-pointer">Releases</span>
+                  <span className="text-[10px] font-bold text-foreground uppercase border-b border-foreground pb-1">All</span>
+                  <span className="text-[11px] font-bold text-foreground/40 uppercase hover:text-foreground cursor-pointer">Releases</span>
                 </div>
               </div>
               
@@ -236,12 +236,12 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
 function StatsCard({ label, value, icon }: { label: string, value: number, icon: React.ReactNode }) {
   return (
     <div className="glass-card p-6 flex flex-col items-center justify-center text-center gap-3 group transition-all hover:bg-white/[0.03] hover:border-white/20">
-      <div className="w-12 h-12 rounded-2xl bg-[#111] border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+      <div className="w-12 h-12 rounded-2xl bg-foreground/5 border border-border flex items-center justify-center group-hover:scale-110 transition-transform">
         {icon}
       </div>
       <div className="flex flex-col">
-        <span className="text-3xl font-black text-white group-hover:silver-glow-text transition-all tracking-tight">{value}</span>
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-1">{label}</span>
+        <span className="text-3xl font-black text-foreground group-hover:silver-glow-text transition-all tracking-tight">{value}</span>
+        <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-[0.2em] mt-1">{label}</span>
       </div>
     </div>
   )

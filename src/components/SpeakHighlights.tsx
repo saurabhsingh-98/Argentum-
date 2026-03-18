@@ -28,7 +28,7 @@ export default function SpeakHighlights({ highlights }: { highlights: Highlight[
           </div>
           <h3 className="text-xs font-black uppercase tracking-[0.3em] text-amber-500">Broadcast Highlights</h3>
         </div>
-        <Link href="/feed?category=Speak" className="text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+        <Link href="/feed?category=Speak" className="text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground transition-colors flex items-center gap-1">
           View All <ChevronRight size={12} />
         </Link>
       </div>
@@ -43,24 +43,24 @@ export default function SpeakHighlights({ highlights }: { highlights: Highlight[
             className="flex-shrink-0 w-80 group"
           >
             <Link href={`/post/${item.id}`}>
-              <div className="h-full bg-[#111] border border-amber-500/10 rounded-2xl p-5 hover:border-amber-500/30 transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] relative overflow-hidden">
+              <div className="h-full bg-card border border-amber-500/10 rounded-2xl p-5 hover:border-amber-500/30 transition-all hover:shadow-[0_0_30px_rgba(245,158,11,0.05)] relative overflow-hidden">
                 {/* Glow behind */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/5 blur-[50px] pointer-events-none group-hover:bg-amber-500/10 transition-all" />
                 
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div 
-                      className="w-7 h-7 rounded-full border border-white/10 flex items-center justify-center overflow-hidden"
+                      className="w-7 h-7 rounded-full border border-border flex items-center justify-center overflow-hidden"
                       style={{ background: item.users.avatar_url ? 'none' : getGradientFromUsername(item.users.username) }}
                     >
                       {item.users.avatar_url ? (
                         <img src={item.users.avatar_url} alt="av" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-[10px] font-black text-white">{item.users.username[0].toUpperCase()}</span>
+                        <span className="text-[10px] font-black text-foreground">{item.users.username[0].toUpperCase()}</span>
                       )}
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold text-white line-clamp-1">@{item.users.username}</span>
+                      <span className="text-[10px] font-bold text-foreground line-clamp-1">@{item.users.username}</span>
                     </div>
                   </div>
                   <div className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
@@ -68,10 +68,10 @@ export default function SpeakHighlights({ highlights }: { highlights: Highlight[
                   </div>
                 </div>
 
-                <h4 className="text-sm font-black text-white mb-2 line-clamp-1 group-hover:text-amber-500 transition-colors">
+                <h4 className="text-sm font-black text-foreground mb-2 line-clamp-1 group-hover:text-amber-500 transition-colors">
                   {item.title.replace('Broadcast: ', '')}
                 </h4>
-                <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-foreground/40 line-clamp-2 leading-relaxed">
                   {item.content.replace(/[#*`]/g, '')}
                 </p>
               </div>

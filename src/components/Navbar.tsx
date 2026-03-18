@@ -289,7 +289,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
       </nav>
 
       {/* Mobile Bottom Tab Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0a0a0a]/90 backdrop-blur-xl border-t border-white/5 z-[100] flex items-center justify-around px-4">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/90 backdrop-blur-xl border-t border-border z-[100] flex items-center justify-around px-4">
         <MobileNavItem icon={<Home size={20} />} label="Feed" href="/feed" active={pathname === '/feed'} />
         <MobileNavItem icon={<Compass size={20} />} label="Explore" href="/explore" active={pathname === '/explore'} />
         <Link href="/new" className="w-12 h-12 silver-metallic rounded-2xl flex items-center justify-center text-black -translate-y-4 shadow-glow-silver/30 active:scale-90 transition-all">

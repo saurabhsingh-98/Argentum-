@@ -58,7 +58,7 @@ export default async function FeedPage() {
                <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
                   The Build Feed
                </h1>
-               <p className="text-gray-500 text-sm max-w-lg leading-relaxed">
+               <p className="text-foreground/50 text-sm max-w-lg leading-relaxed">
                   Real-time intelligence from the world's most innovative builders. 
                   Collective progress, logged on-chain.
                </p>
@@ -104,7 +104,7 @@ export default async function FeedPage() {
                        <span className="text-[10px] font-mono text-foreground/20">{count} posts</span>
                     </div>
                   )) : (
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center py-4">No trending tags yet</p>
+                    <p className="text-[10px] text-foreground/40 font-bold uppercase tracking-widest text-center py-4">No trending tags yet</p>
                   )}
                </div>
             </div>
@@ -118,16 +118,16 @@ export default async function FeedPage() {
                <div className="flex flex-col gap-6">
                   {[1, 2, 3].map((_, i) => (
                     <div key={i} className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border border-white/10" />
+                       <div className="w-8 h-8 rounded-full bg-foreground/5 border border-border" />
                        <div className="flex flex-col">
-                          <span className="text-xs font-bold text-white">Builder #{i+1}</span>
-                          <span className="text-[10px] text-gray-500">@{['satoshi', 'vitalik', 'builder'][i]}</span>
+                          <span className="text-xs font-bold text-foreground">Builder #{i+1}</span>
+                          <span className="text-[10px] text-foreground/40">@{['satoshi', 'vitalik', 'builder'][i]}</span>
                        </div>
-                       <button className="ml-auto px-3 py-1 rounded-full border border-white/10 text-[8px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Follow</button>
+                       <button className="ml-auto px-3 py-1 rounded-full border border-border text-[8px] font-black uppercase tracking-widest hover:bg-foreground/5 transition-all">Follow</button>
                     </div>
                   ))}
                </div>
-               <button className="w-full mt-8 py-2 text-[8px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all border-t border-white/5">
+               <button className="w-full mt-8 py-2 text-[8px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground transition-all border-t border-border">
                   View Leaderboard
                </button>
             </div>

@@ -33,7 +33,7 @@ export default function CategoryFilter({
               {/* 3D Side panels (to avoid "cut in half" look) */}
               {selected === cat && (
                 <div className="absolute inset-0 rounded-xl pointer-events-none">
-                  <div className="absolute bottom-[-10px] left-0 right-0 h-[10px] bg-gray-500 rounded-b-xl origin-top transform-rotate-x-90" />
+                  <div className="absolute bottom-[-10px] left-0 right-0 h-[10px] bg-foreground/20 rounded-b-xl origin-top transform-rotate-x-90" />
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               )}

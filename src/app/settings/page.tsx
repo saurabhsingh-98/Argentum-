@@ -195,8 +195,8 @@ export default function SettingsPage() {
               onClick={() => setActiveSection(s.id as SettingsSection)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                 activeSection === s.id 
-                  ? 'bg-card text-foreground silver-glow shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-border' 
-                  : 'text-gray-500 hover:bg-card/50 hover:text-silver'
+                  ? 'bg-card text-foreground silver-glow shadow-premium border border-border' 
+                  : 'text-foreground/40 hover:bg-card/50 hover:text-foreground'
               }`}
             >
               <s.icon size={18} />
@@ -226,7 +226,7 @@ export default function SettingsPage() {
 
                     <div className="space-y-6">
                       <div className="flex items-center gap-6 p-6 bg-card/5 border border-border rounded-2xl">
-                         <div className="w-16 h-16 rounded-2xl border border-border bg-card overflow-hidden flex items-center justify-center text-xl font-black text-silver">
+                         <div className="w-16 h-16 rounded-2xl border border-border bg-card overflow-hidden flex items-center justify-center text-xl font-black text-foreground">
                             {profile.avatar_url ? (
                               <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
                             ) : (
@@ -234,12 +234,12 @@ export default function SettingsPage() {
                             )}
                          </div>
                          <div className="flex-1">
-                            <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">Display Name</p>
+                            <p className="text-xs font-black text-foreground/40 uppercase tracking-widest mb-1">Display Name</p>
                             <h3 className="text-lg font-bold">{profile.display_name || profile.username}</h3>
                          </div>
                          <button 
                             onClick={() => router.push(`/profile/${profile.username}`)}
-                            className="px-4 py-2 rounded-xl bg-card border border-border text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all"
+                            className="px-4 py-2 rounded-xl bg-card border border-border text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all font-mono"
                           >
                            Edit Profile
                          </button>
@@ -248,35 +248,35 @@ export default function SettingsPage() {
                       <div className="grid gap-4">
                         <div className="p-6 bg-card/5 border border-border rounded-2xl flex items-center justify-between">
                            <div>
-                             <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Username</p>
-                             <p className="text-sm text-silver">@{profile?.username || 'anonymous'}</p>
+                             <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-1">Username</p>
+                             <p className="text-sm text-foreground">@{profile?.username || 'anonymous'}</p>
                            </div>
-                           <button className="text-[10px] font-black text-silver border-b border-white/20 hover:border-white transition-all uppercase tracking-widest p-1">Change</button>
+                           <button className="text-[10px] font-black text-foreground/40 border-b border-border hover:border-foreground transition-all uppercase tracking-widest p-1">Change</button>
                         </div>
 
                          <div className="p-6 bg-card/5 border border-border rounded-2xl">
-                           <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Connected Accounts</p>
+                           <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-4">Connected Accounts</p>
                            <div className="space-y-3">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                  <Github size={18} className="text-gray-400" />
+                                  <Github size={18} className="text-foreground/40" />
                                   <span className="text-sm">GitHub</span>
                                 </div>
                                 {isGitHubConnected ? (
                                   <span className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-md">Connected</span>
                                 ) : (
-                                  <button onClick={() => handleConnect('github')} className="text-[10px] font-black text-silver border-b border-border/50 hover:border-foreground transition-all uppercase tracking-widest p-1">Connect</button>
+                                  <button onClick={() => handleConnect('github')} className="text-[10px] font-black text-foreground/40 border-b border-border/50 hover:border-foreground transition-all uppercase tracking-widest p-1">Connect</button>
                                 )}
                               </div>
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                  <Chrome size={18} className="text-gray-400" />
+                                  <Chrome size={18} className="text-foreground/40" />
                                   <span className="text-sm">Google</span>
                                 </div>
                                 {isGoogleConnected ? (
                                   <span className="text-[10px] font-black text-green-500 uppercase tracking-widest bg-green-500/10 px-2 py-1 rounded-md">Connected</span>
                                 ) : (
-                                  <button onClick={() => handleConnect('google')} className="text-[10px] font-black text-silver border-b border-border/50 hover:border-foreground transition-all uppercase tracking-widest p-1">Connect</button>
+                                  <button onClick={() => handleConnect('google')} className="text-[10px] font-black text-foreground/40 border-b border-border/50 hover:border-foreground transition-all uppercase tracking-widest p-1">Connect</button>
                                 )}
                               </div>
                            </div>

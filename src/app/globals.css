@@ -39,19 +39,19 @@
 }
 
 :root {
-  --background: #f8f9fb; /* Soft cool gray */
-  --foreground: #1c1c1e; /* Deep obsidian for text */
+  --background: #fdfdfd; 
+  --foreground: #000000;
   --card: #ffffff;
   --card-overlay: rgba(255, 255, 255, 0.7);
   --border: rgba(0, 0, 0, 0.04);
-  --silver: #86868b; /* Apple-style silver */
-  --silver-bright: #424245;
-  --accent: #111111;
-  --accent-blue: #0071e3; /* Premium blue */
-  --radius: 1.25rem; /* More rounded in light mode */
+  --silver: #86868b;
+  --silver-bright: #1d1d1f;
+  --accent: #000000;
+  --accent-blue: #007aff; 
+  --radius: 1.5rem; 
   --silver-gradient: linear-gradient(135deg, #ffffff 0%, #f5f5f7 50%, #d2d2d7 100%);
-  --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 0 20px -5px rgba(0, 0, 0, 0.02);
-  --glass-border: rgba(0, 0, 0, 0.04);
+  --shadow-premium: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.4);
 }
 
 .dark {
