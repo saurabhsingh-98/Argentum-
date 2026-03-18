@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { hashContent } from '@/lib/utils/hash'
+import { calculateStreak } from '@/lib/utils/streak'
 import MarkdownEditor from '@/components/MarkdownEditor'
 import { ChevronLeft, Info, Globe, Lock, Zap } from 'lucide-react'
 import Link from 'next/link'
@@ -99,23 +100,11 @@ export default function NewPost() {
         .order('post_date', { ascending: false })
 
       if (allHistory) {
-        let currentStreak = 0
-        const checkDate = new Date()
-        
-        for (const entry of allHistory) {
-          const entryDate = new Date(entry.post_date)
-          const diffDays = Math.floor((checkDate.getTime() - entryDate.getTime()) / (1000 * 3600 * 24))
-          
-          if (diffDays === currentStreak) {
-            currentStreak++
-          } else if (diffDays > currentStreak) {
-            break
-          }
-        }
+        const { current } = calculateStreak(allHistory)
 
         await supabase
           .from('users')
-          .update({ streak_count: currentStreak })
+          .update({ streak_count: current })
           .eq('id', user.id)
       }
       

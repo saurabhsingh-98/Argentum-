@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Flame, Trophy, Calendar, Zap, X, ChevronLeft, ChevronRight, BarChart3, Clock, Loader2, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { calculateStreak } from '@/lib/utils/streak'
 
 interface StreakHistory {
   post_date: string
@@ -44,15 +45,29 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
 
     if (data) {
       setHistory(data)
-      // Mock stats for now - ideally these come from a dedicated stats table or RPC
+      const stats = calculateStreak(data)
       setStreakData({
-        current: 12,
-        longest: 45,
-        postsThisMonth: data.filter((h: StreakHistory) => new Date(h.post_date).getMonth() === currentMonth).length,
-        mostActiveDay: 'Monday'
+        current: stats.current,
+        longest: stats.longest,
+        postsThisMonth: data.filter((h: StreakHistory) => {
+          const d = new Date(h.post_date)
+          return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+        }).length,
+        mostActiveDay: calculateMostActiveDay(data)
       })
     }
     setLoading(false)
+  }
+
+  const calculateMostActiveDay = (data: StreakHistory[]) => {
+    if (!data.length) return '—'
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const counts: Record<string, number> = {}
+    data.forEach(h => {
+      const day = days[new Date(h.post_date).getDay()]
+      counts[day] = (counts[day] || 0) + h.post_count
+    })
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0]
   }
 
   const daysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate()
