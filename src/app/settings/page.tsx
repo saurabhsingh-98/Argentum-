@@ -50,25 +50,32 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const setup = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/login')
-        return
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth/login')
+          return
+        }
+        setUser(user)
+
+        const { data: prof, error: profError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        
+        if (profError && profError.code !== 'PGRST116') throw profError
+        
+        setProfile(prof)
+        setLoading(false)
+
+        const savedCompact = localStorage.getItem('appearance_compact') === 'true'
+        setCompactMode(savedCompact)
+        setDisappearingMessages(localStorage.getItem('ag_disappearing_messages') || 'Off')
+      } catch (err) {
+        console.error('Settings setup error:', err)
+        setLoading(false)
       }
-      setUser(user)
-
-      const { data: prof } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-      
-      setProfile(prof)
-      setLoading(false)
-
-      const savedCompact = localStorage.getItem('appearance_compact') === 'true'
-      setCompactMode(savedCompact)
-      setDisappearingMessages(localStorage.getItem('ag_disappearing_messages') || 'Off')
     }
 
     setup()
