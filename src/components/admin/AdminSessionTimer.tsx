@@ -72,19 +72,19 @@ export default function AdminSessionTimer() {
   }
 
   return (
-    <div className="px-4 py-3 bg-[#111] border border-white/5 rounded-2xl">
+    <div className="px-4 py-3 bg-card border border-border rounded-2xl">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <ShieldCheck size={12} className={isExpiring ? 'text-red-500' : 'text-green-500'} />
-          <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Secure Session</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40">Secure Session</span>
         </div>
-        <div className={`flex items-center gap-1 font-mono text-[10px] font-bold ${isExpiring ? 'text-red-500' : 'text-white'}`}>
+        <div className={`flex items-center gap-1 font-mono text-[10px] font-bold ${isExpiring ? 'text-red-500' : 'text-foreground'}`}>
           <Timer size={10} />
           {formatTime(timeLeft)}
         </div>
       </div>
 
-      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mb-3">
+      <div className="h-1 w-full bg-foreground/5 rounded-full overflow-hidden mb-3">
         <motion.div 
           initial={false}
           animate={{ width: `${(timeLeft / SESSION_TIMEOUT) * 100}%` }}

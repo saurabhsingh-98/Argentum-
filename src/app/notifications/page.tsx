@@ -95,10 +95,10 @@ export default function NotificationsPage() {
     switch (type) {
       case 'upvote': return <ArrowUp size={16} className="text-green-500" />
       case 'comment': return <MessageCircle size={16} className="text-blue-500" />
-      case 'follow': return <UserPlus size={16} className="text-silver" />
+      case 'follow': return <UserPlus size={16} className="text-foreground/40" />
       case 'message': return <Lock size={16} className="text-green-500" />
       case 'verified': return <CheckCircle size={16} className="text-green-500" />
-      default: return <Bell size={16} className="text-gray-500" />
+      default: return <Bell size={16} className="text-foreground/40" />
     }
   }
 
@@ -142,8 +142,8 @@ export default function NotificationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-silver animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-foreground/40 animate-spin" />
       </div>
     )
   }
@@ -151,27 +151,27 @@ export default function NotificationsPage() {
   const grouped = groupNotifications(notifications)
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-silver/30 pb-20">
+    <div className="min-h-screen bg-background text-foreground selection:bg-silver/30 pb-20">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="flex flex-col gap-8"
         >
-          <div className="flex items-center justify-between border-b border-white/5 pb-6">
+          <div className="flex items-center justify-between border-b border-border pb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-silver">
+              <div className="w-12 h-12 rounded-2xl bg-foreground/5 border border-border flex items-center justify-center text-foreground">
                 <Bell size={24} />
               </div>
               <div className="flex flex-col">
-                 <h1 className="text-3xl font-black text-white tracking-tighter">Notifications</h1>
-                 <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Your activity feed</p>
+                 <h1 className="text-3xl font-black text-foreground tracking-tighter">Notifications</h1>
+                 <p className="text-foreground/40 text-xs font-bold uppercase tracking-widest">Your activity feed</p>
               </div>
             </div>
             {notifications.some(n => !n.is_read) && (
               <button 
                 onClick={markAllAsRead}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-silver hover:bg-white/10 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-border text-[10px] font-black uppercase tracking-widest text-foreground hover:bg-foreground/10 transition-all"
               >
                 <CheckCheck size={14} />
                 Mark all as read
@@ -181,12 +181,12 @@ export default function NotificationsPage() {
 
           {notifications.length === 0 ? (
              <div className="glass-card p-20 flex flex-col items-center text-center gap-6 mt-10">
-              <div className="w-20 h-20 rounded-[2rem] border border-white/10 bg-[#0d0d0d] flex items-center justify-center text-gray-500">
+              <div className="w-20 h-20 rounded-[2rem] border border-border bg-card flex items-center justify-center text-foreground/40">
                 <span className="text-xl font-black uppercase tracking-widest opacity-20">Ag</span>
               </div>
               <div className="flex flex-col gap-2">
-                <h2 className="text-xl font-black text-white">No notifications yet</h2>
-                <p className="text-gray-500 text-sm">Activities from users you interact with will appear here.</p>
+                <h2 className="text-xl font-black text-foreground">No notifications yet</h2>
+                <p className="text-foreground/40 text-sm">Activities from users you interact with will appear here.</p>
               </div>
             </div>
           ) : (
@@ -195,19 +195,19 @@ export default function NotificationsPage() {
                 items.length > 0 && (
                   <div key={title} className="flex flex-col gap-4">
                     <div className="flex items-center gap-3">
-                       <span className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em]">{title}</span>
-                       <div className="h-px flex-1 bg-white/5" />
+                       <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.2em]">{title}</span>
+                       <div className="h-px flex-1 bg-border" />
                     </div>
                     <div className="flex flex-col gap-2">
                       {items.map((n: any) => (
                         <div 
                           key={n.id}
                           onClick={() => markAsRead(n.id, n.link)}
-                          className={`glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-white/[0.03] transition-all group relative overflow-hidden ${
-                            !n.is_read ? 'bg-white/[0.02] border-l-2 border-l-green-500/50' : 'opacity-60 grayscale-[0.5]'
+                          className={`glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-foreground/5 transition-all group relative overflow-hidden ${
+                            !n.is_read ? 'bg-foreground/[0.02] border-l-2 border-l-green-500' : 'opacity-60 grayscale-[0.5]'
                           }`}
                         >
-                          <div className="w-10 h-10 rounded-full border border-white/5 bg-[#111] overflow-hidden flex items-center justify-center text-silver relative z-10">
+                          <div className="w-10 h-10 rounded-full border border-border bg-card overflow-hidden flex items-center justify-center text-foreground relative z-10">
                             {n.from_user.avatar_url ? (
                               <img src={n.from_user.avatar_url} alt="avatar" className="w-full h-full object-cover" />
                             ) : (
@@ -215,16 +215,16 @@ export default function NotificationsPage() {
                                 {n.from_user.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || n.from_user.username?.[0].toUpperCase()}
                               </span>
                             )}
-                            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#0a0a0a] border border-white/5 flex items-center justify-center shadow-xl">
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-background border border-border flex items-center justify-center shadow-xl">
                               {getIcon(n.type)}
                             </div>
                           </div>
 
                           <div className="flex-1 flex flex-col gap-0.5 relative z-10">
-                            <p className="text-sm font-medium text-gray-200 leading-tight">
-                              <span className="text-white font-bold">{n.from_user.display_name || `@${n.from_user.username}`}</span> {n.content.split(n.from_user.display_name || n.from_user.username).pop()}
+                            <p className="text-sm font-medium text-foreground/60 leading-tight">
+                              <span className="text-foreground font-bold">{n.from_user.display_name || `@${n.from_user.username}`}</span> {n.content.split(n.from_user.display_name || n.from_user.username).pop()}
                             </p>
-                            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">
+                            <span className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest">
                               {formatRelativeTime(n.created_at)}
                             </span>
                           </div>

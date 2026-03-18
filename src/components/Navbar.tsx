@@ -181,7 +181,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                   </Link>
                 </div>
 
-                <div className="h-4 w-px bg-white/10 hidden md:block mx-1" />
+                <div className="h-4 w-px bg-border hidden md:block mx-1" />
 
                 {/* Streak Counter */}
                 <button 
@@ -205,11 +205,11 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs font-black text-white/40 group-hover/avatar:text-white transition-colors uppercase">${profile?.username?.[0] || user.email?.[0]}</span>`;
+                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs font-black text-foreground/40 group-hover/avatar:text-foreground transition-colors uppercase">${profile?.username?.[0] || user.email?.[0]}</span>`;
                         }}
                       />
                     ) : (
-                      <span className="text-xs font-black text-white/40 group-hover/avatar:text-white transition-colors uppercase">
+                      <span className="text-xs font-black text-foreground/40 group-hover/avatar:text-foreground transition-colors uppercase">
                          {profile?.username?.[0] || user.email?.[0]}
                       </span>
                     )}
@@ -225,25 +225,25 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                       >
                           <div className="p-4 bg-foreground/[0.02] border-b border-border">
                             <div className="flex items-center gap-3">
-                               <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                               <div className="w-10 h-10 rounded-full bg-foreground/5 border border-border flex items-center justify-center overflow-hidden">
                                   {profile?.avatar_url ? (
                                     <img 
                                       src={profile.avatar_url} 
                                       className="w-full h-full object-cover" 
                                       onError={(e) => {
                                         (e.target as HTMLImageElement).style.display = 'none';
-                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="font-black text-xs">${profile?.username?.[0] || ''}</span>`;
+                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="font-black text-xs text-foreground/40">${profile?.username?.[0] || ''}</span>`;
                                       }}
                                     />
                                   ) : (
-                                    <span className="font-black text-xs">{profile?.username?.[0]}</span>
+                                    <span className="font-black text-xs text-foreground/40">{profile?.username?.[0]}</span>
                                   )}
                                </div>
                                <div className="flex flex-col min-w-0">
-                                  <span className="text-sm font-bold text-white truncate">
+                                  <span className="text-sm font-bold text-foreground truncate">
                                     {profile?.display_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Builder'}
                                   </span>
-                                  <span className="text-[10px] text-white/30 font-mono truncate">
+                                  <span className="text-[10px] text-foreground/30 font-mono truncate">
                                     @{profile?.username || user?.user_metadata?.username || 'anonymous'}
                                   </span>
                                </div>
@@ -257,7 +257,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                             <DropdownItem icon={<MessageCircle size={14} />} label="Messages" href="/messages" />
                             <DropdownItem icon={<Settings size={14} />} label="Account Settings" href="/settings" />
                             
-                            <div className="h-px bg-white/5 my-1" />
+                            <div className="h-px bg-border my-1" />
                             <button 
                               onClick={() => { setShowAccountSwitcher(true); setShowDropdown(false); }}
                               className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-foreground/60 hover:text-foreground hover:bg-foreground/5 rounded-xl transition-all"
@@ -279,7 +279,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             ) : (
               <Link 
                 href="/auth/login"
-                className="px-6 py-2 rounded-full bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 shadow-lg"
+                className="px-6 py-2 rounded-full bg-foreground text-background text-[10px] font-black uppercase tracking-widest hover:brightness-90 transition-all active:scale-95 shadow-lg"
               >
                 Sign In
               </Link>
@@ -320,7 +320,7 @@ function DropdownItem({ icon, label, href }: { icon: React.ReactNode, label: str
 
 function MobileNavItem({ icon, label, href, active }: { icon: React.ReactNode, label: string, href: string, active: boolean }) {
   return (
-    <Link href={href} className={`flex flex-col items-center gap-1 ${active ? 'text-green-500' : 'text-foreground/40'}`}>
+    <Link href={href} className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-green-500' : 'text-foreground/40 hover:text-foreground'}`}>
       {icon}
       <span className="text-[8px] font-black uppercase tracking-widest">{label}</span>
     </Link>

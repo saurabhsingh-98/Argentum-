@@ -57,16 +57,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [])
 
   return (
-    <div className="flex h-screen bg-[#050505] text-white selection:bg-red-500/30">
+    <div className="flex h-screen bg-background text-foreground selection:bg-red-500/30">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-white/5 bg-[#0a0a0a] flex flex-col z-50">
+      <aside className="w-64 border-r border-border bg-card flex flex-col z-50">
         <div className="p-8 pb-6">
           <Link href={`/admin-${ADMIN_SEGMENT}`} className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-2xl bg-red-600 flex items-center justify-center shadow-lg shadow-red-600/20 group-hover:scale-110 transition-transform">
                <ShieldAlert size={20} className="text-black" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tighter leading-none">Ag</span>
+              <span className="text-xl font-black tracking-tighter leading-none text-foreground">Ag</span>
               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Security</span>
             </div>
           </Link>
@@ -86,8 +86,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 className={`
                   flex items-center gap-4 px-4 py-3 rounded-xl transition-all group
                   ${isActive 
-                    ? 'bg-red-600/10 text-red-400 border-l-2 border-red-500' 
-                    : 'text-gray-500 hover:text-white hover:bg-white/5'
+                    ? 'bg-red-600/10 text-red-500 border-l-2 border-red-500' 
+                    : 'text-foreground/40 hover:text-foreground hover:bg-foreground/5'
                   }
                 `}
               >
@@ -107,9 +107,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Admin Footer */}
-        <div className="p-6 border-t border-white/5 bg-[#0d0d0d]">
+        <div className="p-6 border-t border-border bg-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-9 h-9 rounded-xl border border-white/10 overflow-hidden bg-red-500/10 flex items-center justify-center text-red-500 text-xs font-black">
+            <div className="w-9 h-9 rounded-xl border border-border overflow-hidden bg-red-500/10 flex items-center justify-center text-red-500 text-xs font-black">
               {profile?.avatar_url ? (
                 <img src={profile.avatar_url} className="w-full h-full object-cover" />
               ) : (
@@ -117,14 +117,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold truncate text-white uppercase tracking-tight">{profile?.display_name || profile?.username}</p>
+              <p className="text-xs font-bold truncate text-foreground uppercase tracking-tight">{profile?.display_name || profile?.username}</p>
               <p className="text-[9px] text-red-500/60 font-black uppercase tracking-widest">Administrator</p>
             </div>
           </div>
           
           <button 
             onClick={() => router.push('/')}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 border border-white/5 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-foreground/5 border border-border text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground hover:bg-foreground/10 transition-all"
           >
             <LogOut size={14} /> Exit Dash
           </button>
@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar">
+      <main className="flex-1 overflow-y-auto bg-background relative custom-scrollbar">
         <div className="p-10 max-w-7xl mx-auto">
           {children}
         </div>

@@ -213,7 +213,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
           style={{ animationDuration: '8s' }}
         />
         <div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-silver/5 blur-[120px] rounded-full pointer-events-none animate-pulse" 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-foreground/5 blur-[120px] rounded-full pointer-events-none animate-pulse" 
           style={{ animationDuration: '10s', animationDelay: '2s' }}
         />
       </div>
@@ -225,32 +225,32 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
             style={getAnimationStyle('slideBottom', 100)}
           >
             <div className="w-28 h-28 rounded-[2.5rem] border-2 border-border bg-card flex items-center justify-center relative shadow-glow">
-              <div className="absolute inset-0 bg-silver/10 blur-3xl rounded-full" />
+              <div className="absolute inset-0 bg-foreground/5 blur-3xl rounded-full" />
               <span className="text-4xl font-black text-foreground drop-shadow-glow relative z-10">
                 {profile.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || profile.username?.[0]?.toUpperCase()}
               </span>
               <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-background border border-border flex items-center justify-center shadow-xl">
-                <Lock size={18} className="text-silver" />
+                <Lock size={18} className="text-foreground/40" />
               </div>
             </div>
             
             <div className="flex flex-col gap-3">
-              <h2 className="text-3xl font-black text-white tracking-tight">{profile.username}</h2>
-              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                <Lock size={14} className="text-gray-500" />
-                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">
+              <h2 className="text-3xl font-black text-foreground tracking-tight">{profile.username}</h2>
+              <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-border">
+                <Lock size={14} className="text-foreground/40" />
+                <p className="text-foreground/40 text-xs font-bold uppercase tracking-widest">
                   This profile is private
                 </p>
               </div>
             </div>
 
-            <p className="text-gray-500 text-sm max-w-xs leading-relaxed">
+            <p className="text-foreground/40 text-sm max-w-xs leading-relaxed">
                 Connect with the builder or wait for them to go public to see their shipping logs.
             </p>
 
             <Link 
               href="/"
-              className="mt-4 px-10 py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-silver hover:bg-white/10 hover:border-white/20 transition-all active:scale-95"
+              className="mt-4 px-10 py-4 rounded-2xl bg-foreground/5 border border-border text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40 hover:bg-foreground/10 hover:border-foreground/20 transition-all active:scale-95"
             >
               Back to Home
             </Link>
@@ -264,8 +264,8 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   className="relative group"
                   style={getAnimationStyle('fade', 0, 'avatar')}
                 >
-                  <div className="absolute -inset-1 bg-gradient-to-br from-silver/40 to-white/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-silver/20 bg-card overflow-hidden flex items-center justify-center relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-foreground/20 to-foreground/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-border bg-card overflow-hidden flex items-center justify-center relative">
                     {profile.avatar_url ? (
                       <img 
                         src={profile.avatar_url} 
@@ -273,11 +273,11 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-5xl font-black text-silver drop-shadow-glow">${profile.username ? profile.username[0].toUpperCase() : '?'}</span>`;
+                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-5xl font-black text-foreground drop-shadow-glow">${profile.username ? profile.username[0].toUpperCase() : '?'}</span>`;
                         }}
                       />
                     ) : (
-                      <span className="text-5xl font-black text-silver drop-shadow-glow">
+                      <span className="text-5xl font-black text-foreground drop-shadow-glow">
                         {profile.username ? profile.username[0].toUpperCase() : '?'}
                       </span>
                     )}
@@ -293,15 +293,15 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       {profile.display_name}
                     </h1>
                     {!profile.is_public && (
-                      <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center gap-2">
-                        <Lock size={12} className="text-silver" />
-                        <span className="text-[10px] font-black text-silver uppercase tracking-[0.2em]">🔒 Private profile</span>
+                      <div className="px-3 py-1 rounded-full bg-foreground/5 border border-border flex items-center gap-2">
+                        <Lock size={12} className="text-foreground/40" />
+                        <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.2em]">🔒 Private profile</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                    <AtSign size={14} className="text-gray-500" />
-                    <span className="text-sm font-bold text-gray-400">{profile.username}</span>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-foreground/5 border border-border">
+                    <AtSign size={14} className="text-foreground/40" />
+                    <span className="text-sm font-bold text-foreground/40">{profile.username}</span>
                   </div>
 
                   {/* Follower Stats */}
@@ -311,15 +311,15 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       className="flex items-center gap-1.5 hover:opacity-80 transition-all group"
                     >
                       <span className="text-sm font-black text-foreground group-hover:silver-glow-text">{followCounts.followers}</span>
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-gray-300">Followers</span>
+                      <span className="text-[10px] text-foreground/40 uppercase tracking-widest group-hover:text-foreground/60">Followers</span>
                     </button>
-                    <div className="w-1 h-1 rounded-full bg-gray-800" />
+                    <div className="w-1 h-1 rounded-full bg-border" />
                     <button 
                       onClick={() => { setFollowModalTab('following'); setIsFollowModalOpen(true); }}
                       className="flex items-center gap-1.5 hover:opacity-80 transition-all group"
                     >
                       <span className="text-sm font-black text-foreground group-hover:silver-glow-text">{followCounts.following}</span>
-                      <span className="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-gray-300">Following</span>
+                      <span className="text-[10px] text-foreground/40 uppercase tracking-widest group-hover:text-foreground/60">Following</span>
                     </button>
                   </div>
                 </div>
@@ -345,7 +345,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                     <button 
                       onClick={handleMessageClick}
                       disabled={isMessagingLoading}
-                      className="flex-1 bg-white/5 border border-white/10 flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-white/10 hover:border-white/20 transition-all active:scale-[0.98] disabled:opacity-50"
+                      className="flex-1 bg-foreground/5 border border-border flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black text-foreground uppercase tracking-widest hover:bg-foreground/10 hover:border-foreground/20 transition-all active:scale-[0.98] disabled:opacity-50"
                     >
                       {isMessagingLoading ? (
                         <Loader2 size={14} className="animate-spin" />
@@ -356,15 +356,15 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                     </button>
                   </div>
                 )}
-                  <button className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white transition-all">
+                  <button className="w-12 h-12 flex items-center justify-center bg-foreground/5 border border-border rounded-2xl text-foreground/40 hover:text-foreground transition-all">
                     <Share2 size={18} />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-6 w-full pt-4 border-t border-white/5">
+                <div className="flex flex-col gap-6 w-full pt-4 border-t border-border">
                   {profile.bio && (
                     <p 
-                      className="text-gray-400 text-sm leading-relaxed italic"
+                      className="text-foreground/40 text-sm leading-relaxed italic"
                       style={getAnimationStyle('slideLeft', 200)}
                     >
                       &quot;{profile.bio}&quot;
@@ -375,9 +375,9 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       className="flex flex-col gap-3"
                       style={getAnimationStyle('slideLeft', 250)}
                   >
-                    <div className="flex items-center gap-3 text-xs text-gray-500 font-bold uppercase tracking-widest">
+                    <div className="flex items-center gap-3 text-xs text-foreground/40 font-bold uppercase tracking-widest">
                       <Rocket size={14} className="text-accent" />
-                    <span>Currently: <span className="text-white normal-case font-medium ml-1">{profile.currently_building || 'Analyzing protocols'}</span></span>
+                    <span>Currently: <span className="text-foreground normal-case font-medium ml-1">{profile.currently_building || 'Analyzing protocols'}</span></span>
                   </div>
 
                   {/* Skills tags */}
@@ -386,7 +386,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                         {profile.skills.map((skill: string, i: number) => (
                             <span 
                                 key={skill}
-                                className="px-3 py-1 bg-white/[0.03] border border-white/10 rounded-full text-[10px] font-bold text-gray-400"
+                                className="px-3 py-1 bg-foreground/5 border border-border rounded-full text-[10px] font-bold text-foreground/40"
                                 style={getAnimationStyle('fade', 300 + (i * 50))}
                             >
                                 {skill}
@@ -408,10 +408,10 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                     )}
 
                     {profile.looking_for && (
-                        <div className="flex items-center gap-2.5 px-3 py-2 bg-white/5 border border-white/10 rounded-xl w-fit">
-                            <Search size={12} className="text-silver" />
-                            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-                                Looking for: <span className="text-white normal-case ml-1">{profile.looking_for}</span>
+                        <div className="flex items-center gap-2.5 px-3 py-2 bg-foreground/5 border border-border rounded-xl w-fit">
+                            <Search size={12} className="text-foreground/40" />
+                            <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">
+                                Looking for: <span className="text-foreground normal-case ml-1">{profile.looking_for}</span>
                             </span>
                         </div>
                     )}
@@ -421,7 +421,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       <Link 
                         href={`https://github.com/${profile.github_username}`} 
                         target="_blank" 
-                        className="p-2 rounded-lg bg-white/5 border border-white/10 text-silver hover:text-green-500 hover:border-green-500/30 hover:bg-green-500/5 transition-all"
+                        className="p-2 rounded-lg bg-foreground/5 border border-border text-foreground/40 hover:text-foreground hover:border-foreground/30 hover:bg-foreground/10 transition-all"
                         title="GitHub"
                       >
                         <Github size={18} />
@@ -432,7 +432,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       <Link 
                         href={`https://instagram.com/${profile.instagram_username.replace('@', '')}`} 
                         target="_blank" 
-                        className="p-2 rounded-lg bg-white/5 border border-white/10 text-silver hover:text-green-500 hover:border-green-500/30 hover:bg-green-500/5 transition-all"
+                        className="p-2 rounded-lg bg-foreground/5 border border-border text-foreground/40 hover:text-foreground hover:border-foreground/30 hover:bg-foreground/10 transition-all"
                         title="Instagram"
                       >
                         <Instagram size={18} />
@@ -442,7 +442,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                       <Link 
                         href={profile.website_url.startsWith('http') ? profile.website_url : `https://${profile.website_url}`} 
                         target="_blank" 
-                        className="p-2 rounded-lg bg-white/5 border border-white/10 text-silver hover:text-green-500 hover:border-green-500/30 hover:bg-green-500/5 transition-all"
+                        className="p-2 rounded-lg bg-foreground/5 border border-border text-foreground/40 hover:text-foreground hover:border-foreground/30 hover:bg-foreground/10 transition-all"
                         title="Website"
                       >
                         <Globe size={18} />
@@ -450,7 +450,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                     )}
                   </div>
 
-                    <div className="flex items-center gap-3 text-xs text-gray-500 font-bold uppercase tracking-widest">
+                    <div className="flex items-center gap-3 text-xs text-foreground/40 font-bold uppercase tracking-widest">
                       <Calendar size={14} />
                       <span>Joined {isMounted ? new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '...'}</span>
                     </div>
@@ -481,7 +481,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   <StatsCard label="Upvotes" value={profile.total_upvotes_received || 0} icon={<ArrowUpRight size={20} className="text-blue-400" />} />
                 </div>
                 <div style={getAnimationStyle('slideBottom', 350)}>
-                  <StatsCard label="Verified" value={posts?.filter((p: any) => p.verification_status === 'verified').length || 0} icon={<Award size={20} className="text-silver" />} />
+                  <StatsCard label="Verified" value={posts?.filter((p: any) => p.verification_status === 'verified').length || 0} icon={<Award size={20} className="text-foreground/60" />} />
                 </div>
               </div>
 
@@ -489,11 +489,11 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   className="flex flex-col gap-8"
                   style={getAnimationStyle('fade', 350)}
               >
-                <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                  <h2 className="text-xs font-black text-gray-500 uppercase tracking-[0.3em]">Build History</h2>
+                <div className="flex items-center justify-between border-b border-border pb-4">
+                  <h2 className="text-xs font-black text-foreground/40 uppercase tracking-[0.3em]">Build History</h2>
                   <div className="flex gap-4">
-                    <span className="text-[10px] font-bold text-white uppercase border-b border-white pb-1">All</span>
-                    <span className="text-[11px] font-bold text-gray-600 uppercase hover:text-gray-400 cursor-pointer">Releases</span>
+                    <span className="text-[10px] font-bold text-foreground uppercase border-b border-foreground pb-1">All</span>
+                    <span className="text-[11px] font-bold text-foreground/40 uppercase hover:text-foreground cursor-pointer">Releases</span>
                   </div>
                 </div>
                 

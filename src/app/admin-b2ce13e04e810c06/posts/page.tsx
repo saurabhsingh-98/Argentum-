@@ -89,7 +89,7 @@ export default function PostsManagement() {
           <input 
             type="text" 
             placeholder="Search logs/content..."
-            className="pl-12 pr-6 py-3 bg-[#111] border border-white/5 rounded-2xl w-full text-xs font-bold outline-none border-red-500/0 focus:border-red-500/30 transition-all"
+            className="pl-12 pr-6 py-3 bg-card border border-border rounded-2xl w-full text-xs font-bold outline-none border-red-500/0 focus:border-red-500/30 transition-all"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -107,7 +107,7 @@ export default function PostsManagement() {
           <motion.div 
             layout
             key={post.id}
-            className="bg-[#0a0a0a] border border-white/5 p-6 rounded-[2rem] hover:border-white/10 transition-all group"
+            className="bg-card border border-border p-6 rounded-[2rem] transition-all group"
           >
             <div className="flex items-start justify-between mb-4">
                <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ export default function PostsManagement() {
                   <div className="px-2 py-1 bg-white/5 rounded-lg text-[8px] font-mono text-gray-500">{new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                   <div className="relative group/menu">
                      <button className="p-2 text-gray-600 hover:text-white rounded-xl transition-all"><MoreHorizontal size={14} /></button>
-                     <div className="absolute right-0 top-full mt-1 w-40 bg-[#111] border border-white/5 rounded-xl shadow-2xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-20 overflow-hidden p-1">
+                     <div className="absolute right-0 top-full mt-1 w-40 bg-card border border-border rounded-xl shadow-2xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-20 overflow-hidden p-1">
                         <button onClick={() => handleModeration('delete', post.id)} className="w-full text-left px-3 py-2 text-red-500 hover:bg-red-500/10 rounded-lg text-[9px] font-black uppercase flex items-center gap-2"><Trash2 size={12} /> Delete</button>
                      </div>
                   </div>

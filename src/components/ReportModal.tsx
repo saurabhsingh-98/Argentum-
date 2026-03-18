@@ -67,16 +67,16 @@ export default function ReportModal({ isOpen, onClose, postId, currentUserId }: 
   }
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#0d0d0d] border border-white/10 rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-3xl">
-        <div className="p-8 border-b border-white/5 flex items-center justify-between">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fade-in">
+      <div className="bg-card border border-border rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-3xl">
+        <div className="p-8 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
               <Flag size={20} />
             </div>
-            <h3 className="text-xl font-black uppercase tracking-tighter">Report Build</h3>
+            <h3 className="text-xl font-black text-foreground uppercase tracking-tighter">Report Build</h3>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-all text-gray-400 hover:text-white">
+          <button onClick={onClose} className="p-2 hover:bg-foreground/5 rounded-full transition-all text-foreground/40 hover:text-foreground">
             <X size={20} />
           </button>
         </div>
@@ -88,14 +88,14 @@ export default function ReportModal({ isOpen, onClose, postId, currentUserId }: 
                 <CheckCircle2 size={32} />
               </div>
               <div className="flex flex-col gap-2">
-                <h4 className="text-xl font-bold">Report Submitted</h4>
-                <p className="text-gray-500 text-sm">We'll review this shortly. Thank you for keeping Argentum safe.</p>
+                <h4 className="text-xl font-bold text-foreground">Report Submitted</h4>
+                <p className="text-foreground/40 text-sm">We'll review this shortly. Thank you for keeping Argentum safe.</p>
               </div>
             </div>
           ) : (
             <>
               <div className="flex flex-col gap-4">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Reason for reporting</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">Reason for reporting</label>
                 <div className="grid grid-cols-1 gap-2">
                   {REPORT_REASONS.map((r) => (
                     <button
@@ -105,8 +105,8 @@ export default function ReportModal({ isOpen, onClose, postId, currentUserId }: 
                       className={`
                         flex items-center gap-3 p-4 rounded-2xl border transition-all text-left
                         ${reason === r.id 
-                          ? 'bg-white/10 border-white/20 text-white' 
-                          : 'bg-white/5 border-white/5 text-gray-500 hover:border-white/10'
+                          ? 'bg-foreground/5 border-foreground/40 text-foreground' 
+                          : 'bg-foreground/5 border-border text-foreground/40 hover:border-foreground/10'
                         }
                       `}
                     >
@@ -117,12 +117,12 @@ export default function ReportModal({ isOpen, onClose, postId, currentUserId }: 
               </div>
 
               <div className="flex flex-col gap-4">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Additional Details (Optional)</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">Additional Details (Optional)</label>
                 <textarea
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder="Tell us more about why you're reporting this..."
-                  className="w-full bg-white/5 border border-white/5 rounded-2xl p-4 text-sm focus:outline-none focus:border-white/20 transition-all min-h-[100px] resize-none"
+                  className="w-full bg-foreground/5 border border-border rounded-2xl p-4 text-sm text-foreground focus:outline-none focus:border-foreground/20 transition-all min-h-[100px] resize-none"
                 />
               </div>
 
@@ -137,7 +137,7 @@ export default function ReportModal({ isOpen, onClose, postId, currentUserId }: 
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-6 py-4 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+                  className="flex-1 px-6 py-4 rounded-2xl bg-foreground/5 border border-border text-[10px] font-black text-foreground/40 uppercase tracking-widest hover:bg-foreground/10 transition-all"
                 >
                   Cancel
                 </button>

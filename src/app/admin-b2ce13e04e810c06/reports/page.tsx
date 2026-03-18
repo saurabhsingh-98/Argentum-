@@ -67,15 +67,15 @@ export default function ReportsQueue() {
 
   return (
     <div className="space-y-8">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-           <h1 className="text-4xl font-black tracking-tighter mb-2">Sanitation Queue</h1>
-           <p className="text-gray-500 text-sm font-medium tracking-tight">Review and resolve user-submitted violation reports.</p>
+           <h1 className="text-4xl font-black tracking-tighter mb-2 text-foreground">Sanitation Queue</h1>
+           <p className="text-foreground/40 text-sm font-medium tracking-tight">Review and resolve user-submitted violation reports.</p>
         </div>
         <div className="flex items-center gap-2">
-           <button onClick={() => setFilter('pending')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'pending' ? 'bg-red-500 text-black shadow-lg shadow-red-500/20' : 'bg-white/5 text-gray-500'}`}>Pending</button>
-           <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-white/10 text-white' : 'bg-white/5 text-gray-500'}`}>History</button>
-           <button onClick={fetchReports} className="p-2 bg-white/5 rounded-xl text-gray-500 hover:text-white transition-all"><RefreshCcw size={16} /></button>
+           <button onClick={() => setFilter('pending')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'pending' ? 'bg-red-500 text-black shadow-lg shadow-red-500/20' : 'bg-foreground/5 text-foreground/40'}`}>Pending</button>
+           <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-foreground/10 text-foreground' : 'bg-foreground/5 text-foreground/40'}`}>History</button>
+           <button onClick={fetchReports} className="p-2 bg-foreground/5 rounded-xl text-foreground/40 hover:text-foreground transition-all"><RefreshCcw size={16} /></button>
         </div>
       </header>
 
@@ -89,34 +89,34 @@ export default function ReportsQueue() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               key={report.id}
-              className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 hover:border-white/10 transition-all group"
+              className="bg-card border border-border rounded-3xl p-8 transition-all group"
             >
               <div className="flex flex-col md:flex-row gap-8">
                  <div className="flex-1 space-y-4">
                     <div className="flex items-center gap-3">
                        <span className="px-2 py-1 bg-red-500/10 border border-red-500/20 text-red-500 text-[8px] font-black uppercase tracking-widest rounded-lg">High Severity</span>
-                       <span className="text-[10px] font-mono text-gray-600 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(report.created_at).toLocaleString()}</span>
+                       <span className="text-[10px] font-mono text-foreground/40 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(report.created_at).toLocaleString()}</span>
                     </div>
 
                     <div className="space-y-1">
-                       <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+                       <div className="flex items-center gap-2 text-xs font-bold text-foreground/40">
                           <User size={12} className="text-red-500" />
-                          <span className="text-white">@{report.reporter?.username}</span> reported 
+                          <span className="text-foreground">@{report.reporter?.username}</span> reported 
                           {report.target_user_id ? (
                             <span className="text-red-400">@{report.target_user?.username}</span>
                           ) : (
                             <span className="text-blue-400">Post ID: {report.target_post_id}</span>
                           )}
                        </div>
-                       <h3 className="text-lg font-black tracking-tight text-white">{report.reason}</h3>
-                       <p className="text-sm text-gray-500 leading-relaxed italic">"{report.details || 'No additional details provided.'}"</p>
+                       <h3 className="text-lg font-black tracking-tight text-foreground">{report.reason}</h3>
+                       <p className="text-sm text-foreground/40 leading-relaxed italic">"{report.details || 'No additional details provided.'}"</p>
                     </div>
 
                     <div className="flex items-center gap-3 pt-2">
                        {report.target_post_id && (
                          <button 
                            onClick={() => window.open(`/post/${report.target_post_id}`, '_blank')}
-                           className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                           className="flex items-center gap-2 px-4 py-2 bg-foreground/5 hover:bg-foreground/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                          >
                            <FileText size={12} /> View Log
                          </button>
@@ -124,7 +124,7 @@ export default function ReportsQueue() {
                        {report.target_user_id && (
                          <button 
                             onClick={() => window.open(`/profile/${report.target_user?.username}`, '_blank')}
-                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                            className="flex items-center gap-2 px-4 py-2 bg-foreground/5 hover:bg-foreground/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                          >
                            <User size={12} /> View Target
                          </button>
@@ -137,7 +137,7 @@ export default function ReportsQueue() {
                       <>
                         <button 
                           onClick={() => resolveReport(report.id, 'dismissed')}
-                          className="w-full py-4 bg-white/5 border border-white/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2"
+                          className="w-full py-4 bg-foreground/5 border border-border rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-foreground/40 hover:bg-foreground/10 hover:text-foreground transition-all flex items-center justify-center gap-2"
                         >
                           <CheckCircle2 size={14} /> Dismiss
                         </button>
@@ -151,7 +151,7 @@ export default function ReportsQueue() {
                     ) : (
                       <div className="p-4 bg-green-500/5 border border-green-500/10 rounded-2xl text-center">
                          <p className="text-[9px] font-black uppercase tracking-widest text-green-500 mb-1">Resolved</p>
-                         <p className="text-[10px] text-gray-500 font-bold uppercase">{report.resolution}</p>
+                         <p className="text-[10px] text-foreground/40 font-bold uppercase">{report.resolution}</p>
                       </div>
                     )}
                  </div>

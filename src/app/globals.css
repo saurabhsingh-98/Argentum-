@@ -43,7 +43,7 @@
   --foreground: #000000;
   --card: #ffffff;
   --card-overlay: rgba(255, 255, 255, 0.7);
-  --border: rgba(0, 0, 0, 0.04);
+  --border: rgba(0, 0, 0, 0.1);
   --silver: #86868b;
   --silver-bright: #1d1d1f;
   --accent: #000000;
@@ -129,7 +129,7 @@ body::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%);
+  background: linear-gradient(110deg, transparent 40%, rgba(var(--foreground), 0.05) 50%, transparent 60%);
   background-size: 200% 100%;
   pointer-events: none;
   transition: background-position 0s;
@@ -142,7 +142,7 @@ body::before {
 
 .glass-card:hover {
   border-color: var(--silver) !important;
-  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.05);
   transform: translateY(-4px) scale(1.002);
 }
 
@@ -164,18 +164,18 @@ body::before {
 .silver-glow-text {
   background: linear-gradient(
     to bottom right,
-    #ffffff 20%,
-    #a1a1aa 40%,
-    #ffffff 50%,
-    #a1a1aa 60%,
-    #ffffff 80%
+    var(--foreground) 20%,
+    var(--silver) 40%,
+    var(--foreground) 50%,
+    var(--silver) 60%,
+    var(--foreground) 80%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+  filter: drop-shadow(0 0 15px rgba(192, 192, 192, 0.15));
 }
 
 .silver-text-subtle {
@@ -225,13 +225,13 @@ body::before {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background-color: #050505;
+  background-color: var(--background);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.03) 0, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(255, 255, 255, 0.02) 0, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(255, 255, 255, 0.03) 0, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.01) 0, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(255, 255, 255, 0.01) 0, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(var(--foreground), 0.03) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(var(--foreground), 0.02) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(var(--foreground), 0.03) 0, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(var(--foreground), 0.01) 0, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(var(--foreground), 0.01) 0, transparent 50%);
   filter: blur(80px);
   animation: mesh 15s ease-in-out infinite alternate;
 }
@@ -253,14 +253,14 @@ body::before {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(192, 192, 192, 0.1);
+  background: var(--border);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C0C0C0;
+  background: var(--silver);
 }
 
 /* Animations */

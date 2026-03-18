@@ -78,7 +78,7 @@ function ExploreContent() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div className="max-w-xl">
                <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">Explore</h1>
-               <p className="text-gray-500 text-sm leading-relaxed">
+               <p className="text-foreground/50 text-sm leading-relaxed">
                  Discover the next generation of software. Filter by category, 
                  search for specific tech stacks, or find elite builders to collaborate with.
                </p>
@@ -88,7 +88,7 @@ function ExploreContent() {
               <button
                 onClick={() => setActiveTab('builds')}
                 className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === 'builds' ? 'bg-white text-black shadow-xl' : 'text-gray-500 hover:text-white'
+                  activeTab === 'builds' ? 'bg-foreground text-background shadow-xl' : 'text-foreground/40 hover:text-foreground'
                 }`}
               >
                 <Zap size={14} /> Builds
@@ -96,7 +96,7 @@ function ExploreContent() {
               <button
                 onClick={() => setActiveTab('builders')}
                 className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === 'builders' ? 'bg-white text-black shadow-xl' : 'text-gray-500 hover:text-white'
+                  activeTab === 'builders' ? 'bg-foreground text-background shadow-xl' : 'text-foreground/40 hover:text-foreground'
                 }`}
               >
                 <Users size={14} /> Builders
@@ -126,7 +126,7 @@ function ExploreContent() {
                   className={`flex items-center gap-2 px-5 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                     selectedCategory === cat.id 
                       ? 'bg-green-500 border-green-500 text-black shadow-lg shadow-green-900/20' 
-                      : 'bg-foreground/5 border-border text-foreground/50 hover:text-foreground hover:border-foreground/20'
+                      : 'bg-card border-border text-foreground/40 hover:text-foreground hover:border-foreground/20'
                   }`}
                 >
                   {cat.icon}
@@ -144,7 +144,7 @@ function ExploreContent() {
                  <Loader2 className="animate-spin text-green-500" size={40} />
                  <div className="absolute inset-0 bg-green-500 blur-xl opacity-20 animate-pulse" />
               </div>
-              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.5em]">Synchronizing...</span>
+              <span className="text-[10px] font-black text-foreground/20 uppercase tracking-[0.5em]">Synchronizing...</span>
             </div>
           ) : (
              <motion.div 
@@ -188,10 +188,10 @@ function ExploreContent() {
 
           {!loading && ((activeTab === 'builds' && filteredPosts.length === 0) || (activeTab === 'builders' && filteredUsers.length === 0)) && (
             <div className="py-32 flex flex-col items-center text-center gap-4">
-               <div className="w-16 h-16 rounded-full border border-white/5 flex items-center justify-center text-white/10">
+               <div className="w-16 h-16 rounded-full border border-border flex items-center justify-center text-foreground/10">
                   <Filter size={32} />
                </div>
-               <p className="text-gray-500 font-mono text-xs uppercase tracking-widest">No matching results found</p>
+               <p className="text-foreground/40 font-mono text-xs uppercase tracking-widest">No matching results found</p>
                <button 
                  onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
                  className="text-[10px] font-black text-green-500 uppercase tracking-widest hover:underline"

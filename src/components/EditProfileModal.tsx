@@ -166,22 +166,22 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
           />
           
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="w-full max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative z-10"
+            className="w-full max-w-2xl bg-card border border-border rounded-3xl overflow-hidden shadow-2xl relative z-10"
           >
             {/* Header */}
-            <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between bg-[#0d0d0d]">
+            <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-foreground/5">
               <div className="flex items-center gap-4">
-                <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                  <X size={20} className="text-gray-400" />
+                <button onClick={onClose} className="p-2 hover:bg-foreground/5 rounded-full transition-colors">
+                  <X size={20} className="text-foreground/40" />
                 </button>
-                <h2 className="text-lg font-bold text-white">Edit Profile</h2>
+                <h2 className="text-lg font-bold text-foreground">Edit Profile</h2>
               </div>
               <button
                 onClick={handleSave}
@@ -196,17 +196,17 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
             <div className="max-h-[70vh] overflow-y-auto p-8 flex flex-col gap-8 custom-scrollbar">
               {/* Avatar Section */}
               <div className="relative group self-center">
-                <div className="w-32 h-32 rounded-3xl border-2 border-silver/20 bg-[#111] overflow-hidden relative flex items-center justify-center">
+                <div className="w-32 h-32 rounded-3xl border-2 border-border bg-background overflow-hidden relative flex items-center justify-center">
                   {avatarUrl ? (
                     <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-4xl font-bold text-white uppercase">{username[0]}</span>
+                    <span className="text-4xl font-bold text-foreground uppercase">{username[0]}</span>
                   )}
                   <div 
                     onClick={handleAvatarClick}
-                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity"
+                    className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity"
                   >
-                    <Camera size={32} className="text-white" />
+                    <Camera size={32} className="text-foreground" />
                   </div>
                 </div>
                 <input
@@ -222,34 +222,34 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Name Fields */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Display Name</label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Display Name</label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         placeholder="Your full name or preferred name"
-                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Username</label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Username</label>
                     <div className="relative">
-                      <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, ''))}
-                        className={`w-full bg-white/5 border rounded-xl py-3 pl-10 pr-10 text-sm text-white focus:outline-none transition-all ${
-                          usernameStatus === 'taken' ? 'border-red-500/50' : 'border-white/5 focus:border-silver/40'
+                        className={`w-full bg-foreground/5 border rounded-xl py-3 pl-10 pr-10 text-sm text-foreground focus:outline-none transition-all ${
+                          usernameStatus === 'taken' ? 'border-red-500/50' : 'border-border focus:border-foreground/40'
                         }`}
                         placeholder="yourhandle"
                       />
                       <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                        {usernameStatus === 'checking' && <Loader2 size={14} className="animate-spin text-gray-600" />}
+                        {usernameStatus === 'checking' && <Loader2 size={14} className="animate-spin text-foreground/20" />}
                         {usernameStatus === 'available' && <CheckCircle2 size={14} className="text-green-500" />}
                         {usernameStatus === 'taken' && <AlertCircle size={14} className="text-red-500" />}
                       </div>
@@ -259,29 +259,29 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
 
                 {/* Bio & Current Work */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Bio <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                  <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Bio <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                   <div className="relative">
-                    <FileText className="absolute left-4 top-4 text-gray-600" size={14} />
+                    <FileText className="absolute left-4 top-4 text-foreground/20" size={14} />
                     <textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       rows={3}
                       placeholder="Tell us what you're shipping..."
-                      className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all resize-none"
+                      className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all resize-none"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Currently Building <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                  <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Currently Building <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                   <div className="relative">
-                    <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                    <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                     <input
                       type="text"
                       value={currentlyBuilding}
                       onChange={(e) => setCurrentlyBuilding(e.target.value)}
                       placeholder="Project Alpha..."
-                      className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                      className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     />
                   </div>
                 </div>
@@ -290,93 +290,93 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                 {/* Socials */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">GitHub <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">GitHub <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
-                      <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={githubUsername}
                         onChange={(e) => setGithubUsername(e.target.value)}
                         placeholder="yourhandle"
-                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">X / Twitter <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">X / Twitter <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
-                      <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={twitterUsername}
                         onChange={(e) => setTwitterUsername(e.target.value)}
                         placeholder="yourhandle"
-                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Instagram <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Instagram <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
-                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={instagramUsername}
                         onChange={(e) => setInstagramUsername(e.target.value)}
                         placeholder="yourhandle"
-                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Website <span className="text-gray-700 font-normal lowercase">(Optional)</span></label>
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Website <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
                     <div className="relative">
-                      <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                      <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                       <input
                         type="text"
                         value={websiteUrl}
                         onChange={(e) => setWebsiteUrl(e.target.value)}
                         placeholder="https://..."
-                        className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Visibility Toggle */}
-                <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Profile Visibility</label>
+                <div className="flex flex-col gap-4 pt-4 border-t border-border">
+                  <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Profile Visibility</label>
                   <div className="grid grid-cols-2 gap-4">
                     <div 
                       onClick={() => setIsPublic(true)}
                       className={`cursor-pointer p-4 rounded-2xl border transition-all ${
                         isPublic 
-                          ? 'bg-green-500/5 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' 
-                          : 'bg-white/5 border-white/5 hover:border-white/10'
+                          ? 'bg-green-500/5 border-green-500 shadow-xl scale-[1.02]' 
+                          : 'bg-foreground/5 border-border hover:border-foreground/10'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <Globe2 size={18} className={isPublic ? 'text-green-500' : 'text-gray-400'} />
-                        <span className={`text-sm font-bold ${isPublic ? 'text-green-500' : 'text-white'}`}>Public</span>
+                        <Globe2 size={18} className={isPublic ? 'text-green-500' : 'text-foreground/20'} />
+                        <span className={`text-sm font-bold ${isPublic ? 'text-green-500' : 'text-foreground'}`}>Public</span>
                       </div>
-                      <p className="text-[10px] text-gray-500 leading-relaxed">Anyone can view your profile and builds</p>
+                      <p className="text-[10px] text-foreground/40 leading-relaxed">Anyone can view your profile and builds</p>
                     </div>
 
                     <div 
                       onClick={() => setIsPublic(false)}
                       className={`cursor-pointer p-4 rounded-2xl border transition-all ${
                         !isPublic 
-                          ? 'bg-green-500/5 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' 
-                          : 'bg-white/5 border-white/5 hover:border-white/10'
+                          ? 'bg-green-500/5 border-green-500 shadow-xl scale-[1.02]' 
+                          : 'bg-foreground/5 border-border hover:border-foreground/10'
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <Lock size={18} className={!isPublic ? 'text-green-500' : 'text-gray-400'} />
-                        <span className={`text-sm font-bold ${!isPublic ? 'text-green-500' : 'text-white'}`}>Private</span>
+                        <Lock size={18} className={!isPublic ? 'text-green-500' : 'text-foreground/20'} />
+                        <span className={`text-sm font-bold ${!isPublic ? 'text-green-500' : 'text-foreground'}`}>Private</span>
                       </div>
-                      <p className="text-[10px] text-gray-500 leading-relaxed">Only you can see your profile</p>
+                      <p className="text-[10px] text-foreground/40 leading-relaxed">Only you can see your profile</p>
                     </div>
                   </div>
                 </div>

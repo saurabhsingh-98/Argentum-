@@ -22,18 +22,18 @@ export default function BuilderCard({ user }: BuilderCardProps) {
 
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl border border-white/10 bg-[#0d0d0d] flex items-center justify-center relative overflow-hidden ring-1 ring-white/5 group-hover:ring-white/30 transition-all">
+          <div className="w-14 h-14 rounded-2xl border border-border bg-card flex items-center justify-center relative overflow-hidden ring-1 ring-foreground/5 group-hover:ring-foreground/20 transition-all">
             {user.avatar_url ? (
               <img src={user.avatar_url} alt="avatar" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-xl font-bold text-silver uppercase">{user.username[0]}</span>
+              <span className="text-xl font-bold text-foreground/40 uppercase">{user.username[0]}</span>
             )}
           </div>
           <div className="flex flex-col -space-y-0.5">
-            <h3 className="text-base font-black text-white group-hover:text-silver transition-colors">
+            <h3 className="text-base font-black text-foreground group-hover:text-foreground/80 transition-colors">
               {user.display_name || user.username}
             </h3>
-            <span className="text-[11px] text-gray-500 font-mono tracking-tighter">@{user.username}</span>
+            <span className="text-[11px] text-foreground/40 font-mono tracking-tighter">@{user.username}</span>
           </div>
         </div>
         
@@ -50,11 +50,11 @@ export default function BuilderCard({ user }: BuilderCardProps) {
 
       <div className="flex flex-col gap-4">
         {user.bio ? (
-          <p className="text-xs text-gray-400 line-clamp-1 italic leading-relaxed">
+          <p className="text-xs text-foreground/50 line-clamp-1 italic leading-relaxed">
             "{user.bio}"
           </p>
         ) : (
-          <p className="text-xs text-gray-600 italic">No bio available</p>
+          <p className="text-xs text-foreground/20 italic">No bio available</p>
         )}
 
         {skills.length > 0 ? (
@@ -62,7 +62,7 @@ export default function BuilderCard({ user }: BuilderCardProps) {
             {skills.map((skill: string) => (
               <span 
                 key={skill}
-                className="px-2 py-0.5 bg-white/[0.03] border border-white/5 rounded-md text-[9px] font-bold text-gray-500"
+                className="px-2 py-0.5 bg-foreground/5 border border-border rounded-md text-[9px] font-bold text-foreground/40"
               >
                 {skill}
               </span>
@@ -73,16 +73,16 @@ export default function BuilderCard({ user }: BuilderCardProps) {
         )}
       </div>
 
-      <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
+      <div className="mt-auto pt-6 border-t border-border flex items-center justify-between">
         <div className="flex items-center gap-4">
             <div className="flex flex-col -space-y-1">
-                <span className="text-xs font-black text-white">{user.posts?.[0]?.count || 0}</span>
-                <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Builds</span>
+                <span className="text-xs font-black text-foreground">{user.posts?.[0]?.count || 0}</span>
+                <span className="text-[8px] font-bold text-foreground/40 uppercase tracking-widest">Builds</span>
             </div>
-            <div className="w-[1px] h-6 bg-white/5" />
+            <div className="w-[1px] h-6 bg-border" />
             <div className="flex flex-col -space-y-1">
-                <span className="text-xs font-black text-white">{user.streak_count || 0}</span>
-                <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Streak</span>
+                <span className="text-xs font-black text-foreground">{user.streak_count || 0}</span>
+                <span className="text-[8px] font-bold text-foreground/40 uppercase tracking-widest">Streak</span>
             </div>
         </div>
 

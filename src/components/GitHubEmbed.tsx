@@ -16,15 +16,15 @@ export default function GitHubEmbed({ repoName, stars, forks, language, descript
       href={`https://github.com/${repoName}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="block group mt-3 bg-[#0a0a0a] border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all hover:bg-white/[0.02]"
+      className="block group mt-3 bg-card border border-border rounded-xl p-4 hover:border-foreground/20 transition-all hover:bg-foreground/5"
     >
       <div className="flex items-center gap-2 mb-2">
-        <Book size={16} className="text-gray-400 group-hover:text-white transition-colors" />
-        <span className="text-sm font-bold text-blue-400 group-hover:underline truncate">{repoName}</span>
+        <Book size={16} className="text-foreground/40 group-hover:text-foreground transition-colors" />
+        <span className="text-sm font-bold text-blue-500 group-hover:underline truncate">{repoName}</span>
       </div>
       
       {description && (
-        <p className="text-xs text-gray-500 mb-4 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-foreground/50 mb-4 line-clamp-2 leading-relaxed">
           {description}
         </p>
       )}
@@ -32,15 +32,15 @@ export default function GitHubEmbed({ repoName, stars, forks, language, descript
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-          <span className="text-[10px] font-bold text-gray-500">{language}</span>
+          <span className="text-[10px] font-bold text-foreground/40">{language}</span>
         </div>
         
-        <div className="flex items-center gap-1.5 text-gray-500">
+        <div className="flex items-center gap-1.5 text-foreground/40">
           <Star size={12} />
           <span className="text-[10px] font-black">{stars}</span>
         </div>
         
-        <div className="flex items-center gap-1.5 text-gray-500">
+        <div className="flex items-center gap-1.5 text-foreground/40">
           <GitFork size={12} />
           <span className="text-[10px] font-black">{forks}</span>
         </div>

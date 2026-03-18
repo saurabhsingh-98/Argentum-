@@ -62,12 +62,12 @@ export default function IssuesManagement() {
     <div className="space-y-8">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-           <h1 className="text-4xl font-black tracking-tighter mb-2">Build Errors</h1>
-           <p className="text-gray-500 text-sm font-medium tracking-tight">Technical support tickets and system bug reports from the community.</p>
+           <h1 className="text-4xl font-black tracking-tighter mb-2 text-foreground">Build Errors</h1>
+           <p className="text-foreground/40 text-sm font-medium tracking-tight">Technical support tickets and system bug reports from the community.</p>
         </div>
         <div className="flex items-center gap-2">
-           <button onClick={() => setFilter('open')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'open' ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-white/5 text-gray-500'}`}>Triage Required</button>
-           <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-white/10 text-white' : 'bg-white/5 text-gray-500'}`}>All Archive</button>
+           <button onClick={() => setFilter('open')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'open' ? 'bg-orange-500 text-black shadow-lg shadow-orange-500/20' : 'bg-foreground/5 text-foreground/40'}`}>Triage Required</button>
+           <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-foreground/10 text-foreground' : 'bg-foreground/5 text-foreground/40'}`}>All Archive</button>
         </div>
       </header>
 
@@ -81,7 +81,7 @@ export default function IssuesManagement() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
               key={issue.id}
-              className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 hover:border-white/10 transition-all group flex flex-col md:flex-row gap-8"
+              className="bg-card border border-border rounded-3xl p-8 hover:border-border transition-all group flex flex-col md:flex-row gap-8"
             >
                <div className="flex-1 space-y-4">
                   <div className="flex items-center gap-3">
@@ -89,21 +89,21 @@ export default function IssuesManagement() {
                         <Bug size={16} />
                      </div>
                      <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">Bug Report</span>
-                     <span className="text-[10px] font-mono text-gray-600 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(issue.created_at).toLocaleString()}</span>
+                     <span className="text-[10px] font-mono text-foreground/40 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(issue.created_at).toLocaleString()}</span>
                   </div>
 
                   <div className="space-y-2">
-                     <h3 className="text-xl font-black tracking-tight text-white">{issue.title || 'Untitled Issue'}</h3>
-                     <p className="text-sm text-gray-400 leading-relaxed font-medium">{issue.description}</p>
+                     <h3 className="text-xl font-black tracking-tight text-foreground">{issue.title || 'Untitled Issue'}</h3>
+                     <p className="text-sm text-foreground/40 leading-relaxed font-medium">{issue.description}</p>
                   </div>
 
-                  <div className="flex flex-wrap gap-4 pt-4 border-t border-white/5">
-                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 uppercase">
+                  <div className="flex flex-wrap gap-4 pt-4 border-t border-border">
+                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-foreground/40 uppercase">
                         <User size={12} className="text-blue-500" />
-                        <span className="text-white">@{issue.users?.username || 'anonymous'}</span>
+                        <span className="text-foreground">@{issue.users?.username || 'anonymous'}</span>
                      </div>
-                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 uppercase">
-                        <AlertCircle size={12} className="text-silver" />
+                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-foreground/40 uppercase">
+                        <AlertCircle size={12} className="text-foreground/40" />
                         <span>Platform: Desktop/Web</span>
                      </div>
                   </div>
@@ -123,7 +123,7 @@ export default function IssuesManagement() {
                        <p className="text-[9px] font-black uppercase tracking-widest text-green-500">Fixed & Verified</p>
                     </div>
                   )}
-                  <button className="w-full py-4 bg-white/5 border border-white/5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2">
+                  <button className="w-full py-4 bg-foreground/5 border border-border rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-foreground/40 hover:bg-foreground/10 hover:text-foreground transition-all flex items-center justify-center gap-2">
                     <MessageSquare size={14} /> Respond
                   </button>
                </div>

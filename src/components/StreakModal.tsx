@@ -91,7 +91,7 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
   }
 
   const getActivityColor = (count: number) => {
-    if (count === 0) return 'bg-[#1a1a1a]'
+    if (count === 0) return 'bg-foreground/5'
     if (count === 1) return 'bg-green-500/30'
     if (count === 2) return 'bg-green-500/60'
     return 'bg-[#22c55e]'
@@ -100,15 +100,15 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fade-in">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="bg-[#0a0a0a] border border-white/10 rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-3xl relative flex flex-col"
+        className="bg-card border border-border rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-3xl relative flex flex-col"
       >
         <button 
           onClick={onClose} 
-          className="absolute top-6 right-6 p-2 hover:bg-white/5 rounded-full transition-all text-gray-500 hover:text-white z-10"
+          className="absolute top-6 right-6 p-2 hover:bg-foreground/5 rounded-full transition-all text-foreground/40 hover:text-foreground z-10"
         >
           <X size={20} />
         </button>
@@ -119,23 +119,23 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
                <Flame size={40} className="drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" />
                <span className="text-5xl font-black">{streakData.current}</span>
             </div>
-            <h2 className="text-xl font-bold text-white uppercase tracking-widest">Your Streak</h2>
-            <p className="text-gray-500 font-mono text-[10px] uppercase tracking-[0.3em]">Building in the shadows</p>
+            <h2 className="text-xl font-bold text-foreground uppercase tracking-widest">Your Streak</h2>
+            <p className="text-foreground/40 font-mono text-[10px] uppercase tracking-[0.3em]">Building in the shadows</p>
           </header>
 
           {/* Calendar View */}
           <section className="mb-10">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-sm font-bold text-white">{months[currentMonth]} {currentYear}</h3>
-              <div className="flex gap-2">
-                <button onClick={() => navigateMonth(-1)} className="p-2 hover:bg-white/5 rounded-lg border border-white/5"><ChevronLeft size={16} /></button>
-                <button onClick={() => navigateMonth(1)} className="p-2 hover:bg-white/5 rounded-lg border border-white/5"><ChevronRight size={16} /></button>
+              <h3 className="text-sm font-bold text-foreground">{months[currentMonth]} {currentYear}</h3>
+              <div className="flex gap-2 text-foreground/40">
+                <button onClick={() => navigateMonth(-1)} className="p-2 hover:bg-foreground/5 rounded-lg border border-border"><ChevronLeft size={16} /></button>
+                <button onClick={() => navigateMonth(1)} className="p-2 hover:bg-foreground/5 rounded-lg border border-border"><ChevronRight size={16} /></button>
               </div>
             </div>
 
             <div className="grid grid-cols-7 gap-2">
               {weekDays.map(d => (
-                <div key={d} className="text-[10px] font-bold text-gray-600 text-center uppercase mb-2">{d}</div>
+                <div key={d} className="text-[10px] font-bold text-foreground/20 text-center uppercase mb-2">{d}</div>
               ))}
               {Array.from({ length: (firstDayOfMonth(currentMonth, currentYear) + 6) % 7 }).map((_, i) => (
                 <div key={`empty-${i}`} />
@@ -153,12 +153,12 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
                         <span className="text-[10px] font-black text-black">{day}</span>
                       </div>
                     ) : (
-                      <div className={`w-8 h-8 rounded-full border border-white/5 flex items-center justify-center ${isToday ? 'border-white ring-1 ring-white/20' : 'bg-white/5 opacity-20'}`}>
-                        <span className="text-[10px] font-bold text-gray-400">{day}</span>
+                      <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center ${isToday ? 'border-foreground ring-1 ring-foreground/20' : 'bg-foreground/5 opacity-20'}`}>
+                        <span className="text-[10px] font-bold text-foreground/20">{day}</span>
                       </div>
                     )}
                     {activity && (
-                      <div className="absolute bottom-full mb-2 hidden group-hover/day:block bg-black border border-white/10 px-2 py-1 rounded text-[8px] whitespace-nowrap z-50">
+                      <div className="absolute bottom-full mb-2 hidden group-hover/day:block bg-card border border-border px-2 py-1 rounded text-[8px] text-foreground whitespace-nowrap z-50 shadow-xl">
                         {activity.post_count} builds on {dateStr}
                       </div>
                     )}
@@ -177,10 +177,10 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
           </div>
 
           {/* All Years Expansion */}
-          <div className="border-t border-white/5 pt-8">
+          <div className="border-t border-border pt-8">
             <button 
               onClick={() => setShowFullYear(!showFullYear)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all bg-white/5 rounded-xl border border-white/5 hover:border-white/10"
+              className="w-full flex items-center justify-center gap-2 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground transition-all bg-foreground/5 rounded-xl border border-border hover:border-foreground/10"
             >
               {showFullYear ? 'Collapse History' : 'View all years'}
               <ChevronDown size={14} className={`transition-transform duration-300 ${showFullYear ? 'rotate-180' : ''}`} />
@@ -194,14 +194,14 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden mt-6"
                 >
-                  <div className="bg-black/40 border border-white/5 rounded-2xl p-6">
+                  <div className="bg-background/40 border border-border rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex gap-2 text-[8px] font-bold text-gray-700">
+                      <div className="flex gap-2 text-[8px] font-bold text-foreground/20">
                         {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => <span key={m}>{m}</span>)}
                       </div>
                     </div>
                     <div className="flex gap-1.5 overflow-x-auto pb-4 custom-scrollbar">
-                       <div className="flex flex-col justify-between text-[7px] font-bold text-gray-800 pr-2">
+                       <div className="flex flex-col justify-between text-[7px] font-bold text-foreground/10 pr-2">
                           <span>M</span>
                           <span>W</span>
                           <span>F</span>
@@ -229,10 +229,10 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
 
 function StatBox({ label, value, icon }: { label: string, value: any, icon: string }) {
   return (
-    <div className="p-4 rounded-xl bg-white/5 border border-white/5 flex flex-col gap-1 items-center hover:bg-white/[0.08] transition-all">
+    <div className="p-4 rounded-xl bg-foreground/5 border border-border flex flex-col gap-1 items-center hover:bg-foreground/10 transition-all">
       <span className="text-xl mb-1">{icon}</span>
-      <span className="text-sm font-black text-white">{value}</span>
-      <span className="text-[8px] font-black uppercase tracking-widest text-gray-600">{label}</span>
+      <span className="text-sm font-black text-foreground">{value}</span>
+      <span className="text-[8px] font-black uppercase tracking-widest text-foreground/40">{label}</span>
     </div>
   )
 }

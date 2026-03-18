@@ -91,18 +91,18 @@ export default function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
           />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="w-full max-w-2xl bg-[#0d0d0d] border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative z-10"
+            className="w-full max-w-2xl bg-card border border-border rounded-3xl shadow-2xl overflow-hidden relative z-10"
           >
             {/* Search Input Area */}
-            <div className="flex items-center gap-4 px-6 py-5 border-b border-white/5 bg-white/[0.02]">
-              <Search className="text-white/20" size={20} />
+            <div className="flex items-center gap-4 px-6 py-5 border-b border-border bg-foreground/5">
+              <Search className="text-foreground/20" size={20} />
               <input
                 ref={inputRef}
                 type="text"
@@ -110,13 +110,13 @@ export default function CommandPalette() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent border-none outline-none text-lg text-white placeholder:text-white/10"
+                className="flex-1 bg-transparent border-none outline-none text-lg text-foreground placeholder:text-foreground/20"
               />
               <div className="flex items-center gap-2">
                 {loading && <Loader2 className="animate-spin text-green-500" size={18} />}
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 hover:bg-white/5 rounded-lg text-white/20 hover:text-white transition-all"
+                  className="p-1.5 hover:bg-foreground/5 rounded-lg text-foreground/20 hover:text-foreground transition-all"
                 >
                   <X size={18} />
                 </button>
@@ -198,7 +198,7 @@ export default function CommandPalette() {
                       <button 
                         key={tag}
                         onClick={() => setQuery(tag.replace('#', ''))}
-                        className="px-4 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-bold text-gray-400 hover:text-white hover:border-white/10 transition-all"
+                        className="px-4 py-1.5 rounded-full bg-foreground/5 border border-border text-[10px] font-bold text-foreground/40 hover:text-foreground hover:border-foreground/20 transition-all"
                       >
                         {tag}
                       </button>
@@ -209,13 +209,13 @@ export default function CommandPalette() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-3 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-white/10 bg-white/[0.01]">
+            <div className="px-6 py-3 border-t border-border flex items-center justify-between text-[10px] font-mono text-foreground/20 bg-foreground/[0.02]">
               <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10">↑↓</kbd> to navigate</span>
-                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10">↵</kbd> to select</span>
+                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 rounded bg-foreground/5 border border-border">↑↓</kbd> to navigate</span>
+                <span className="flex items-center gap-1.5"><kbd className="px-1.5 py-0.5 rounded bg-foreground/5 border border-border">↵</kbd> to select</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10">ESC</kbd> to close
+                <kbd className="px-1.5 py-0.5 rounded bg-foreground/5 border border-border">ESC</kbd> to close
               </div>
             </div>
           </motion.div>
@@ -231,18 +231,18 @@ function ResultItem({ icon, title, subtitle, active, onClick }: any) {
       onClick={onClick}
       className={`
         flex items-center gap-4 px-4 py-3 rounded-2xl cursor-pointer transition-all
-        ${active ? 'bg-white/10 translate-x-1' : 'hover:bg-white/5'}
+        ${active ? 'bg-foreground/10 translate-x-1' : 'hover:bg-foreground/5'}
       `}
     >
       <div className={`
         w-10 h-10 rounded-xl flex items-center justify-center border transition-all
-        ${active ? 'border-green-500 bg-green-500 text-black shadow-glow-green/20' : 'border-white/5 bg-white/[0.03] text-white/40'}
+        ${active ? 'border-green-500 bg-green-500 text-black shadow-xl' : 'border-border bg-foreground/5 text-foreground/40'}
       `}>
         {icon}
       </div>
       <div className="flex flex-col min-w-0">
-        <span className={`text-sm font-bold transition-colors ${active ? 'text-white' : 'text-white/60'}`}>{title}</span>
-        <span className="text-[10px] text-white/20 font-medium truncate">{subtitle}</span>
+        <span className={`text-sm font-bold transition-colors ${active ? 'text-background' : 'text-foreground/60'}`}>{title}</span>
+        <span className="text-[10px] text-foreground/20 font-medium truncate">{subtitle}</span>
       </div>
       {active && (
         <div className="ml-auto text-green-500">

@@ -83,9 +83,9 @@ export default function PostCard({
       whileHover={{ y: -2 }}
       className={`
         relative group bg-card rounded-2xl border border-border transition-all duration-300 hover:border-foreground/20 hover:shadow-2xl
-        ${post.verification_status === 'verified' ? 'border-l-2 border-l-green-500/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)]' : ''}
-        ${(post as any).is_priority ? 'border-amber-500/50 bg-gradient-to-br from-card via-amber-500/[0.02] to-amber-500/[0.05] shadow-[0_0_50px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20' : ''}
-        ${(post.category as any) === 'Speak' && !(post as any).is_priority ? 'border-amber-500/30 bg-gradient-to-br from-card to-amber-500/5 hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
+        ${post.verification_status === 'verified' ? 'border-l-2 border-l-green-500 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)]' : ''}
+        ${(post as any).is_priority ? 'border-amber-500 bg-gradient-to-br from-card via-amber-500/5 to-amber-500/10 shadow-[0_0_50px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20' : ''}
+        ${(post.category as any) === 'Speak' && !(post as any).is_priority ? 'border-amber-500/40 bg-card hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
       `}
     >
       <div className="p-5 flex flex-col h-full">
@@ -116,17 +116,17 @@ export default function PostCard({
                   </span>
                 )}
                 {(post as any).is_priority && (
-                  <span className="px-1.5 py-0.5 rounded bg-amber-500 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-[0_0_20px_rgba(245,158,11,0.4)] animate-pulse">
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-[0_0_20px_rgba(34,197,94,0.2)] animate-pulse">
                     <Zap size={8} fill="currentColor" /> Priority Transmission
                   </span>
                 )}
                 {(post.category as any) === 'Speak' && !(post as any).is_priority && (
-                  <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-[8px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-1 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-[8px] font-black text-amber-600 uppercase tracking-widest flex items-center gap-1">
                     <Zap size={8} fill="currentColor" /> Speak
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2 text-[10px] text-gray-500">
+              <div className="flex items-center gap-2 text-[10px] text-foreground/40">
                 <span className="font-mono">@{post.users?.username}</span>
                 <span>•</span>
                 <span>Joined {post.users?.created_at ? new Date(post.users.created_at).toLocaleDateString([], { month: 'short', year: 'numeric' }) : '...'}</span>
@@ -186,12 +186,12 @@ export default function PostCard({
           <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-green-500 transition-colors">
             {post.title}
           </h3>
-          <p className="text-sm text-foreground/50 line-clamp-3 leading-relaxed">
+          <p className="text-sm text-foreground/60 line-clamp-3 leading-relaxed">
             {post.content.replace(/[#*`]/g, '')}
           </p>
 
           {codeSnippet && (
-            <div className="mt-2 bg-background rounded-xl border border-border p-3 overflow-hidden font-mono text-[11px] text-gray-500 opacity-60 group-hover:opacity-100 transition-opacity">
+            <div className="mt-2 bg-background rounded-xl border border-border p-3 overflow-hidden font-mono text-[11px] text-foreground/40 opacity-60 group-hover:opacity-100 transition-opacity">
               <pre className="line-clamp-4">
                 <code>{codeSnippet}</code>
               </pre>
@@ -209,11 +209,11 @@ export default function PostCard({
 
           <div className="flex flex-wrap gap-2 mt-2">
             {post.category && (
-              <span className="text-[10px] font-bold text-green-500/70 hover:text-green-500 transition-all font-mono">
+              <span className="text-[10px] font-bold text-foreground/60 hover:text-foreground transition-all font-mono">
                 #{post.category.toLowerCase()}
               </span>
             )}
-            <span className="text-[10px] font-bold text-foreground/20 font-mono italic">#argentum</span>
+            <span className="text-[10px] font-bold text-foreground/10 font-mono italic">#argentum</span>
           </div>
         </Link>
 

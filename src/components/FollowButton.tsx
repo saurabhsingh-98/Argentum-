@@ -93,8 +93,8 @@ export default function FollowButton({ followingId, initialIsFollowing, onCountC
       className={`
         flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-[0.98]
         ${isFollowing 
-          ? 'bg-white/5 border border-white/10 text-silver hover:bg-white/10' 
-          : 'silver-metallic text-[#050505] shadow-glow hover:brightness-110'
+          ? 'bg-foreground/5 border border-border text-foreground/40 hover:bg-foreground/10' 
+          : 'silver-metallic text-background shadow-glow hover:brightness-110'
         }
         ${className || ''}
       `}

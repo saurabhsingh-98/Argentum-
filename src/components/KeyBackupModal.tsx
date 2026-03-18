@@ -192,28 +192,28 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#050505]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
           />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+            className="relative w-full max-w-lg bg-card border border-border rounded-[2.5rem] overflow-hidden shadow-2xl"
           >
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 {step !== 'choose' && step !== 'success' && (
-                  <button onClick={handleBack} className="p-2 hover:bg-white/5 rounded-full transition-all">
-                    <ArrowLeft size={20} className="text-white/40" />
+                  <button onClick={handleBack} className="p-2 hover:bg-foreground/5 rounded-full transition-all">
+                    <ArrowLeft size={20} className="text-foreground/40" />
                   </button>
                 )}
                 <div className="flex-1 text-center">
-                   <h2 className="text-xl font-black tracking-tight text-white italic">Argentum Shield</h2>
+                   <h2 className="text-xl font-black tracking-tight text-foreground italic">Argentum Shield</h2>
                 </div>
                 {!isSettingsMode && step !== 'success' && (
-                  <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-all">
-                    <X size={20} className="text-white/40" />
+                  <button onClick={onClose} className="p-2 hover:bg-foreground/5 rounded-full transition-all">
+                    <X size={20} className="text-foreground/40" />
                   </button>
                 )}
               </div>
@@ -221,28 +221,28 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
               {step === 'choose' && (
                 <div className="space-y-6">
                   <div className="text-center mb-8">
-                    <h3 className="text-2xl font-black mb-2">Back up your messages</h3>
-                    <p className="text-sm text-gray-500 max-w-xs mx-auto">
+                    <h3 className="text-2xl font-black mb-2 text-foreground">Back up your messages</h3>
+                    <p className="text-sm text-foreground/40 max-w-xs mx-auto">
                       Your keys are only stored on this device. Create a backup to avoid losing your messages forever.
                     </p>
                   </div>
 
                   <div className="grid gap-3">
                     <MethodCard 
-                      icon={<Shield className="text-silver shrink-0" />} 
+                      icon={<Shield className="text-foreground shrink-0" />} 
                       title="PIN Backup" 
                       desc="Simple recovery for daily use" 
                       badge="Recommended"
                       onClick={() => setStep('pin')}
                     />
                     <MethodCard 
-                      icon={<Key className="text-gray-400 shrink-0" />} 
+                      icon={<Key className="text-foreground/40 shrink-0" />} 
                       title="Custom Password" 
                       desc="Maximum security for your vault" 
                       onClick={() => setStep('password')}
                     />
                     <MethodCard 
-                      icon={<FileJson className="text-gray-400 shrink-0" />} 
+                      icon={<FileJson className="text-foreground/40 shrink-0" />} 
                       title="Export Backup File" 
                       desc="Download and store it yourself" 
                       onClick={() => setStep('export')}
@@ -268,11 +268,11 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
               {step === 'pin' && (
                 <div className="space-y-8 py-4">
                   <div className="text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-silver/10 border border-silver/20 flex items-center justify-center mx-auto mb-6 scale-animation">
-                      <Lock size={32} className="text-silver" />
+                    <div className="w-16 h-16 rounded-3xl bg-foreground/5 border border-border flex items-center justify-center mx-auto mb-6 scale-animation">
+                      <Lock size={32} className="text-foreground" />
                     </div>
-                    <h3 className="text-2xl font-black mb-2">{isConfirming ? 'Confirm your PIN' : 'Set a backup PIN'}</h3>
-                    <p className="text-sm text-gray-500">6 digits to restore your identity</p>
+                    <h3 className="text-2xl font-black mb-2 text-foreground">{isConfirming ? 'Confirm your PIN' : 'Set a backup PIN'}</h3>
+                    <p className="text-sm text-foreground/40">6 digits to restore your identity</p>
                   </div>
 
                   <div className="flex justify-center gap-3">
@@ -285,20 +285,20 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
                         maxLength={1}
                         value={isConfirming ? confirmPin[i] : pin[i]}
                         onChange={(e) => handlePinChange(e.target.value, i, isConfirming)}
-                        className="w-12 h-16 bg-[#111] border border-white/5 rounded-2xl text-center text-2xl font-black focus:border-silver/40 focus:ring-4 focus:ring-silver/5 outline-none transition-all"
+                        className="w-12 h-16 bg-background border border-border rounded-2xl text-center text-2xl font-black text-foreground focus:border-foreground/40 focus:ring-4 focus:ring-foreground/5 outline-none transition-all"
                       />
                     ))}
                   </div>
 
                   {!isConfirming && (
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Backup Hint (Optional)</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Backup Hint (Optional)</label>
                        <input 
                          type="text"
                          placeholder="e.g. Grandma's birthday"
                          value={hint}
                          onChange={(e) => setHint(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                     </div>
                   )}
@@ -310,7 +310,7 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
                   <button
                     onClick={handlePinSubmit}
                     disabled={isLoading || (isConfirming ? confirmPin.some(d => !d) : pin.some(d => !d))}
-                    className="w-full py-5 silver-metallic text-[#050505] rounded-3xl font-black uppercase tracking-widest text-xs disabled:opacity-50 transition-all shadow-glow-silver/20"
+                    className="w-full py-5 bg-foreground text-background rounded-3xl font-black uppercase tracking-widest text-xs disabled:opacity-50 transition-all shadow-xl"
                   >
                     {isLoading ? 'Encrypting...' : isConfirming ? 'Confirm & Protect' : 'Next Step'}
                   </button>
@@ -320,49 +320,49 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
               {step === 'password' && (
                 <div className="space-y-8 py-4">
                   <div className="text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-silver/10 border border-silver/20 flex items-center justify-center mx-auto mb-6">
-                      <Key size={32} className="text-silver" />
+                    <div className="w-16 h-16 rounded-3xl bg-foreground/5 border border-border flex items-center justify-center mx-auto mb-6">
+                      <Key size={32} className="text-foreground" />
                     </div>
-                    <h3 className="text-2xl font-black mb-2">Custom Password</h3>
-                    <p className="text-sm text-gray-500">Use a phrase only you know</p>
+                    <h3 className="text-2xl font-black mb-2 text-foreground">Custom Password</h3>
+                    <p className="text-sm text-foreground/40">Use a phrase only you know</p>
                   </div>
 
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Enter Password</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Enter Password</label>
                        <input 
                          type="password"
                          placeholder="Minimum 8 characters"
                          value={password}
                          onChange={(e) => setPassword(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                        <div className="flex gap-1 px-4 mt-2">
                           {[1,2,3,4].map(i => (
-                            <div key={i} className={`h-1 flex-1 rounded-full transition-all ${getPasswordStrength(password) >= i ? 'bg-silver shadow-glow-silver/50' : 'bg-white/5'}`} />
+                            <div key={i} className={`h-1 flex-1 rounded-full transition-all ${getPasswordStrength(password) >= i ? 'bg-foreground shadow-xl' : 'bg-foreground/5'}`} />
                           ))}
                        </div>
                     </div>
 
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Confirm Password</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Confirm Password</label>
                        <input 
                          type="password"
                          placeholder="Repeat password"
                          value={confirmPassword}
                          onChange={(e) => setConfirmPassword(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                     </div>
 
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Backup Hint (Optional)</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Backup Hint (Optional)</label>
                        <input 
                          type="text"
                          placeholder="Wait, what was it?"
                          value={hint}
                          onChange={(e) => setHint(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                     </div>
                   </div>
@@ -374,7 +374,7 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
                   <button
                     onClick={handlePasswordSubmit}
                     disabled={isLoading || !password || password !== confirmPassword || getPasswordStrength(password) < 2}
-                    className="w-full py-5 silver-metallic text-[#050505] rounded-3xl font-black uppercase tracking-widest text-xs disabled:opacity-50 transition-all shadow-glow-silver/20"
+                    className="w-full py-5 bg-foreground text-background rounded-3xl font-black uppercase tracking-widest text-xs disabled:opacity-50 transition-all shadow-xl"
                   >
                     {isLoading ? 'Securing...' : 'Verify & Backup'}
                   </button>
@@ -384,11 +384,11 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
               {step === 'export' && (
                 <div className="space-y-8 py-4">
                   <div className="text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-silver/10 border border-silver/20 flex items-center justify-center mx-auto mb-6">
-                      <FileJson size={32} className="text-silver" />
+                    <div className="w-16 h-16 rounded-3xl bg-foreground/5 border border-border flex items-center justify-center mx-auto mb-6">
+                      <FileJson size={32} className="text-foreground" />
                     </div>
-                    <h3 className="text-2xl font-black mb-2">Export Metadata</h3>
-                    <p className="text-sm text-gray-500">Download keys to your vault</p>
+                    <h3 className="text-2xl font-black mb-2 text-foreground">Export Metadata</h3>
+                    <p className="text-sm text-foreground/40">Download keys to your vault</p>
                   </div>
 
                   <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-3xl p-6">
@@ -405,22 +405,22 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
 
                   <div className="grid gap-6">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Password to encrypt file</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Password to encrypt file</label>
                        <input 
                          type="password"
                          value={password}
                          onChange={(e) => setPassword(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                     </div>
 
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Confirm Encryption Password</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Confirm Encryption Password</label>
                        <input 
                          type="password"
                          value={confirmPassword}
                          onChange={(e) => setConfirmPassword(e.target.value)}
-                         className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                         className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                        />
                     </div>
                   </div>
@@ -432,7 +432,7 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
                   <button
                     onClick={handleDownloadBackup}
                     disabled={isLoading || !password || password !== confirmPassword}
-                    className="w-full py-5 silver-metallic text-[#050505] rounded-3xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all shadow-glow-silver/20"
+                    className="w-full py-5 bg-foreground text-background rounded-3xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all shadow-xl"
                   >
                     <Download size={16} />
                     {isLoading ? 'Generating File...' : 'Download & Save Backup'}
@@ -445,17 +445,17 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
                    <motion.div 
                      initial={{ scale: 0 }}
                      animate={{ scale: 1 }}
-                     className="w-24 h-24 rounded-full bg-silver/10 border border-silver/20 flex items-center justify-center mx-auto mb-8 shadow-glow-silver/20"
+                     className="w-24 h-24 rounded-full bg-foreground/5 border border-border flex items-center justify-center mx-auto mb-8 shadow-xl"
                    >
-                     <CheckCircle2 size={48} className="text-silver" />
+                     <CheckCircle2 size={48} className="text-foreground" />
                    </motion.div>
-                   <h3 className="text-3xl font-black mb-4">You're Protected</h3>
-                   <p className="text-gray-500 text-sm max-w-xs mx-auto mb-10 font-medium">
+                   <h3 className="text-3xl font-black mb-4 text-foreground">You're Protected</h3>
+                   <p className="text-foreground/40 text-sm max-w-xs mx-auto mb-10 font-medium">
                      Your message keys are safely backed up to Argentum Shield. You can now recover your conversations on any device.
                    </p>
                    <button
                      onClick={onClose}
-                     className="px-12 py-5 silver-metallic text-[#050505] rounded-[2rem] font-black uppercase tracking-widest text-xs transition-shadow shadow-glow-silver/40"
+                     className="px-12 py-5 bg-foreground text-background rounded-[2rem] font-black uppercase tracking-widest text-xs transition-shadow shadow-xl"
                    >
                      Done
                    </button>
@@ -479,23 +479,23 @@ function MethodCard({ icon, title, desc, badge, onClick }: {
   return (
     <button 
       onClick={onClick}
-      className="w-full p-6 rounded-[2rem] border border-white/5 bg-white/[0.02] hover:bg-white/5 hover:border-white/10 transition-all text-left flex items-center gap-5 group"
+      className="w-full p-6 rounded-[2rem] border border-border bg-card hover:bg-foreground/5 hover:border-foreground/20 transition-all text-left flex items-center gap-5 group"
     >
-      <div className="p-4 rounded-2xl bg-[#0a0a0a] border border-white/5 group-hover:border-white/20 transition-all">
+      <div className="p-4 rounded-2xl bg-background border border-border group-hover:border-foreground/20 transition-all">
         {icon}
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-3 mb-1">
-          <h4 className="text-sm font-bold text-white uppercase tracking-widest">{title}</h4>
+          <h4 className="text-sm font-bold text-foreground uppercase tracking-widest">{title}</h4>
           {badge && (
-             <span className="text-[8px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full bg-silver/20 text-silver border border-silver/20">
+             <span className="text-[8px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full bg-foreground/10 text-foreground border border-foreground/20">
                {badge}
              </span>
           )}
         </div>
-        <p className="text-[11px] text-gray-500 font-medium">{desc}</p>
+        <p className="text-[11px] text-foreground/40 font-medium">{desc}</p>
       </div>
-      <ChevronRight size={18} className="text-white/10 group-hover:text-white/40 transition-all" />
+      <ChevronRight size={18} className="text-foreground/10 group-hover:text-foreground/40 transition-all" />
     </button>
   )
 }

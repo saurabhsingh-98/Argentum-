@@ -64,22 +64,22 @@ export default function AuditLogView() {
            <p className="text-gray-500 text-sm font-medium tracking-tight">Immutable history of administrative actions and system modifications.</p>
         </div>
         <div className="relative group w-full md:w-80">
-          <Terminal size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" />
+          <Terminal size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-red-500 transition-colors" />
           <input 
             type="text" 
             placeholder="Filter by action or target..."
-            className="pl-12 pr-6 py-3 bg-[#111] border border-white/5 rounded-2xl w-full text-xs font-bold outline-none border-red-500/0 focus:border-red-500/30 transition-all"
+            className="pl-12 pr-6 py-3 bg-card border border-border rounded-2xl w-full text-xs font-bold outline-none border-red-500/0 focus:border-red-500/30 transition-all text-foreground"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </header>
 
-      <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden">
+      <div className="bg-card border border-border rounded-[2.5rem] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/[0.02] border-b border-white/5 text-[10px] font-black uppercase tracking-widest text-gray-500">
+              <tr className="bg-foreground/[0.02] border-b border-border text-[10px] font-black uppercase tracking-widest text-foreground/40">
                 <th className="px-8 py-5">Timestamp</th>
                 <th className="px-6 py-5">Administrator</th>
                 <th className="px-6 py-5">Action</th>
@@ -87,15 +87,15 @@ export default function AuditLogView() {
                 <th className="px-8 py-5 text-right">Endpoint</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 font-medium">
+            <tbody className="divide-y divide-border font-medium text-foreground">
               {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-white/[0.01] transition-all group">
+                <tr key={log.id} className="hover:bg-foreground/[0.01] transition-all group">
                   <td className="px-8 py-4 whitespace-nowrap">
-                    <span className="text-[10px] font-mono text-gray-500 uppercase">{new Date(log.created_at).toLocaleString()}</span>
+                    <span className="text-[10px] font-mono text-foreground/40 uppercase">{new Date(log.created_at).toLocaleString()}</span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                       <span className="text-xs font-bold text-white uppercase tracking-tight">@{log.users?.username || 'system'}</span>
+                       <span className="text-xs font-bold text-foreground uppercase tracking-tight">@{log.users?.username || 'system'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -105,12 +105,12 @@ export default function AuditLogView() {
                   </td>
                   <td className="px-6 py-4">
                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{log.target_type}:</span>
-                        <span className="text-[10px] font-mono text-gray-600 truncate max-w-[150px]">{log.target_id}</span>
+                        <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-tighter">{log.target_type}:</span>
+                        <span className="text-[10px] font-mono text-foreground/40 truncate max-w-[150px]">{log.target_id}</span>
                      </div>
                   </td>
                   <td className="px-8 py-4 text-right">
-                    <span className="text-[9px] font-mono text-gray-700 bg-white/2 px-2 py-1 rounded">{log.ip_address || 'internal'}</span>
+                    <span className="text-[9px] font-mono text-foreground/60 bg-foreground/5 px-2 py-1 rounded">{log.ip_address || 'internal'}</span>
                   </td>
                 </tr>
               ))}
@@ -124,11 +124,11 @@ export default function AuditLogView() {
           )}
         </div>
 
-        <div className="p-6 border-t border-white/5 flex items-center justify-between text-xs font-bold text-gray-600">
+        <div className="p-6 border-t border-border flex items-center justify-between text-xs font-bold text-foreground/40">
            <span>{totalCount} immutable records</span>
            <div className="flex items-center gap-2">
-              <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="p-2 border border-white/5 rounded-xl disabled:opacity-30"><ChevronLeft size={16} /></button>
-              <button disabled={page * 20 >= totalCount} onClick={() => setPage(p => p + 1)} className="p-2 border border-white/5 rounded-xl disabled:opacity-30"><ChevronRight size={16} /></button>
+              <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="p-2 border border-border rounded-xl disabled:opacity-30"><ChevronLeft size={16} /></button>
+              <button disabled={page * 20 >= totalCount} onClick={() => setPage(p => p + 1)} className="p-2 border border-border rounded-xl disabled:opacity-30"><ChevronRight size={16} /></button>
            </div>
         </div>
       </div>

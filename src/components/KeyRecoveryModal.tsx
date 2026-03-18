@@ -206,22 +206,22 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-[#050505]/95 backdrop-blur-md"
+            className="absolute inset-0 bg-background/95 backdrop-blur-md"
           />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-[3rem] overflow-hidden shadow-3xl"
+            className="relative w-full max-w-lg bg-card border border-border rounded-[3rem] overflow-hidden shadow-3xl"
           >
             <div className="p-10">
               <div className="text-center mb-10">
-                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-silver/10 border border-silver/20 text-[8px] font-black uppercase tracking-widest text-silver mb-6">
+                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-border text-[8px] font-black uppercase tracking-widest text-foreground/40 mb-6">
                     <ShieldCheck size={10} /> Argentum Shield Recovery
                  </div>
-                 <h2 className="text-4xl font-black text-white tracking-tighter mb-4">Restore Messages</h2>
-                 <p className="text-gray-500 text-sm font-medium">Your identity is protected. Enter your backup secret to access your conversations on this device.</p>
+                 <h2 className="text-4xl font-black text-foreground tracking-tighter mb-4">Restore Messages</h2>
+                 <p className="text-foreground/40 text-sm font-medium">Your identity is protected. Enter your backup secret to access your conversations on this device.</p>
               </div>
 
               {mode === 'locked' ? (
@@ -230,9 +230,9 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
                       <Clock size={32} />
                    </div>
                    <div className="space-y-2">
-                      <h3 className="text-xl font-black text-white">Recovery Locked</h3>
-                      <p className="text-sm text-gray-500">Too many incorrect attempts.</p>
-                      <p className="text-2xl font-black text-silver tabular-nums mt-4">
+                      <h3 className="text-xl font-black text-foreground">Recovery Locked</h3>
+                      <p className="text-sm text-foreground/40">Too many incorrect attempts.</p>
+                      <p className="text-2xl font-black text-foreground tabular-nums mt-4">
                         {Math.floor(remainingTime / 60)}:{(remainingTime % 60).toString().padStart(2, '0')}
                       </p>
                    </div>
@@ -253,15 +253,15 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
                    <button
                      onClick={handleDeleteAll}
                      disabled={isLoading}
-                     className="w-full py-5 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/20"
+                     className="w-full py-5 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 shadow-lg"
                    >
                      <Trash2 size={16} /> Reset Identity & Messages
                    </button>
-                   <button onClick={() => setMode('pin')} className="w-full text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">I found my PIN</button>
+                   <button onClick={() => setMode('pin')} className="w-full text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground transition-colors">I found my PIN</button>
                 </div>
               ) : (
                 <div className="space-y-8">
-                   {mode === 'pin' ? (
+                    {mode === 'pin' ? (
                      <div className="flex justify-center gap-3">
                         {[0,1,2,3,4,5].map(i => (
                           <input
@@ -272,26 +272,26 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
                             maxLength={1}
                             value={pin[i]}
                             onChange={(e) => handlePinChange(e.target.value, i)}
-                            className="w-12 h-16 bg-[#111] border border-white/5 rounded-2xl text-center text-2xl font-black focus:border-silver/40 focus:ring-4 focus:ring-silver/5 outline-none transition-all"
+                            className="w-12 h-16 bg-background border border-border rounded-2xl text-center text-2xl font-black text-foreground focus:border-foreground/40 focus:ring-4 focus:ring-foreground/5 outline-none transition-all"
                           />
                         ))}
                      </div>
                    ) : (
                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-4">Enter Password</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-foreground/20 ml-4">Enter Password</label>
                         <input 
                           type="password"
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
-                          className="w-full p-5 bg-[#111] border border-white/5 rounded-3xl text-sm silver-focus transition-all"
+                          className="w-full p-5 bg-background border border-border rounded-3xl text-sm focus:border-foreground/40 transition-all"
                         />
                      </div>
                    )}
 
                    {hint && (
                      <div className="text-center">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-white/20">Backup Hint</p>
-                        <p className="text-xs text-silver mt-1 font-medium">{hint}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/20">Backup Hint</p>
+                        <p className="text-xs text-foreground/60 mt-1 font-medium">{hint}</p>
                      </div>
                    )}
 
@@ -310,21 +310,21 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
                         {isLoading ? 'Decrypting Space...' : 'Restore Conversations'}
                       </button>
 
-                      <div className="flex items-center gap-2 mt-4">
-                         <div className="h-px bg-white/5 flex-1" />
-                         <span className="text-[9px] font-black text-white/10 uppercase tracking-widest">Other Methods</span>
-                         <div className="h-px bg-white/5 flex-1" />
+                       <div className="flex items-center gap-2 mt-4">
+                         <div className="h-px bg-border flex-1" />
+                         <span className="text-[9px] font-black text-foreground/20 uppercase tracking-widest">Other Methods</span>
+                         <div className="h-px bg-border flex-1" />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                          <button 
                            onClick={() => setMode(mode === 'pin' ? 'password' : 'pin')}
-                           className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-all"
+                           className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-foreground/5 border border-border text-[9px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground transition-all"
                          >
                             {mode === 'pin' ? <Key size={14} /> : <Lock size={14} />}
                             {mode === 'pin' ? 'Password' : 'PIN'}
                          </button>
-                         <label className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/5 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-all cursor-pointer">
+                         <label className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-foreground/5 border border-border text-[9px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground transition-all cursor-pointer">
                             <FileUp size={14} /> File Backup
                             <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" />
                          </label>
@@ -333,7 +333,7 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
 
                    <button 
                      onClick={() => setMode('lost')}
-                     className="w-full text-[10px] font-black uppercase tracking-widest text-white/20 hover:text-red-500/60 transition-colors mt-4"
+                     className="w-full text-[10px] font-black uppercase tracking-widest text-foreground/20 hover:text-red-500 transition-colors mt-4"
                    >
                      I lost my backup secret
                    </button>

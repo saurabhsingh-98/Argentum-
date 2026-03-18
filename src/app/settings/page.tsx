@@ -62,19 +62,20 @@ export default function SettingsPage() {
           .from('users')
           .select('*')
           .eq('id', user.id)
-          .single()
+          .maybeSingle()
         
-        if (profError && profError.code !== 'PGRST116') throw profError
+        if (profError) {
+          console.error('Error fetching profile:', profError)
+        }
         
-        setProfile(prof)
-        setLoading(false)
-
-        const savedCompact = localStorage.getItem('appearance_compact') === 'true'
-        setCompactMode(savedCompact)
-        setDisappearingMessages(localStorage.getItem('ag_disappearing_messages') || 'Off')
+        setProfile(prof || { username: 'anonymous' })
       } catch (err) {
         console.error('Settings setup error:', err)
+      } finally {
         setLoading(false)
+        const savedCompact = typeof window !== 'undefined' ? localStorage.getItem('appearance_compact') === 'true' : false
+        setCompactMode(savedCompact)
+        setDisappearingMessages(typeof window !== 'undefined' ? (localStorage.getItem('ag_disappearing_messages') || 'Off') : 'Off')
       }
     }
 
@@ -227,18 +228,18 @@ export default function SettingsPage() {
                     <div className="space-y-6">
                       <div className="flex items-center gap-6 p-6 bg-card/5 border border-border rounded-2xl">
                          <div className="w-16 h-16 rounded-2xl border border-border bg-card overflow-hidden flex items-center justify-center text-xl font-black text-foreground">
-                            {profile.avatar_url ? (
+                            {profile?.avatar_url ? (
                               <img src={profile.avatar_url} alt="avatar" className="w-full h-full object-cover" />
                             ) : (
-                              profile.username[0].toUpperCase()
+                              (profile?.username?.[0] || 'A').toUpperCase()
                             )}
                          </div>
                          <div className="flex-1">
                             <p className="text-xs font-black text-foreground/40 uppercase tracking-widest mb-1">Display Name</p>
-                            <h3 className="text-lg font-bold">{profile.display_name || profile.username}</h3>
+                            <h3 className="text-lg font-bold">{profile?.display_name || profile?.username || 'Anonymous'}</h3>
                          </div>
                          <button 
-                            onClick={() => router.push(`/profile/${profile.username}`)}
+                            onClick={() => router.push(`/profile/${profile?.username || ''}`)}
                             className="px-4 py-2 rounded-xl bg-card border border-border text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all font-mono"
                           >
                            Edit Profile

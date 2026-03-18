@@ -45,13 +45,13 @@ export default function AdminSettings() {
                 { label: 'Speak Broadcasts', desc: 'Toggle global premium broadcasts.', icon: Zap, status: 'ON' },
                 { label: 'Network Visibility', desc: 'Toggle public profile discovery.', icon: Globe, status: 'ON' },
               ].map((item) => (
-                <div key={item.label} className="bg-[#111] border border-white/5 p-6 rounded-3xl flex items-center justify-between hover:border-white/10 transition-all">
+                <div key={item.label} className="bg-card border border-border p-6 rounded-3xl flex items-center justify-between transition-all">
                    <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400">
                          <item.icon size={20} />
                       </div>
                       <div>
-                         <p className="text-xs font-black uppercase tracking-widest text-white">{item.label}</p>
+                         <p className="text-xs font-black uppercase tracking-widest text-foreground">{item.label}</p>
                          <p className="text-[10px] text-gray-500 font-medium">{item.desc}</p>
                       </div>
                    </div>
@@ -68,10 +68,10 @@ export default function AdminSettings() {
            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 flex items-center gap-2">
              <Database size={14} /> Database & Sync
            </h2>
-           <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl overflow-hidden divide-y divide-white/5">
+           <div className="bg-card border border-border rounded-3xl overflow-hidden divide-y divide-border">
               <div className="p-6 flex items-center justify-between">
                  <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-white">Cache Invalidation</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-foreground">Cache Invalidation</p>
                     <p className="text-[10px] text-gray-500 font-medium">Clear all CDN and Redis edge caches instantly.</p>
                  </div>
                  <button className="px-6 py-3 bg-white/5 text-silver text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function AdminSettings() {
               </div>
               <div className="p-6">
                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-4">Environment Keys</p>
-                 <div className="bg-[#111] p-4 rounded-2xl border border-white/5 font-mono text-[10px] text-gray-700">
+                 <div className="bg-card p-4 rounded-2xl border border-border font-mono text-[10px] text-foreground/40">
                     SUPABASE_URL: https://*******.supabase.co<br/>
                     SITE_URL: http://localhost:3000/
                  </div>
@@ -98,7 +98,7 @@ export default function AdminSettings() {
            {saving ? <RefreshCcw size={16} className="animate-spin" /> : <Save size={16} />}
            {saving ? 'Processing...' : 'Save Configuration'}
          </button>
-         <button className="px-8 py-5 bg-white/5 text-gray-500 text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:text-white transition-all">
+         <button className="px-8 py-5 bg-foreground/5 text-foreground/40 text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:text-foreground transition-all">
            Revert Changes
          </button>
       </div>

@@ -13,14 +13,14 @@ export default function EmptyState({
   showAction?: boolean
 }) {
   return (
-    <div className="glass-card py-20 px-6 flex flex-col items-center justify-center text-center gap-6 border-dashed border-white/10 bg-transparent">
-      <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-silver group-hover:silver-glow transition-all">
+    <div className="glass-card py-20 px-6 flex flex-col items-center justify-center text-center gap-6 border-dashed border-border bg-transparent">
+      <div className="w-16 h-16 rounded-2xl bg-foreground/5 border border-border flex items-center justify-center text-foreground group-hover:silver-glow transition-all">
         <span className="text-xl font-black italic">Ag</span>
       </div>
       
       <div className="flex flex-col gap-2 max-w-sm">
-        <h3 className="text-xl font-bold text-white">{title}</h3>
-        <p className="text-gray-500 text-sm leading-relaxed">
+        <h3 className="text-xl font-bold text-foreground">{title}</h3>
+        <p className="text-foreground/40 text-sm leading-relaxed">
           {description}
         </p>
       </div>

@@ -108,16 +108,16 @@ export default function UsersManagement() {
     <div className="space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-           <h1 className="text-4xl font-black tracking-tighter mb-2">Build Corps</h1>
-           <p className="text-gray-500 text-sm font-medium tracking-tight">Identity management and access control for the Argentum network.</p>
+           <h1 className="text-4xl font-black tracking-tighter mb-2 text-foreground">Build Corps</h1>
+           <p className="text-foreground/40 text-sm font-medium tracking-tight">Identity management and access control for the Argentum network.</p>
         </div>
         <div className="flex items-center gap-3">
            <div className="relative group">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" />
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/40 group-focus-within:text-red-500 transition-colors" />
               <input 
                 type="text" 
                 placeholder="Search by ID, Username, or Email..."
-                className="pl-12 pr-6 py-3 bg-[#111] border border-white/5 rounded-2xl w-full md:w-80 text-xs font-bold outline-none ring-1 ring-transparent focus:ring-red-500/20 focus:border-red-500/30 transition-all"
+                className="pl-12 pr-6 py-3 bg-card border border-border rounded-2xl w-full md:w-80 text-xs font-bold outline-none ring-1 ring-transparent focus:ring-red-500/20 focus:border-red-500/30 transition-all text-foreground"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -126,46 +126,46 @@ export default function UsersManagement() {
       </header>
 
       {/* Stats Triage */}
-      <div className="flex items-center gap-4 text-gray-500 overflow-x-auto pb-2 scrollbar-hide">
-         <button className="px-4 py-2 rounded-xl bg-white/5 text-white text-[10px] font-black uppercase tracking-widest border border-white/10 shrink-0">All Users ({totalCount})</button>
-         <button className="px-4 py-2 rounded-xl bg-white/2 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors shrink-0">Admins</button>
-         <button className="px-4 py-2 rounded-xl bg-white/2 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors shrink-0 text-red-500/60">Banned</button>
-         <button className="px-4 py-2 rounded-xl bg-white/2 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors shrink-0">New Last 24h</button>
+      <div className="flex items-center gap-4 text-foreground/40 overflow-x-auto pb-2 scrollbar-hide">
+         <button className="px-4 py-2 rounded-xl bg-foreground/5 text-foreground text-[10px] font-black uppercase tracking-widest border border-border shrink-0">All Users ({totalCount})</button>
+         <button className="px-4 py-2 rounded-xl bg-foreground/2 hover:text-foreground text-[10px] font-black uppercase tracking-widest transition-colors shrink-0">Admins</button>
+         <button className="px-4 py-2 rounded-xl bg-foreground/2 hover:text-foreground text-[10px] font-black uppercase tracking-widest transition-colors shrink-0 text-red-500/60">Banned</button>
+         <button className="px-4 py-2 rounded-xl bg-foreground/2 hover:text-foreground text-[10px] font-black uppercase tracking-widest transition-colors shrink-0">New Last 24h</button>
       </div>
 
-      <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden">
+      <div className="bg-card border border-border rounded-[2.5rem] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white/[0.02] border-b border-white/5">
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Identity</th>
-                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Email</th>
-                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Joined</th>
-                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Status</th>
-                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Actions</th>
+              <tr className="bg-foreground/[0.02] border-b border-border">
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground/40">Identity</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-foreground/40">Email</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-foreground/40 text-center">Joined</th>
+                <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-foreground/40 text-center">Status</th>
+                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-foreground/40 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-border">
               {users.map((item) => (
-                <tr key={item.id} className="hover:bg-white/[0.01] transition-colors group">
+                <tr key={item.id} className="hover:bg-foreground/[0.01] transition-colors group">
                   <td className="px-8 py-4">
                     <div className="flex items-center gap-4">
-                       <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center text-xs font-black">
+                       <div className="w-10 h-10 rounded-2xl bg-foreground/5 border border-border overflow-hidden flex items-center justify-center text-xs font-black text-foreground">
                           {item.avatar_url ? <img src={item.avatar_url} className="w-full h-full object-cover" /> : item.username[0].toUpperCase()}
                        </div>
                        <div className="flex flex-col min-w-0">
-                          <span className="text-sm font-bold text-white truncate">{item.display_name || item.username}</span>
-                          <span className="text-[10px] font-mono text-gray-600 truncate">@{item.username}</span>
+                          <span className="text-sm font-bold text-foreground truncate">{item.display_name || item.username}</span>
+                          <span className="text-[10px] font-mono text-foreground/40 truncate">@{item.username}</span>
                        </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 group/email cursor-pointer" onClick={() => navigator.clipboard.writeText(item.email)}>
-                       <span className="text-xs font-medium text-gray-400 group-hover/email:text-blue-400 transition-colors uppercase tracking-tighter">{item.email || 'NO_AUTH_EMAIL'}</span>
+                       <span className="text-xs font-medium text-foreground/40 group-hover/email:text-blue-400 transition-colors uppercase tracking-tighter">{item.email || 'NO_AUTH_EMAIL'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <span className="text-[10px] font-bold text-gray-600 uppercase">
+                    <span className="text-[10px] font-bold text-foreground/40 uppercase">
                       {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </td>
@@ -175,7 +175,7 @@ export default function UsersManagement() {
                          <span className="px-2 py-0.5 bg-red-500/10 border border-red-500/20 text-red-500 text-[8px] font-black uppercase tracking-widest rounded shadow-[0_0_10px_rgba(239,68,68,0.1)]">Admin</span>
                        )}
                        {item.is_banned ? (
-                         <span className="px-2 py-0.5 bg-gray-500/10 border border-white/10 text-gray-500 text-[8px] font-black uppercase tracking-widest rounded">Banned</span>
+                         <span className="px-2 py-0.5 bg-foreground/10 border border-border text-foreground/40 text-[8px] font-black uppercase tracking-widest rounded">Banned</span>
                        ) : (
                          <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 text-green-500 text-[8px] font-black uppercase tracking-widest rounded">Active</span>
                        )}
@@ -185,17 +185,17 @@ export default function UsersManagement() {
                     <div className="flex items-center justify-end gap-1">
                       <button 
                         onClick={() => window.open(`/profile/${item.username}`, '_blank')}
-                        className="p-2 text-gray-600 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                        className="p-2 text-foreground/40 hover:text-foreground hover:bg-foreground/5 rounded-xl transition-all"
                       >
                         <ExternalLink size={16} />
                       </button>
                       
                       <div className="relative group/menu">
-                        <button className="p-2 text-gray-600 hover:text-white hover:bg-white/5 rounded-xl transition-all">
+                        <button className="p-2 text-foreground/40 hover:text-foreground hover:bg-foreground/5 rounded-xl transition-all">
                           <MoreHorizontal size={18} />
                         </button>
                         
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-[#111] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-20 overflow-hidden">
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-2xl shadow-2xl opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-20 overflow-hidden">
                            <div className="p-2 space-y-1">
                               {item.is_banned ? (
                                 <button onClick={() => handleModeration('unban', item.id)} className="w-full flex items-center gap-3 px-3 py-2 text-green-500 hover:bg-green-500/10 rounded-xl text-xs font-black uppercase tracking-tight">
@@ -208,7 +208,7 @@ export default function UsersManagement() {
                               )}
                               
                               {item.is_admin ? (
-                                <button onClick={() => handleModeration('remove_admin', item.id)} className="w-full flex items-center gap-3 px-3 py-2 text-gray-400 hover:bg-white/5 rounded-xl text-xs font-black uppercase tracking-tight">
+                                <button onClick={() => handleModeration('remove_admin', item.id)} className="w-full flex items-center gap-3 px-3 py-2 text-foreground/40 hover:bg-foreground/5 rounded-xl text-xs font-black uppercase tracking-tight">
                                   <ShieldAlert size={14} /> Revoke Admin
                                 </button>
                               ) : (
@@ -217,7 +217,7 @@ export default function UsersManagement() {
                                 </button>
                               )}
                               
-                              <div className="h-px bg-white/5 my-1" />
+                              <div className="h-px bg-border my-1" />
                               <button onClick={() => setShowDeleteModal(item)} className="w-full flex items-center gap-3 px-3 py-2 text-red-900 hover:bg-red-900/10 rounded-xl text-xs font-black uppercase tracking-tight">
                                 <Trash2 size={14} /> Delete Identity
                               </button>
@@ -233,26 +233,26 @@ export default function UsersManagement() {
           {users.length === 0 && !loading && (
             <div className="p-20 text-center opacity-30">
               <Search size={48} className="mx-auto mb-4" />
-              <p className="font-black uppercase tracking-widest">No builders found matching criteria</p>
+              <p className="font-black uppercase tracking-widest text-foreground">No builders found matching criteria</p>
             </div>
           )}
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-6 border-t border-white/5 flex items-center justify-between text-xs font-bold text-gray-600">
+        <div className="p-6 border-t border-border flex items-center justify-between text-xs font-bold text-foreground/40">
            <span>Page {page} of {Math.ceil(totalCount / 20)}</span>
            <div className="flex items-center gap-2">
               <button 
                 disabled={page === 1}
                 onClick={() => setPage(p => p - 1)}
-                className="p-2 border border-white/5 rounded-xl hover:bg-white/5 disabled:opacity-30"
+                className="p-2 border border-border rounded-xl hover:bg-foreground/5 disabled:opacity-30"
               >
                 <ChevronLeft size={16} />
               </button>
               <button 
                 disabled={page * 20 >= totalCount}
                 onClick={() => setPage(p => p + 1)}
-                className="p-2 border border-white/5 rounded-xl hover:bg-white/5 disabled:opacity-30"
+                className="p-2 border border-border rounded-xl hover:bg-foreground/5 disabled:opacity-30"
               >
                 <ChevronRight size={16} />
               </button>
@@ -273,19 +273,19 @@ export default function UsersManagement() {
                initial={{ opacity: 0, scale: 0.9, y: 20 }}
                animate={{ opacity: 1, scale: 1, y: 0 }}
                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-               className="bg-[#0a0a0a] border border-red-500/20 rounded-[2.5rem] p-10 w-full max-w-lg relative z-[101] shadow-2xl"
+               className="bg-card border border-red-500/20 rounded-[2.5rem] p-10 w-full max-w-lg relative z-[101] shadow-2xl"
             >
                <div className="w-16 h-16 rounded-3xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 mb-8">
                   <Hammer size={28} />
                </div>
-               <h2 className="text-2xl font-black tracking-tighter mb-2">Suspend Identity</h2>
-               <p className="text-gray-500 text-sm mb-8">Restricting access for <span className="text-white">@{showBanModal.username}</span>. This action will be logged.</p>
+               <h2 className="text-2xl font-black tracking-tighter mb-2 text-foreground">Suspend Identity</h2>
+               <p className="text-foreground/40 text-sm mb-8">Restricting access for <span className="text-foreground font-bold">@{showBanModal.username}</span>. This action will be logged.</p>
                
                <div className="space-y-6">
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 block mb-3">Violation Reason</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 block mb-3">Violation Reason</label>
                     <textarea 
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm font-medium outline-none focus:border-red-500/30 transition-all h-24 resize-none"
+                      className="w-full bg-foreground/5 border border-border rounded-2xl p-4 text-sm font-medium outline-none focus:border-red-500/30 transition-all h-24 resize-none text-foreground"
                       placeholder="Specify the terms violation..."
                       value={banReason}
                       onChange={(e) => setBanReason(e.target.value)}
@@ -293,7 +293,7 @@ export default function UsersManagement() {
                   </div>
                   
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 block mb-3">Duration</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 block mb-3">Duration</label>
                     <div className="grid grid-cols-2 gap-3">
                        {[
                          { label: '24 Hours', value: '1' },
@@ -304,7 +304,7 @@ export default function UsersManagement() {
                          <button 
                            key={d.value}
                            onClick={() => setBanDuration(d.value)}
-                           className={`py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${banDuration === d.value ? 'bg-red-500 text-black border-red-500' : 'bg-white/5 border-white/5 text-gray-500 hover:border-white/20'}`}
+                           className={`py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${banDuration === d.value ? 'bg-red-500 text-black border-red-500' : 'bg-foreground/5 border-border text-foreground/40 hover:border-foreground/20'}`}
                          >
                            {d.label}
                          </button>
@@ -313,7 +313,7 @@ export default function UsersManagement() {
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                     <button onClick={() => setShowBanModal(null)} className="flex-1 py-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:bg-white/10 transition-all">Cancel</button>
+                     <button onClick={() => setShowBanModal(null)} className="flex-1 py-4 bg-foreground/5 border border-border rounded-2xl text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:bg-foreground/10 transition-all">Cancel</button>
                      <button 
                        disabled={!banReason}
                        onClick={() => handleModeration('ban', showBanModal.id)}
@@ -341,13 +341,13 @@ export default function UsersManagement() {
                initial={{ opacity: 0, y: 50 }}
                animate={{ opacity: 1, y: 0 }}
                exit={{ opacity: 0, y: 50 }}
-               className="bg-[#0a0a0a] border border-red-900/50 rounded-[2.5rem] p-10 w-full max-w-md relative z-[101] shadow-[0_0_50px_rgba(239,68,68,0.1)] text-center"
+               className="bg-card border border-red-900/50 rounded-[2.5rem] p-10 w-full max-w-md relative z-[101] shadow-[0_0_50px_rgba(239,68,68,0.1)] text-center"
             >
                <div className="w-20 h-20 rounded-full bg-red-900/20 border border-red-900/40 flex items-center justify-center text-red-600 mx-auto mb-8">
                   <Trash2 size={40} />
                </div>
-               <h2 className="text-3xl font-black tracking-tighter mb-4 text-white">Critical Action</h2>
-               <p className="text-gray-500 text-sm mb-10 leading-relaxed">
+               <h2 className="text-3xl font-black tracking-tighter mb-4 text-foreground">Critical Action</h2>
+               <p className="text-foreground/40 text-sm mb-10 leading-relaxed">
                   You are about to permanently delete the identity <span className="text-red-500 font-bold">@{showDeleteModal.username}</span>. 
                   This will purge all associated build logs and messages. This is irreversible.
                </p>
@@ -361,7 +361,7 @@ export default function UsersManagement() {
                   </button>
                   <button 
                     onClick={() => setShowDeleteModal(null)}
-                    className="w-full py-5 bg-white/5 text-gray-400 font-black uppercase tracking-[0.3em] text-[11px] rounded-2xl hover:bg-white/10 transition-all"
+                    className="w-full py-5 bg-foreground/5 text-foreground/40 font-black uppercase tracking-[0.3em] text-[11px] rounded-2xl hover:bg-foreground/10 transition-all"
                   >
                     Abort Action
                   </button>

@@ -122,36 +122,36 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm" 
+          className="absolute inset-0 bg-background/80 backdrop-blur-sm" 
         />
         
         <motion.div 
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-md bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"
+          className="relative w-full max-w-md bg-card border border-border rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"
         >
           {/* Header */}
-          <div className="p-4 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
-            <h3 className="font-bold text-white uppercase tracking-widest text-xs">
+          <div className="p-4 border-b border-border flex items-center justify-between bg-foreground/5">
+            <h3 className="font-bold text-foreground uppercase tracking-widest text-xs">
               {activeTab === 'followers' ? `Followers (${totalCount})` : `Following (${totalCount})`}
             </h3>
-            <button onClick={onClose} className="p-1 hover:bg-white/5 rounded-lg transition-colors">
-              <X size={18} className="text-gray-500" />
+            <button onClick={onClose} className="p-1 hover:bg-foreground/5 rounded-lg transition-colors">
+              <X size={18} className="text-foreground/40" />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-white/5">
+          <div className="flex border-b border-border">
             <button 
               onClick={() => setActiveTab('followers')}
-              className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'followers' ? 'text-white border-b-2 border-white bg-white/5' : 'text-gray-500 hover:text-white'}`}
+              className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'followers' ? 'text-foreground border-b-2 border-foreground bg-foreground/5' : 'text-foreground/40 hover:text-foreground'}`}
             >
               Followers
             </button>
             <button 
               onClick={() => setActiveTab('following')}
-              className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'following' ? 'text-white border-b-2 border-white bg-white/5' : 'text-gray-500 hover:text-white'}`}
+              className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'following' ? 'text-foreground border-b-2 border-foreground bg-foreground/5' : 'text-foreground/40 hover:text-foreground'}`}
             >
               Following
             </button>
@@ -159,13 +159,13 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
 
           {/* Search */}
           <div className="p-4 relative">
-            <Search className="absolute left-7 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+            <Search className="absolute left-7 top-1/2 -translate-y-1/2 text-foreground/40" size={14} />
             <input 
               type="text"
               placeholder="Search users..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-white/20 transition-all"
+              className="w-full bg-foreground/5 border border-border rounded-xl py-2 pl-10 pr-4 text-xs text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-foreground/20 transition-all"
             />
           </div>
 
@@ -176,7 +176,7 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
                 <div 
                   key={user.id}
                   ref={index === users.length - 1 ? lastUserRef : null}
-                  className="p-3 flex items-center justify-between hover:bg-white/[0.03] rounded-xl transition-all group"
+                  className="p-3 flex items-center justify-between hover:bg-foreground/5 rounded-xl transition-all group"
                 >
                   <Link 
                     href={`/profile/${user.username}`}
@@ -184,27 +184,27 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
                     className="flex items-center gap-3 overflow-hidden flex-1"
                   >
                     <div 
-                      className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center border border-white/10"
+                      className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center border border-border"
                       style={{ background: getGradientFromUsername(user.username) }}
                     >
                       {user.avatar_url ? (
-                        <img src={user.avatar_url} className="w-full h-full object-cover rounded-full" />
+                        <img src={user.avatar_url} alt={user.username} className="w-full h-full object-cover rounded-full" />
                       ) : (
-                        <span className="text-xs font-black text-white">{getInitials(user.display_name, user.username)}</span>
+                        <span className="text-xs font-black text-foreground">{getInitials(user.display_name, user.username)}</span>
                       )}
                     </div>
                     <div className="flex flex-col overflow-hidden">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-white truncate">{user.display_name || user.username}</span>
+                        <span className="text-xs font-bold text-foreground truncate">{user.display_name || user.username}</span>
                       </div>
-                      <span className="text-[10px] text-gray-500 truncate">@{user.username}</span>
+                      <span className="text-[10px] text-foreground/40 truncate">@{user.username}</span>
                       {user.bio && (
-                        <p className="text-[10px] text-gray-600 truncate mt-0.5">{user.bio}</p>
+                        <p className="text-[10px] text-foreground/20 truncate mt-0.5">{user.bio}</p>
                       )}
                       {user.skills && user.skills.length > 0 && (
                         <div className="flex gap-1 mt-1">
                           {user.skills.slice(0, 2).map((skill: string) => (
-                            <span key={skill} className="px-1.5 py-0.5 bg-white/5 border border-white/5 rounded text-[8px] text-gray-400 capitalize whitespace-nowrap">
+                            <span key={skill} className="px-1.5 py-0.5 bg-foreground/5 border border-border rounded text-[8px] text-foreground/40 capitalize whitespace-nowrap">
                               {skill}
                             </span>
                           ))}
@@ -229,10 +229,10 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center opacity-30">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-                  <UserCircle2 size={24} />
+                <div className="w-12 h-12 rounded-2xl bg-foreground/5 border border-border flex items-center justify-center mb-4">
+                  <UserCircle2 size={24} className="text-foreground" />
                 </div>
-                <p className="text-xs font-black uppercase tracking-widest">
+                <p className="text-xs font-black text-foreground uppercase tracking-widest">
                   {activeTab === 'followers' ? 'No followers yet' : 'Not following anyone yet'}
                 </p>
               </div>

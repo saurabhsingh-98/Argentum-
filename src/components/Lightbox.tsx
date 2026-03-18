@@ -29,14 +29,14 @@ export default function Lightbox({ isOpen, onClose, imageUrl }: LightboxProps) {
             <a 
               href={imageUrl} 
               download 
-              className="p-3 bg-white/5 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-all backdrop-blur-xl border border-white/10"
+              className="p-3 bg-foreground/5 hover:bg-foreground/10 rounded-full text-foreground/70 hover:text-foreground transition-all backdrop-blur-xl border border-border"
               onClick={(e) => e.stopPropagation()}
             >
               <Download size={20} />
             </a>
             <button 
               onClick={onClose}
-              className="p-3 bg-white/5 hover:bg-white/10 rounded-full text-white/70 hover:text-white transition-all backdrop-blur-xl border border-white/10"
+              className="p-3 bg-foreground/5 hover:bg-foreground/10 rounded-full text-foreground/70 hover:text-foreground transition-all backdrop-blur-xl border border-border"
             >
               <X size={20} />
             </button>
@@ -45,13 +45,13 @@ export default function Lightbox({ isOpen, onClose, imageUrl }: LightboxProps) {
           <div className="absolute top-6 left-6 flex items-center gap-2 z-[510]">
               <button 
                 onClick={() => setScale(prev => Math.min(prev + 0.5, 3))}
-                className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition-all"
+                className="p-2 bg-foreground/5 hover:bg-foreground/10 rounded-lg text-foreground/50 hover:text-foreground transition-all"
               >
                   <ZoomIn size={18} />
               </button>
               <button 
                 onClick={() => setScale(prev => Math.max(prev - 0.5, 0.5))}
-                className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition-all"
+                className="p-2 bg-foreground/5 hover:bg-foreground/10 rounded-lg text-foreground/50 hover:text-foreground transition-all"
               >
                   <ZoomOut size={18} />
               </button>
@@ -72,7 +72,7 @@ export default function Lightbox({ isOpen, onClose, imageUrl }: LightboxProps) {
             />
           </motion.div>
           
-          <div className="absolute bottom-10 px-8 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+          <div className="absolute bottom-10 px-8 py-3 bg-foreground/5 backdrop-blur-xl border border-border rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40">
               End-to-End Encrypted Secure View
           </div>
         </motion.div>

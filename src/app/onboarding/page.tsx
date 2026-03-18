@@ -136,7 +136,7 @@ export default function Onboarding() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-[#050505] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       {/* Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full" />
@@ -157,8 +157,8 @@ export default function Onboarding() {
             >
               <span className="text-xl font-black text-silver-glow-text tracking-tighter">Ag</span>
             </motion.div>
-            <h1 className="text-3xl font-black text-white tracking-tight text-center">Initialize Identity</h1>
-            <p className="text-gray-500 text-sm mt-3 text-center font-medium max-w-xs">
+            <h1 className="text-3xl font-black text-foreground tracking-tight text-center">Initialize Identity</h1>
+            <p className="text-foreground/40 text-sm mt-3 text-center font-medium max-w-xs">
               Every builder needs a name. Claim yours on the Argentum protocol.
             </p>
           </div>
@@ -167,7 +167,7 @@ export default function Onboarding() {
             {/* Username & Display Name */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Username</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Username</label>
                 <div className="relative group">
                   <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-silver transition-colors" size={16} />
                   <input
@@ -176,10 +176,10 @@ export default function Onboarding() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value.toLowerCase())}
                     maxLength={20}
-                    className={`w-full bg-white/[0.03] border rounded-2xl pl-12 pr-12 py-4 text-sm text-white focus:outline-none transition-all ${
+                    className={`w-full bg-card border rounded-2xl pl-12 pr-12 py-4 text-sm text-foreground focus:outline-none transition-all ${
                       usernameStatus === 'available' ? 'border-green-500/30 focus:border-green-500' : 
                       usernameStatus === 'taken' ? 'border-red-500/30 focus:border-red-500' : 
-                      'border-white/5 focus:border-silver/40'
+                      'border-border focus:border-foreground/40'
                     }`}
                     placeholder="yourhandle"
                   />
@@ -214,7 +214,7 @@ export default function Onboarding() {
                     required
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-4 py-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     placeholder="Your full name or preferred name"
                   />
                 </div>
@@ -224,28 +224,28 @@ export default function Onboarding() {
             {/* Currently Building & Website */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Currently Building</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Currently Building</label>
                 <div className="relative group">
-                  <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                  <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={16} />
                   <input
                     type="text"
                     value={currentlyBuilding}
                     onChange={(e) => setCurrentlyBuilding(e.target.value)}
-                    className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-4 py-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     placeholder="Project Alpha..."
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Website URL</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Website URL</label>
                 <div className="relative group">
-                  <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                  <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={16} />
                   <input
                     type="text"
                     value={websiteUrl}
                     onChange={(e) => setWebsiteUrl(e.target.value)}
-                    className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-4 py-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     placeholder="https://..."
                   />
                 </div>
@@ -255,28 +255,28 @@ export default function Onboarding() {
             {/* Socials */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">GitHub</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">GitHub</label>
                 <div className="relative group">
-                  <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                  <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                   <input
                     type="text"
                     value={githubUsername}
                     onChange={(e) => setGithubUsername(e.target.value)}
-                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                    className="w-full bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     placeholder="handle"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">X / Twitter</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">X / Twitter</label>
                 <div className="relative group">
-                  <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
+                  <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
                   <input
                     type="text"
                     value={twitterUsername}
                     onChange={(e) => setTwitterUsername(e.target.value)}
-                    className="w-full bg-white/[0.03] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-silver/40 transition-all"
+                    className="w-full bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                     placeholder="handle"
                   />
                 </div>
@@ -298,13 +298,13 @@ export default function Onboarding() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Bio</label>
+              <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Bio</label>
               <div className="relative group">
-                <FileText className="absolute left-4 top-5 text-gray-600 group-focus-within:text-silver transition-colors" size={16} />
+                <FileText className="absolute left-4 top-5 text-foreground/20 group-focus-within:text-foreground/60 transition-colors" size={16} />
                 <textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all min-h-[100px] resize-none"
+                  className="w-full bg-card border border-border rounded-2xl pl-12 pr-4 py-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all min-h-[100px] resize-none"
                   placeholder="Tell your story..."
                 />
               </div>
@@ -312,36 +312,36 @@ export default function Onboarding() {
 
             {/* Skills */}
             <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Skills <span className="text-gray-700">(Comma separated)</span></label>
+              <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Skills <span className="text-foreground/20">(Comma separated)</span></label>
               <div className="relative group">
-                <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+                <Rocket className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={16} />
                 <input
                   type="text"
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-sm text-white focus:outline-none focus:border-silver/40 transition-all"
+                  className="w-full bg-card border border-border rounded-2xl pl-12 pr-4 py-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                   placeholder="Rust, React, Solidity..."
                 />
               </div>
             </div>
 
             {/* Visibility */}
-            <div className="flex flex-col gap-4 pt-4 border-t border-white/5">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Profile Visibility</label>
+            <div className="flex flex-col gap-4 pt-4 border-t border-border">
+              <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Profile Visibility</label>
               <div className="grid grid-cols-2 gap-6">
                 <div 
                   onClick={() => setIsPublic(true)}
                   className={`cursor-pointer p-6 rounded-2xl border transition-all ${
                     isPublic 
                       ? 'bg-green-500/5 border-green-500 shadow-glow' 
-                      : 'bg-white/5 border-white/5 hover:border-white/10'
+                      : 'bg-card border-border hover:border-foreground/20'
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <Globe size={18} className={isPublic ? 'text-green-500' : 'text-gray-400'} />
-                    <span className={`text-sm font-bold ${isPublic ? 'text-green-500' : 'text-white'}`}>Public</span>
+                    <Globe size={18} className={isPublic ? 'text-green-500' : 'text-foreground/40'} />
+                    <span className={`text-sm font-bold ${isPublic ? 'text-green-500' : 'text-foreground'}`}>Public</span>
                   </div>
-                  <p className="text-[10px] text-gray-500 leading-relaxed">Anyone can view your profile and builds.</p>
+                  <p className="text-[10px] text-foreground/40 leading-relaxed">Anyone can view your profile and builds.</p>
                 </div>
 
                 <div 
@@ -349,14 +349,14 @@ export default function Onboarding() {
                   className={`cursor-pointer p-6 rounded-2xl border transition-all ${
                     !isPublic 
                       ? 'bg-green-500/5 border-green-500 shadow-glow' 
-                      : 'bg-white/5 border-white/5 hover:border-white/10'
+                      : 'bg-card border-border hover:border-foreground/20'
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <Lock size={18} className={!isPublic ? 'text-green-500' : 'text-gray-400'} />
-                    <span className={`text-sm font-bold ${!isPublic ? 'text-green-500' : 'text-white'}`}>Private</span>
+                    <Lock size={18} className={!isPublic ? 'text-green-500' : 'text-foreground/40'} />
+                    <span className={`text-sm font-bold ${!isPublic ? 'text-green-500' : 'text-foreground'}`}>Private</span>
                   </div>
-                  <p className="text-[10px] text-gray-500 leading-relaxed">Only you can see your profile.</p>
+                  <p className="text-[10px] text-foreground/40 leading-relaxed">Only you can see your profile.</p>
                 </div>
               </div>
             </div>
@@ -366,7 +366,7 @@ export default function Onboarding() {
               disabled={loading || usernameStatus !== 'available'}
               className={`
                 w-full group relative flex items-center justify-center gap-3 font-black py-5 rounded-2xl transition-all shadow-xl active:scale-[0.98] disabled:opacity-30
-                ${usernameStatus === 'available' ? 'silver-metallic shadow-glow' : 'bg-white/5 text-gray-500 border border-white/10'}
+                ${usernameStatus === 'available' ? 'bg-foreground text-background shadow-glow' : 'bg-card text-foreground/40 border border-border'}
               `}
             >
               {loading ? (

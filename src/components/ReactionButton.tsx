@@ -121,7 +121,7 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
               initial={{ opacity: 0, y: 10, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.8 }}
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-1.5 bg-[#111] border border-white/10 rounded-full flex items-center gap-0.5 shadow-2xl z-50 backdrop-blur-xl"
+              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-1.5 bg-card border border-border rounded-full flex items-center gap-0.5 shadow-2xl z-50 backdrop-blur-xl"
             >
               {REACTION_TYPES.map((r, i) => (
                 <motion.button
@@ -130,7 +130,7 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
                   animate={{ scale: 1 }}
                   transition={{ delay: i * 0.04, type: 'spring', stiffness: 300, damping: 20 }}
                   onClick={() => handleReaction(r.type)}
-                  className="p-2 text-xl hover:scale-150 hover:-translate-y-2 transition-all duration-300 rounded-full hover:bg-white/5"
+                  className="p-2 text-xl hover:scale-150 hover:-translate-y-2 transition-all duration-300 rounded-full hover:bg-foreground/5"
                   title={r.label}
                 >
                   {r.emoji}
@@ -145,8 +145,8 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
           className={`
             flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-300
             ${userReaction 
-              ? `bg-white/5 ${currentReactionInfo?.glow} border border-white/20` 
-              : 'hover:bg-white/5 text-white/50 hover:text-white border border-transparent'
+              ? `bg-foreground/5 ${currentReactionInfo?.glow} border border-foreground/20` 
+              : 'hover:bg-foreground/5 text-foreground/40 hover:text-foreground border border-transparent'
             }
           `}
         >
@@ -172,7 +172,7 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
               </span>
             ))}
           </div>
-          <span className="text-[9px] font-bold text-white/40 font-mono">
+          <span className="text-[9px] font-bold text-foreground/20 font-mono">
             {reactions.length}
           </span>
         </div>

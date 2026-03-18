@@ -73,7 +73,7 @@ export default function SecurityDashboard() {
            <h1 className="text-4xl font-black tracking-tighter mb-2 flex items-center gap-3">
              <ShieldAlert className="text-red-500" size={32} /> Intrusion Detection
            </h1>
-           <p className="text-gray-500 text-sm font-medium tracking-tight">Monitoring real-time threats and suspicious network activity.</p>
+           <p className="text-foreground/40 text-sm font-medium tracking-tight">Monitoring real-time threats and suspicious network activity.</p>
         </div>
         <div className="flex items-center gap-2">
            <button 
@@ -84,11 +84,11 @@ export default function SecurityDashboard() {
            </button>
            <button 
              onClick={() => setFilter('all')}
-             className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-white/10 text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}
+             className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-foreground/10 text-foreground' : 'bg-foreground/5 text-foreground/40 hover:bg-foreground/10'}`}
            >
              All Logs
            </button>
-           <button onClick={fetchAlerts} className="p-2 rounded-xl bg-white/5 text-gray-500 hover:text-white transition-all">
+           <button onClick={fetchAlerts} className="p-2 rounded-xl bg-foreground/5 text-foreground/40 hover:text-foreground transition-all">
              <RefreshCcw size={16} />
            </button>
         </div>
@@ -101,12 +101,12 @@ export default function SecurityDashboard() {
           { label: 'Resolved Incidents', value: stats.resolved, icon: CheckCircle2, color: 'text-green-500' },
           { label: 'Total Events', value: stats.total, icon: Activity, color: 'text-blue-500' },
         ].map((stat) => (
-          <div key={stat.label} className="bg-[#111] border border-white/5 rounded-3xl p-6 flex items-center justify-between">
+          <div key={stat.label} className="bg-card border border-border rounded-3xl p-6 flex items-center justify-between">
             <div>
-               <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">{stat.label}</p>
-               <p className="text-3xl font-black text-white">{stat.value || 0}</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-foreground/40 mb-1">{stat.label}</p>
+               <p className="text-3xl font-black text-foreground">{stat.value || 0}</p>
             </div>
-            <div className={`p-4 rounded-2xl bg-white/5 ${stat.color}`}>
+            <div className={`p-4 rounded-2xl bg-foreground/5 ${stat.color}`}>
                <stat.icon size={24} />
             </div>
           </div>
@@ -114,12 +114,12 @@ export default function SecurityDashboard() {
       </div>
 
       {/* Alerts Table-style List */}
-      <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden">
-        <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
-           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-             <Filter size={14} className="text-gray-500" /> Security Event Stream
+      <div className="bg-card border border-border rounded-[2.5rem] overflow-hidden">
+        <div className="p-8 border-b border-border flex items-center justify-between bg-foreground/[0.02]">
+           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2 text-foreground">
+             <Filter size={14} className="text-foreground/40" /> Security Event Stream
            </h3>
-           <span className="text-[10px] font-mono text-gray-600">Updated in real-time</span>
+           <span className="text-[10px] font-mono text-foreground/20">Updated in real-time</span>
         </div>
 
         <div className="flex flex-col">
@@ -146,14 +146,14 @@ export default function SecurityDashboard() {
                       </span>
                    </div>
                    
-                   <h4 className="text-sm font-bold text-white leading-snug">
+                   <h4 className="text-sm font-bold text-foreground leading-snug">
                      {alert.details?.message || 'Unauthorized access attempt detected'}
                    </h4>
 
-                   <div className="flex flex-wrap gap-4 text-[10px] font-medium text-gray-500 uppercase tracking-tight">
+                   <div className="flex flex-wrap gap-4 text-[10px] font-medium text-foreground/40 uppercase tracking-tight">
                       <div className="flex items-center gap-1.5">
                         <Globe size={12} className="text-blue-500" />
-                        <span className="text-white font-mono">{alert.ip_address}</span>
+                        <span className="text-foreground font-mono">{alert.ip_address}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <MapPin size={12} className="text-orange-500" />
@@ -162,11 +162,11 @@ export default function SecurityDashboard() {
                       {alert.users && (
                         <div className="flex items-center gap-1.5">
                           <User size={12} className="text-purple-500" />
-                          <span className="text-purple-400">@{alert.users.username}</span>
+                          <span className="text-purple-500">@{alert.users.username}</span>
                         </div>
                       )}
                       <div className="flex items-center gap-1.5">
-                        <Server size={12} className="text-silver" />
+                        <Server size={12} className="text-foreground/40" />
                         <span className="truncate max-w-[200px]">{alert.details?.path || '/'}</span>
                       </div>
                    </div>
@@ -177,7 +177,7 @@ export default function SecurityDashboard() {
                      onClick={() => {
                        window.open(`https://www.abuseipdb.com/check/${alert.ip_address}`, '_blank')
                      }}
-                     className="p-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-widest"
+                     className="p-3 rounded-xl bg-foreground/5 border border-border text-foreground/40 hover:text-foreground hover:bg-foreground/10 transition-all flex items-center gap-2 text-[9px] font-black uppercase tracking-widest"
                    >
                      <ExternalLink size={14} /> Check IP
                    </button>
@@ -197,8 +197,8 @@ export default function SecurityDashboard() {
               <div className="w-16 h-16 rounded-3xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500 mb-6">
                 <ShieldCheck size={32} />
               </div>
-              <h4 className="text-lg font-bold mb-2 uppercase tracking-tighter">Security Ledger Clean</h4>
-              <p className="text-sm text-gray-500 max-w-xs leading-relaxed">No intrusion attempts or suspicious activity detected in the current filter.</p>
+              <h4 className="text-lg font-bold mb-2 uppercase tracking-tighter text-foreground">Security Ledger Clean</h4>
+              <p className="text-sm text-foreground/40 max-w-xs leading-relaxed">No intrusion attempts or suspicious activity detected in the current filter.</p>
             </div>
           )}
         </div>

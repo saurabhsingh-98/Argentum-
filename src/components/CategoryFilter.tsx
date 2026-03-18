@@ -22,7 +22,7 @@ export default function CategoryFilter({
               className={`
                 relative px-7 py-3 rounded-xl text-[11px] font-black tracking-[0.15em] uppercase transition-all duration-500 transform-style-3d border box-border
                 ${selected === cat 
-                  ? 'bg-gradient-to-b from-white via-silver to-gray-400 text-black border-white/50 -translate-y-2 shadow-silver-lux' 
+                  ? 'bg-foreground text-background border-foreground/20 -translate-y-2 shadow-silver-lux' 
                   : 'bg-card text-foreground/40 border-border hover:border-border/50 hover:text-foreground translate-y-0 hover:-translate-y-1 shadow-flat'
                 }
                 active:translate-y-[-2px] active:scale-[0.98]
@@ -33,8 +33,8 @@ export default function CategoryFilter({
               {/* 3D Side panels (to avoid "cut in half" look) */}
               {selected === cat && (
                 <div className="absolute inset-0 rounded-xl pointer-events-none">
-                  <div className="absolute bottom-[-10px] left-0 right-0 h-[10px] bg-foreground/20 rounded-b-xl origin-top transform-rotate-x-90" />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute bottom-[-10px] left-0 right-0 h-[10px] bg-foreground/10 rounded-b-xl origin-top transform-rotate-x-90" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-foreground/5 to-transparent" />
                 </div>
               )}
             </button>
@@ -54,8 +54,8 @@ export default function CategoryFilter({
         }
         .shadow-silver-lux {
           box-shadow: 
-            0 10px 30px -5px rgba(192, 192, 192, 0.3),
-            0 0 15px rgba(255, 255, 255, 0.2);
+            0 10px 30px -5px rgba(0, 0, 0, 0.2),
+            0 0 15px var(--border);
         }
         .shadow-flat {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);

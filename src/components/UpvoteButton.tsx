@@ -76,8 +76,8 @@ export default function UpvoteButton({
       className={`
         flex flex-col items-center gap-1 p-2 rounded-xl transition-all duration-300
         ${isUpvoted 
-          ? 'bg-white/10 text-white silver-metallic ring-1 ring-white/30' 
-          : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-silver'
+          ? 'bg-foreground/5 text-foreground silver-metallic ring-1 ring-border' 
+          : 'bg-foreground/5 text-foreground/40 hover:bg-foreground/10 hover:text-foreground'
         }
         active:scale-90 disabled:opacity-50
       `}

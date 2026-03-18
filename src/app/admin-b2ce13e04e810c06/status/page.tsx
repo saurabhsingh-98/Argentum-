@@ -64,8 +64,8 @@ export default function StatusModeration() {
   return (
     <div className="space-y-6">
       <header>
-         <h1 className="text-4xl font-black tracking-tighter mb-2">Speak Moderation</h1>
-         <p className="text-gray-500 text-sm font-medium tracking-tight">Managing real-time premium broadcasts and global announcements.</p>
+         <h1 className="text-4xl font-black tracking-tighter mb-2 text-foreground">Speak Moderation</h1>
+         <p className="text-foreground/40 text-sm font-medium tracking-tight">Managing real-time premium broadcasts and global announcements.</p>
       </header>
 
       <div className="grid grid-cols-1 gap-4">
@@ -78,7 +78,7 @@ export default function StatusModeration() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05 }}
               key={update.id}
-              className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 hover:border-white/10 transition-all flex flex-col md:flex-row gap-6 items-start"
+              className="bg-card border border-border rounded-3xl p-6 hover:border-border transition-all flex flex-col md:flex-row gap-6 items-start"
             >
               <div className="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center text-red-500 shrink-0">
                  <Zap size={24} />
@@ -86,10 +86,10 @@ export default function StatusModeration() {
 
               <div className="flex-1 space-y-3">
                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-white uppercase tracking-tight">@{update.users?.username}</span>
-                    <span className="text-[10px] font-mono text-gray-600 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(update.created_at).toLocaleString()}</span>
+                    <span className="text-xs font-bold text-foreground uppercase tracking-tight">@{update.users?.username}</span>
+                    <span className="text-[10px] font-mono text-foreground/40 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(update.created_at).toLocaleString()}</span>
                  </div>
-                 <p className="text-base text-gray-300 font-medium leading-relaxed italic">"{update.content}"</p>
+                 <p className="text-base text-foreground/80 font-medium leading-relaxed italic">"{update.content}"</p>
               </div>
 
               <div className="flex items-center gap-2 shrink-0 self-center">
@@ -110,11 +110,11 @@ export default function StatusModeration() {
         )}
       </div>
 
-      <div className="p-6 flex items-center justify-between text-xs font-bold text-gray-600">
+      <div className="p-6 flex items-center justify-between text-xs font-bold text-foreground/40">
          <span>Page {page} of {Math.ceil(totalCount / 20)}</span>
          <div className="flex items-center gap-2">
-            <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="p-2 border border-white/5 rounded-xl disabled:opacity-30"><ChevronLeft size={16} /></button>
-            <button disabled={page * 20 >= totalCount} onClick={() => setPage(p => p + 1)} className="p-2 border border-white/5 rounded-xl disabled:opacity-30"><ChevronRight size={16} /></button>
+            <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="p-2 border border-border rounded-xl disabled:opacity-30 hover:bg-foreground/5 transition-all"><ChevronLeft size={16} /></button>
+            <button disabled={page * 20 >= totalCount} onClick={() => setPage(p => p + 1)} className="p-2 border border-border rounded-xl disabled:opacity-30 hover:bg-foreground/5 transition-all"><ChevronRight size={16} /></button>
          </div>
       </div>
     </div>
