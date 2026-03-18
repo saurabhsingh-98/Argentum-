@@ -249,7 +249,7 @@ export default function SettingsPage() {
                         <div className="p-6 bg-card/5 border border-border rounded-2xl flex items-center justify-between">
                            <div>
                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Username</p>
-                             <p className="text-sm text-silver">@{profile.username}</p>
+                             <p className="text-sm text-silver">@{profile?.username || 'anonymous'}</p>
                            </div>
                            <button className="text-[10px] font-black text-silver border-b border-white/20 hover:border-white transition-all uppercase tracking-widest p-1">Change</button>
                         </div>
