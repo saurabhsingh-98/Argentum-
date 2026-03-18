@@ -11,6 +11,11 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  // Prevent crashes if Supabase env vars are missing during build/prerender
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return response;
+  }
+
   try {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

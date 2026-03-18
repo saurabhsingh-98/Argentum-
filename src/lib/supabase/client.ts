@@ -6,9 +6,11 @@ export function createClient() {
 
   if (!url || !key) {
     // Return a robust mock using a Proxy during build
-    const mock: any = new Proxy(() => mock, {
+    const mock: any = new Proxy({}, {
       get: (target, prop) => {
-        if (prop === 'then') return undefined
+        if (prop === 'then') {
+          return (resolve: any) => resolve({ data: [], error: null, count: 0 })
+        }
         if (prop === 'auth') return {
           getUser: () => Promise.resolve({ data: { user: null }, error: null }),
           onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
