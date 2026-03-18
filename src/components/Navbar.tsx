@@ -95,7 +95,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
   return (
     <>
-      <nav className="sticky top-0 z-[100] w-full border-b border-border bg-background/80 backdrop-blur-xl">
+      <nav className="sticky top-0 z-[100] w-full glass-header">
         <div className="mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
           {/* Left Section: Logo */}
           <div className="flex items-center gap-2 shrink-0">
@@ -139,7 +139,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               onClick={() => setIsSearchOpen(true)}
               className="flex-1 max-w-xl relative hidden md:block group cursor-text"
             >
-              <div className="flex items-center gap-3 px-4 py-2 rounded-full border border-border bg-foreground/[0.02] group-hover:border-foreground/20 transition-all">
+              <div className="flex items-center gap-3 px-4 py-2 rounded-full glass-search">
                 <Search size={16} className="text-foreground/20" />
                 <div className="text-sm text-foreground/30 flex-1">Search builds, builders, tags...</div>
                 <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded border border-border bg-foreground/5">
@@ -174,7 +174,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
                   <Link 
                     href="/new" 
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full silver-metallic text-[#050505] text-[10px] font-black uppercase tracking-widest shadow-glow-silver/20 hover:brightness-110 transition-all active:scale-95"
+                    className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full silver-metallic text-background text-[10px] font-black uppercase tracking-widest shadow-glow-silver/20 hover:brightness-110 transition-all active:scale-95 silver-shine"
                   >
                     <Plus size={14} />
                     <span>Build Log</span>

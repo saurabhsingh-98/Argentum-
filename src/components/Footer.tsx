@@ -5,16 +5,16 @@ export default function Footer() {
   return (
     <footer className="w-full border-t border-border bg-card py-20 relative overflow-hidden">
       {/* Background Decorative Element */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-silver/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 translate-y-1/2" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
           <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2 group w-fit">
               <div className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card group-hover:silver-glow transition-all duration-500">
-                <span className="text-sm font-bold text-foreground">Ag</span>
+                <span className="text-sm font-bold silver-glow-text">Ag</span>
               </div>
-              <span className="text-[12px] font-bold tracking-[0.4em] text-foreground/40 uppercase">ARGENTUM</span>
+              <span className="text-[12px] font-bold tracking-[0.4em] text-foreground/20 uppercase group-hover:text-foreground/40 transition-colors">ARGENTUM</span>
             </Link>
             <p className="text-foreground/40 text-sm max-w-xs leading-relaxed italic">
               "Build in public. Prove it forever." <br />
