@@ -251,7 +251,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                           </div>
                    
                            <div className="p-1">
-                            <DropdownItem icon={<UserIcon size={14} />} label="View Profile" href={profile?.username ? `/profile/${profile.username}` : '#'} />
+                            <DropdownItem icon={<UserIcon size={14} />} label="View Profile" href={profile?.username ? `/profile/${profile.username}` : (user ? '/onboarding' : '/auth/login')} />
                             <DropdownItem icon={<Edit3 size={14} />} label="Edit Profile" href={profile?.username ? `/profile/${profile.username}?edit=true` : '/settings'} />
                             <DropdownItem icon={<Bell size={14} />} label="Notifications" href="/notifications" />
                             <DropdownItem icon={<MessageCircle size={14} />} label="Messages" href="/messages" />
@@ -296,7 +296,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
            <Plus size={24} />
         </Link>
         <MobileNavItem icon={<MessageCircle size={20} />} label="Chat" href="/messages" active={pathname === '/messages'} />
-        <MobileNavItem icon={<UserIcon size={20} />} label="Me" href={`/profile/${profile?.username}`} active={pathname?.startsWith('/profile')} />
+        <MobileNavItem icon={<UserIcon size={20} />} label="Me" href={profile?.username ? `/profile/${profile.username}` : (user ? '/onboarding' : '/auth/login')} active={pathname?.startsWith('/profile')} />
       </div>
 
       <StreakModal 
