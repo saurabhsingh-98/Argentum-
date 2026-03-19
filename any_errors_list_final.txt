@@ -1,0 +1,124 @@
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\audit\page.tsx
+  Line 23: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\issues\page.tsx
+  Line 23: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\layout.tsx
+  Line 42: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\page.tsx
+  Line 137: Unexpected any. Specify a different type.
+  Line 253: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\posts\page.tsx
+  Line 29: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\reports\page.tsx
+  Line 24: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\security\page.tsx
+  Line 22: Unexpected any. Specify a different type.
+  Line 23: Unexpected any. Specify a different type.
+  Line 210: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin-b2ce13e04e810c06\status\page.tsx
+  Line 25: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\admin\layout.tsx
+  Line 37: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\banned\page.tsx
+  Line 12: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\brand\page.tsx
+  Line 212: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\explore\page.tsx
+  Line 17: Unexpected any. Specify a different type.
+  Line 18: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\feed\page.tsx
+  Line 82: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\messages\[conversationId]\page.tsx
+  Line 216: Unexpected any. Specify a different type.
+  Line 217: Unexpected any. Specify a different type.
+  Line 234: Unexpected any. Specify a different type.
+  Line 235: Unexpected any. Specify a different type.
+  Line 253: Unexpected any. Specify a different type.
+  Line 273: Unexpected any. Specify a different type.
+  Line 378: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\messages\page.tsx
+  Line 24: Unexpected any. Specify a different type.
+  Line 33: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\new\page.tsx
+  Line 24: Unexpected any. Specify a different type.
+  Line 62: Unexpected any. Specify a different type.
+  Line 120: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\app\post\[id]\page.tsx
+  Line 17: Unexpected any. Specify a different type.
+  Line 18: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\AccountSwitcher.tsx
+  Line 30: Unexpected any. Specify a different type.
+  Line 46: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\BuilderCard.tsx
+  Line 8: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\CommandPalette.tsx
+  Line 12: Unexpected any. Specify a different type.
+  Line 12: Unexpected any. Specify a different type.
+  Line 228: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\CommentsSection.tsx
+  Line 58: Unexpected any. Specify a different type.
+  Line 84: Unexpected any. Specify a different type.
+  Line 121: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\FeedWithFilter.tsx
+  Line 8: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\FeedWrapper.tsx
+  Line 9: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\FollowListModal.tsx
+  Line 66: Unexpected any. Specify a different type.
+  Line 66: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\InfiniteFeed.tsx
+  Line 10: Unexpected any. Specify a different type.
+  Line 24: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\KeyBackupModal.tsx
+  Line 112: Unexpected any. Specify a different type.
+  Line 157: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\KeyRecoveryModal.tsx
+  Line 136: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\ProfileContent.tsx
+  Line 487: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\ReportModal.tsx
+  Line 62: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\components\StreakModal.tsx
+  Line 230: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\lib\crypto.ts
+  Line 107: Unexpected any. Specify a different type.
+  Line 129: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\lib\supabase\client.ts
+  Line 12: Unexpected any. Specify a different type.
+  Line 15: Unexpected any. Specify a different type.
+
+FILE: C:\Projects\Argentum\src\lib\supabase\server.ts
+  Line 10: Unexpected any. Specify a different type.
+  Line 13: Unexpected any. Specify a different type.

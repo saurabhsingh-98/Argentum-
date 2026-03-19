@@ -120,7 +120,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               </motion.div>
               <motion.span 
                 whileHover={{ letterSpacing: "0.5em" }}
-                className="text-[11px] font-black tracking-[0.4em] text-silver/40 group-hover:text-silver group-hover:silver-glow-text transition-all duration-500 hidden md:block"
+                className="text-[11px] font-black tracking-[0.4em] text-silver/40 group-hover:text-silver glass:glass-text transition-all duration-500 hidden md:block"
               >
                 ARGENTUM
               </motion.span>
@@ -138,7 +138,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                     ${pathname === link.href ? 'text-foreground' : 'text-foreground/40 hover:text-foreground'}
                   `}
                 >
-                  {link.name}
+                  <span className="glass:glass-text">{link.name}</span>
                   {pathname === link.href && (
                     <motion.div layoutId="nav-underline" className="absolute -bottom-1 left-0 right-0 h-px bg-green-500" />
                   )}

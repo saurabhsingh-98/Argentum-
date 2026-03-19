@@ -69,7 +69,7 @@ export default async function FeedPage() {
                   <Flame size={16} />
                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">Live Network</span>
                </div>
-               <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">
+               <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 glass:glass-text">
                   The Build Feed
                </h1>
                <p className="text-foreground/50 text-sm max-w-lg leading-relaxed">
@@ -89,7 +89,7 @@ export default async function FeedPage() {
           {/* Sidebar */}
           <aside className="w-full lg:w-80 flex flex-col gap-8">
             {/* Stats Overview */}
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-2xl">
+            <div className="bg-card glass-card border border-border rounded-2xl p-6 shadow-2xl">
                <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground/40">Network Stats</h3>
                   <Target size={14} className="text-green-500" />
@@ -106,7 +106,7 @@ export default async function FeedPage() {
             </div>
 
             {/* Trending Tags */}
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-2xl">
+            <div className="bg-card glass-card border border-border rounded-2xl p-6 shadow-2xl">
                <div className="flex items-center gap-2 mb-6">
                   <TrendingUp size={16} className="text-blue-500" />
                   <h3 className="text-xs font-black uppercase tracking-widest">Trending Tags</h3>
@@ -124,7 +124,7 @@ export default async function FeedPage() {
             </div>
 
             {/* Top Builders */}
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-2xl">
+            <div className="bg-card glass-card border border-border rounded-2xl p-6 shadow-2xl">
                <div className="flex items-center gap-2 mb-6">
                   <Users size={16} className="text-purple-500" />
                   <h3 className="text-xs font-black uppercase tracking-widest">Top Builders</h3>

@@ -193,15 +193,15 @@ export default function SettingsPage() {
         
         {/* Sidebar Nav */}
         <div className="w-64 hidden md:flex flex-col gap-2">
-          <h1 className="text-2xl font-black mb-6 px-4 tracking-tighter">Settings</h1>
+          <h1 className="text-2xl font-black mb-6 px-4 tracking-tighter glass:glass-text">Settings</h1>
           {sections.map((s) => (
             <button
               key={s.id}
               onClick={() => setActiveSection(s.id as SettingsSection)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                 activeSection === s.id 
-                  ? 'bg-card text-foreground silver-glow shadow-premium border border-border' 
-                  : 'text-foreground/40 hover:bg-card/50 hover:text-foreground'
+                  ? 'bg-card glass-card text-foreground silver-glow shadow-premium border border-border' 
+                  : 'text-foreground/40 hover:bg-card/50 hover:text-foreground glass:hover:glass-card'
               }`}
             >
               <s.icon size={18} />
@@ -225,7 +225,7 @@ export default function SettingsPage() {
                 {activeSection === 'account' && (
                   <div className="space-y-8">
                     <div>
-                      <h2 className="text-xl font-black mb-2">Account</h2>
+                      <h2 className="text-xl font-black mb-2 glass:glass-text">Account</h2>
                       <p className="text-sm text-foreground/40">Manage your profile and linked accounts.</p>
                     </div>
 
@@ -442,7 +442,7 @@ export default function SettingsPage() {
                 {activeSection === 'appearance' && (
                   <div className="space-y-8">
                      <div>
-                      <h2 className="text-xl font-black mb-2">Appearance</h2>
+                      <h2 className="text-xl font-black mb-2 glass:glass-text">Appearance</h2>
                       <p className="text-sm text-foreground/40">Customize your visual experience.</p>
                     </div>
 

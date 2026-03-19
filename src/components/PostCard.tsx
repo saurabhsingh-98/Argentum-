@@ -72,7 +72,7 @@ export default function PostCard({
       viewport={{ once: true }}
       whileHover={{ y: -2 }}
       className={`
-        relative group bg-card rounded-2xl border border-border transition-all duration-300 hover:border-foreground/20 hover:shadow-2xl
+        relative group bg-card glass-card rounded-2xl border border-border transition-all duration-300 hover:border-foreground/20 hover:shadow-2xl
         ${post.verification_status === 'verified' ? 'border-l-2 border-l-green-500 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)]' : ''}
         ${post.is_priority ? 'border-amber-500 bg-gradient-to-br from-card via-amber-500/5 to-amber-500/10 shadow-[0_0_50px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20' : ''}
         ${post.category === 'Speak' && !post.is_priority ? 'border-amber-500/40 bg-card hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
@@ -173,7 +173,7 @@ export default function PostCard({
 
         {/* Content Area */}
         <Link href={`/post/${post.id}`} className="flex flex-col gap-3">
-          <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-green-500 transition-colors">
+          <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-green-500 glass:glass-text transition-colors">
             {post.title}
           </h3>
           <p className="text-sm text-foreground/60 line-clamp-3 leading-relaxed">

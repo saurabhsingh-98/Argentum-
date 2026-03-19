@@ -22,8 +22,8 @@ export default function CategoryFilter({
               className={`
                 relative px-7 py-3 rounded-xl text-[11px] font-black tracking-[0.15em] uppercase transition-all duration-500 transform-style-3d border box-border
                 ${selected === cat 
-                  ? 'bg-foreground text-background border-foreground/20 -translate-y-2 shadow-silver-lux' 
-                  : 'bg-card text-foreground/40 border-border hover:border-border/50 hover:text-foreground translate-y-0 hover:-translate-y-1 shadow-flat'
+                  ? 'bg-foreground glass:bg-white/20 glass:text-white glass:backdrop-blur-xl text-background border-foreground/20 -translate-y-2 shadow-silver-lux' 
+                  : 'bg-card glass:glass-card text-foreground/40 border-border hover:border-border/50 hover:text-foreground translate-y-0 hover:-translate-y-1 shadow-flat'
                 }
                 active:translate-y-[-2px] active:scale-[0.98]
               `}
