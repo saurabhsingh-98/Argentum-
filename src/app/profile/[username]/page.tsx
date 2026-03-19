@@ -14,7 +14,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   // Fetch user profile - resilient select
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, twitter_username, instagram_username, website_url, is_public, skills, open_to_work, looking_for, pinned_post_id, total_upvotes_received')
+    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, instagram_username, website_url, is_public, skills, open_to_work, looking_for, pinned_post_id')
     .eq('username', username.toLowerCase())
     .single()
 

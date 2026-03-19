@@ -21,7 +21,6 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [bio, setBio] = useState(profile.bio || '')
   const [currentlyBuilding, setCurrentlyBuilding] = useState(profile.currently_building || '')
   const [githubUsername, setGithubUsername] = useState(profile.github_username || '')
-  const [twitterUsername, setTwitterUsername] = useState(profile.twitter_username || '')
   const [instagramUsername, setInstagramUsername] = useState(profile.instagram_username || '')
   const [websiteUrl, setWebsiteUrl] = useState(profile.website_url || '')
   const [isPublic, setIsPublic] = useState(profile.is_public !== false)
@@ -117,7 +116,6 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
           bio: bio || null,
           currently_building: currentlyBuilding || null,
           github_username: githubUsername || null,
-          twitter_username: twitterUsername || null,
           instagram_username: instagramUsername || null,
           website_url: websiteUrl || null,
           is_public: isPublic,
@@ -137,7 +135,6 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         bio: bio || null,
         currently_building: currentlyBuilding || null,
         github_username: githubUsername || null,
-        twitter_username: twitterUsername || null,
         instagram_username: instagramUsername || null,
         website_url: websiteUrl || null,
         is_public: isPublic,
@@ -299,20 +296,6 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                         type="text"
                         value={githubUsername}
                         onChange={(e) => setGithubUsername(e.target.value)}
-                        placeholder="yourhandle"
-                        className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">X / Twitter <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
-                    <div className="relative">
-                      <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
-                      <input
-                        type="text"
-                        value={twitterUsername}
-                        onChange={(e) => setTwitterUsername(e.target.value)}
                         placeholder="yourhandle"
                         className="w-full bg-foreground/5 border border-border rounded-xl py-3 pl-10 pr-4 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
                       />

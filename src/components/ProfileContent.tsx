@@ -19,7 +19,7 @@ import { User } from '@supabase/supabase-js'
 import { Post } from '@/types/post'
 
 interface ProfileContentProps {
-  initialProfile: Database['public']['Tables']['users']['Row'] & { total_upvotes_received?: number }
+  initialProfile: Database['public']['Tables']['users']['Row']
   posts: Post[]
   isOwner: boolean
 }
@@ -78,7 +78,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     return () => clearTimeout(timer)
   }, [profile.id, supabase])
 
-  const handleUpdateProfile = (updatedProfile: Database['public']['Tables']['users']['Row'] & { total_upvotes_received?: number }) => {
+  const handleUpdateProfile = (updatedProfile: Database['public']['Tables']['users']['Row']) => {
     setProfile(updatedProfile)
   }
 
@@ -481,7 +481,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   />
                 </div>
                 <div style={getAnimationStyle('slideBottom', 300)}>
-                  <StatsCard label="Upvotes" value={profile.total_upvotes_received || 0} icon={<ArrowUpRight size={20} className="text-blue-400" />} />
+                  <StatsCard label="Upvotes" value={0} icon={<ArrowUpRight size={20} className="text-blue-400" />} />
                 </div>
                 <div style={getAnimationStyle('slideBottom', 350)}>
                   <StatsCard label="Verified" value={posts?.filter((p: any) => p.verification_status === 'verified').length || 0} icon={<Award size={20} className="text-foreground/60" />} />

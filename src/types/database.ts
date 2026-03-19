@@ -17,7 +17,6 @@ export interface Database {
           avatar_url: string | null
           bio: string | null
           github_username: string | null
-          twitter_username: string | null
           instagram_username: string | null
           website_url: string | null
           hbar_wallet: string | null
@@ -44,7 +43,6 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          twitter_username?: string | null
           instagram_username?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
@@ -71,7 +69,6 @@ export interface Database {
           avatar_url?: string | null
           bio?: string | null
           github_username?: string | null
-          twitter_username?: string | null
           instagram_username?: string | null
           website_url?: string | null
           hbar_wallet?: string | null
@@ -100,7 +97,8 @@ export interface Database {
           content: string
           content_hash: string | null
           status: 'draft' | 'published' | 'private'
-          category: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | null
+          category: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | 'Speak' | null
+          is_priority: boolean | null
           tags: string[]
           upvotes: number
           nft_token_id: string | null
@@ -116,7 +114,8 @@ export interface Database {
           content: string
           content_hash?: string | null
           status?: 'draft' | 'published' | 'private'
-          category?: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | null
+          category?: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | 'Speak' | null
+          is_priority?: boolean | null
           tags?: string[]
           upvotes?: number
           nft_token_id?: string | null
@@ -132,7 +131,8 @@ export interface Database {
           content?: string
           content_hash?: string | null
           status?: 'draft' | 'published' | 'private'
-          category?: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | null
+          category?: 'Web3' | 'AI' | 'Mobile' | 'DevTools' | 'Game' | 'Other' | 'Speak' | null
+          is_priority?: boolean | null
           tags?: string[]
           upvotes?: number
           nft_token_id?: string | null

@@ -8,10 +8,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 interface SavedAccount {
   id: string
-  email: string
+  email: string // Keep email for fallback login
   username: string
   avatar_url: string | null
   display_name: string | null
+  session?: any // Add session property
 }
 
 export default function AccountSwitcher({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {

@@ -14,7 +14,6 @@ export default function Onboarding() {
   const [bio, setBio] = useState('')
   const [currentlyBuilding, setCurrentlyBuilding] = useState('')
   const [githubUsername, setGithubUsername] = useState('')
-  const [twitterUsername, setTwitterUsername] = useState('')
   const [instagramUsername, setInstagramUsername] = useState('')
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [skills, setSkills] = useState('')
@@ -114,7 +113,6 @@ export default function Onboarding() {
         currently_building: currentlyBuilding,
         avatar_url: user.user_metadata.avatar_url,
         github_username: githubUsername || user.user_metadata.user_name,
-        twitter_username: twitterUsername || null,
         instagram_username: instagramUsername || null,
         website_url: websiteUrl || null,
         skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
@@ -271,21 +269,7 @@ export default function Onboarding() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">X / Twitter</label>
-                <div className="relative group">
-                  <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20" size={14} />
-                  <input
-                    type="text"
-                    value={twitterUsername}
-                    onChange={(e) => setTwitterUsername(e.target.value)}
-                    className="w-full bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-xs text-foreground focus:outline-none focus:border-foreground/40 transition-all"
-                    placeholder="handle"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-1">Instagram</label>
+                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em] ml-1">Instagram</label>
                 <div className="relative group">
                   <Instagram className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={14} />
                   <input
