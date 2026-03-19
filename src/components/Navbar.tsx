@@ -58,7 +58,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         .from('users')
         .select('*')
         .eq('id', authUser.id)
-        .single()
+        .maybeSingle()
 
       if (profileError && profileError.code !== 'PGRST116') {
         console.error('Navbar profile fetch error:', profileError)

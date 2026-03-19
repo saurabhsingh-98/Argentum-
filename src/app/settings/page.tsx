@@ -94,6 +94,17 @@ export default function SettingsPage() {
         .eq('id', user.id)
       
       if (error) throw error
+      
+      // Sync to auth metadata if username or display_name changed
+      if (updates.username || updates.display_name) {
+        await supabase.auth.updateUser({
+          data: { 
+            username: updates.username || profile?.username,
+            full_name: updates.display_name || profile?.display_name
+          }
+        })
+      }
+
       if (profile) setProfile({ ...profile, ...updates })
     } catch (error) {
       console.error('Error updating profile:', error)
@@ -256,7 +267,17 @@ export default function SettingsPage() {
                              <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-1">Username</p>
                              <p className="text-sm text-foreground">@{profile?.username || 'anonymous'}</p>
                            </div>
-                           <button className="text-[10px] font-black text-foreground/40 border-b border-border hover:border-foreground transition-all uppercase tracking-widest p-1">Change</button>
+                           <button 
+                             onClick={() => {
+                               const newUsername = prompt("Enter new username:", profile?.username || '')
+                               if (newUsername && newUsername !== profile?.username) {
+                                 updateProfile({ username: newUsername.toLowerCase().replace(/[^a-z0-9_]/g, '') })
+                               }
+                             }}
+                             className="text-[10px] font-black text-foreground/40 border-b border-border hover:border-foreground transition-all uppercase tracking-widest p-1"
+                           >
+                             Change
+                           </button>
                         </div>
 
                          <div className="p-6 bg-card/5 border border-border rounded-2xl">

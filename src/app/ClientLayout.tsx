@@ -37,7 +37,7 @@ function LayoutContent({ children, isMessages, isAuth, isPageMounted }: {
       )}
 
       {!isMessages && !isAuth && <Navbar />}
-      <main className={`min-h-screen ${!isMessages && !isAuth ? 'pt-4' : ''} transition-all duration-700 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <main className={`min-h-screen ${!isMessages && !isAuth ? 'pt-4' : ''} transition-all duration-400 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         {children}
       </main>
       {!isMessages && !isAuth && <Footer />}

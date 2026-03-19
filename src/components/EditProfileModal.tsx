@@ -128,6 +128,11 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
 
       if (error) throw error
 
+      // Sync to auth metadata so Navbar/Middleware see it immediately
+      await supabase.auth.updateUser({
+        data: { username: username.toLowerCase() }
+      })
+
       onUpdate({
         ...profile,
         username: username.toLowerCase(),
