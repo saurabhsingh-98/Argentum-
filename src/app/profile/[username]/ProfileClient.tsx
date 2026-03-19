@@ -8,9 +8,13 @@ import PostCard from '@/components/PostCard'
 import EmptyState from '@/components/EmptyState'
 import EditProfileModal from '@/components/EditProfileModal'
 
+import { Database } from '@/types/database'
+
+import { Post } from '@/types/post'
+
 interface ProfileClientProps {
-  initialProfile: any
-  posts: any[]
+  initialProfile: Database['public']['Tables']['users']['Row']
+  posts: Post[]
   isOwner: boolean
 }
 
@@ -23,7 +27,7 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
     setIsMounted(true)
   }, [])
 
-  const handleUpdateProfile = (updatedProfile: any) => {
+  const handleUpdateProfile = (updatedProfile: Database['public']['Tables']['users']['Row']) => {
     setProfile(updatedProfile)
   }
 
@@ -184,7 +188,7 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
             <motion.div variants={item} className="grid grid-cols-3 gap-4">
               <StatsCard label="Builds" value={posts?.length || 0} icon={<Zap size={20} className="text-accent" />} />
               <StatsCard label="Streak" value={profile.streak_count || 0} icon={<Flame size={20} className="text-orange-500" />} />
-              <StatsCard label="Verified" value={posts?.filter((p: any) => p.verification_status === 'verified').length || 0} icon={<Award size={20} className="text-blue-500" />} />
+              <StatsCard label="Verified" value={posts?.filter((p) => p.verification_status === 'verified').length || 0} icon={<Award size={20} className="text-blue-500" />} />
             </motion.div>
 
             {/* Build Feed */}
@@ -202,7 +206,7 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                   variants={container}
                   className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 >
-                  {posts.map((post: any) => (
+                  {posts.map((post) => (
                     <motion.div key={post.id} variants={item}>
                       <PostCard post={post} />
                     </motion.div>

@@ -14,7 +14,7 @@ interface StreakHistory {
 interface StreakModalProps {
   isOpen: boolean
   onClose: () => void
-  userId: string
+  userId?: string
 }
 
 export default function StreakModal({ isOpen, onClose, userId }: StreakModalProps) {
@@ -32,10 +32,11 @@ export default function StreakModal({ isOpen, onClose, userId }: StreakModalProp
   })
 
   useEffect(() => {
-    if (isOpen) fetchHistory()
+    if (isOpen && userId) fetchHistory()
   }, [isOpen, userId])
 
   const fetchHistory = async () => {
+    if (!userId) return
     setLoading(true)
     const { data } = await supabase
       .from('streak_history')

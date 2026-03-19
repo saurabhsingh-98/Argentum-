@@ -26,6 +26,8 @@ import {
   CheckCircle
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { User as SupabaseUser } from '@supabase/supabase-js'
+import { Database } from '@/types/database'
 
 import { useTheme } from '@/context/ThemeContext'
 import { resetKeys } from '@/lib/crypto'
@@ -39,8 +41,8 @@ export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme()
   const [activeSection, setActiveSection] = useState<SettingsSection>('account')
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
-  const [profile, setProfile] = useState<any>(null)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
+  const [profile, setProfile] = useState<Database['public']['Tables']['users']['Row'] | null>(null)
   const [saving, setSaving] = useState(false)
   const [disappearingMessages, setDisappearingMessages] = useState('Off')
   
@@ -82,7 +84,8 @@ export default function SettingsPage() {
     setup()
   }, [])
 
-  const updateProfile = async (updates: any) => {
+  const updateProfile = async (updates: Partial<Database['public']['Tables']['users']['Row']>) => {
+    if (!user) return
     setSaving(true)
     try {
       const { error } = await supabase
@@ -91,7 +94,7 @@ export default function SettingsPage() {
         .eq('id', user.id)
       
       if (error) throw error
-      setProfile({ ...profile, ...updates })
+      if (profile) setProfile({ ...profile, ...updates })
     } catch (error) {
       console.error('Error updating profile:', error)
       alert('Failed to save settings')
@@ -120,6 +123,7 @@ export default function SettingsPage() {
   }
 
   const handleDownloadData = () => {
+    if (!user || !profile) return
     const data = {
       profile,
       user: {
@@ -180,8 +184,8 @@ export default function SettingsPage() {
     { id: 'danger', label: 'Danger Zone', icon: ShieldAlert },
   ]
 
-  const isGitHubConnected = user?.identities?.some((id: any) => id.provider === 'github')
-  const isGoogleConnected = user?.identities?.some((id: any) => id.provider === 'google')
+  const isGitHubConnected = user?.identities?.some((id) => id.provider === 'github')
+  const isGoogleConnected = user?.identities?.some((id) => id.provider === 'google')
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col pt-16">
@@ -301,10 +305,10 @@ export default function SettingsPage() {
                             <p className="text-xs text-gray-500">Make your profile visible to everyone.</p>
                          </div>
                          <button 
-                          onClick={() => updateProfile({ is_public: !profile.is_public })}
-                          className={`w-12 h-6 rounded-full relative transition-all ${profile.is_public ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'bg-card'}`}
+                          onClick={() => profile && updateProfile({ is_public: !profile.is_public })}
+                          className={`w-12 h-6 rounded-full relative transition-all ${profile?.is_public ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'bg-card'}`}
                          >
-                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${profile.is_public ? 'left-7' : 'left-1'}`} />
+                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${profile?.is_public ? 'left-7' : 'left-1'}`} />
                          </button>
                       </div>
 

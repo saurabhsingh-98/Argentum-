@@ -6,12 +6,14 @@ import { Bell, ArrowUp, MessageCircle, UserPlus, Lock, CheckCircle, X } from 'lu
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { User as SupabaseUser } from '@supabase/supabase-js'
+import { Database } from '@/types/database'
 
 export default function NotificationBell() {
   const supabase = createClient()
   const router = useRouter()
   const [unreadCount, setUnreadCount] = useState(0)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
   const [toast, setToast] = useState<{ id: string; content: string; type: string } | null>(null)
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function NotificationBell() {
             table: 'notifications',
             filter: `user_id=eq.${user.id}`
           },
-          (payload: any) => {
+          (payload: { new: Database['public']['Tables']['notifications']['Row'] }) => {
             setUnreadCount(prev => prev + 1)
             
             // Check for mute status if it's a message
@@ -63,7 +65,7 @@ export default function NotificationBell() {
     setup()
   }, [])
 
-  const showToast = (notification: any) => {
+  const showToast = (notification: Database['public']['Tables']['notifications']['Row']) => {
     setToast({
       id: notification.id,
       content: notification.content,

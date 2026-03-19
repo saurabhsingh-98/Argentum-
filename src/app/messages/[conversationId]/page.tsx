@@ -57,6 +57,9 @@ import CameraCapture from '@/components/CameraCapture'
 import Lightbox from '@/components/Lightbox'
 import KeyBackupModal from '@/components/KeyBackupModal'
 import KeyRecoveryModal from '@/components/KeyRecoveryModal'
+import { ChatUser, MessageWithReactions, ConversationWithParticipants, MessageReaction } from '@/types/chat'
+import { User as SupabaseUser } from '@supabase/supabase-js'
+import { Database } from '@/types/database'
 
 const supabase = createClient()
 
@@ -64,12 +67,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   const { conversationId } = use(params)
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [messages, setMessages] = useState<any[]>([])
-  const [conversation, setConversation] = useState<any>(null)
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [messages, setMessages] = useState<MessageWithReactions[]>([])
+  const [conversation, setConversation] = useState<ConversationWithParticipants | null>(null)
+  const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null)
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
-  const [otherParticipant, setOtherParticipant] = useState<any>(null)
+  const [otherParticipant, setOtherParticipant] = useState<ChatUser | null>(null)
   const [encryptionStatus, setEncryptionStatus] = useState<string>('loading')
   
   // Advanced Features State
@@ -78,12 +81,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   const [isMuted, setIsMuted] = useState(false)
   const [nickname, setNickname] = useState('')
   const [isEditingNickname, setIsEditingNickname] = useState(false)
-  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, msg: any, isOwn: boolean } | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ x: number, y: number, msg: MessageWithReactions, isOwn: boolean } | null>(null)
   const [bgContextMenu, setBgContextMenu] = useState<{ x: number, y: number } | null>(null)
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
-  const [replyTo, setReplyTo] = useState<any>(null)
+  const [replyTo, setReplyTo] = useState<MessageWithReactions | null>(null)
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editContent, setEditContent] = useState('')
@@ -106,7 +109,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   }
 
   // Decryption function that doesn't depend on stale state
-  const decryptContent = (content: string, isOwn: boolean, conv: any, userId: string) => {
+  const decryptContent = (content: string, isOwn: boolean, conv: ConversationWithParticipants, userId: string) => {
     if (content.startsWith('[IMAGE]:')) return content
     
     const secretKey = getStoredSecretKey()
@@ -116,10 +119,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     const senderProfile = conv.participant_1 === (isOwn ? userId : otherProfile.id) ? conv.participant_1_profile : conv.participant_2_profile
     const decryptionKey = isOwn ? otherProfile.public_key : senderProfile.public_key
     
+    if (!decryptionKey) return "Encrypted message"
+
     return decryptMessage(content, decryptionKey, secretKey) || "Encrypted message"
   }
 
-  const fetchMessages = async (conv: any, userId: string) => {
+  const fetchMessages = async (conv: ConversationWithParticipants, userId: string) => {
     const { data, error } = await supabase
       .from('messages')
       .select('*, message_reactions(*)')
@@ -128,10 +133,10 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
     if (error) return
 
-    const processedMessages = data.map((msg: any) => ({
+    const processedMessages = (data as (Database['public']['Tables']['messages']['Row'] & { message_reactions: MessageReaction[] })[]).map((msg): MessageWithReactions => ({
       ...msg,
       decryptedContent: decryptContent(msg.content, msg.sender_id === userId, conv, userId),
-      expired: msg.expires_at && new Date(msg.expires_at) < new Date()
+      expired: msg.expires_at ? new Date(msg.expires_at) < new Date() : false
     })).filter(Boolean)
     
     setMessages(processedMessages)
@@ -192,13 +197,13 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           .on(
             'postgres_changes',
             { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${conversationId}` },
-            (payload: any) => {
-              setMessages((prev: any[]) => {
+            (payload: { new: Database['public']['Tables']['messages']['Row'] }) => {
+              setMessages((prev) => {
                 const msg = payload.new
-                const processed = {
+                const processed: MessageWithReactions = {
                   ...msg,
-                  decryptedContent: decryptContent(msg.content, msg.sender_id === user.id, conv, user.id),
-                  expired: msg.expires_at && new Date(msg.expires_at) < new Date()
+                  decryptedContent: decryptContent(msg.content, msg.sender_id === (user?.id || ''), conv, user?.id || ''),
+                  expired: msg.expires_at ? new Date(msg.expires_at) < new Date() : false
                 }
                 return [...prev, processed]
               })
@@ -215,8 +220,8 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                   return {
                     ...m,
                     ...msg,
-                    decryptedContent: decryptContent(msg.content, msg.sender_id === user.id, conv, user.id),
-                    expired: msg.expires_at && new Date(msg.expires_at) < new Date()
+                    decryptedContent: decryptContent(msg.content, msg.sender_id === (user?.id || ''), conv, user?.id || ''),
+                    expired: msg.expires_at ? new Date(msg.expires_at) < new Date() : false
                   }
                 }
                 return m
@@ -237,7 +242,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           .on(
             'postgres_changes',
             { event: '*', schema: 'public', table: 'message_reactions' },
-            async (payload: any) => {
+            async (payload: { new: MessageReaction, old: MessageReaction }) => {
               const messageId = payload.new?.message_id || payload.old?.message_id;
               if (messageId) {
                   const { data: reactions } = await supabase
@@ -313,7 +318,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       setContextMenu(null);
   }
 
-  const handleSendMessage = async (e?: React.FormEvent, contentOverride?: string, attachmentData?: any) => {
+  const handleSendMessage = async (e?: React.FormEvent, contentOverride?: string, attachmentData?: { url: string, type: string, name: string, size: number }) => {
     if (e) e.preventDefault()
     const content = contentOverride || newMessage
     if ((!content.trim() && !attachmentData) || sending || !otherParticipant || !conversation) return
@@ -335,7 +340,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     try {
       let finalContent = content
       if (!content.startsWith('[IMAGE]:')) {
-          finalContent = encryptMessage(content, otherParticipant.public_key, secretKey!)
+          finalContent = encryptMessage(content, otherParticipant.public_key!, secretKey!)
       }
 
       // Calculate Expiry based on conversation settings
@@ -351,7 +356,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         .from('messages')
         .insert({
           conversation_id: conversationId,
-          sender_id: currentUser.id,
+          sender_id: currentUser!.id,
           content: finalContent,
           expires_at: expiresAt,
           attachment_url: attachmentData?.url,
@@ -366,7 +371,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
       // Prompt for backup after first message if not set up
       const hasPrompted = localStorage.getItem('ag_backup_prompted') === 'true'
-      if (!hasPrompted && conversation.participant_1 === currentUser.id && messages.length === 0) {
+      if (!hasPrompted && conversation.participant_1 === currentUser?.id && messages.length === 0) {
         setShowBackupModal(true)
         localStorage.setItem('ag_backup_prompted', 'true')
       }
@@ -437,7 +442,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       }
   }
 
-  const handleContextMenu = (e: React.MouseEvent, msg: any, isOwn: boolean) => {
+  const handleContextMenu = (e: React.MouseEvent, msg: MessageWithReactions, isOwn: boolean) => {
     e.preventDefault()
     e.stopPropagation()
     setContextMenu({ x: e.clientX, y: e.clientY, msg, isOwn })
@@ -450,7 +455,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       if (!secretKey) return
 
       try {
-          const encrypted = encryptMessage(editContent, otherParticipant.public_key, secretKey)
+          const encrypted = encryptMessage(editContent, otherParticipant.public_key!, secretKey)
           await supabase.from('messages').update({ content: encrypted, is_edited: true }).eq('id', editingId)
           setEditingId(null)
           setEditContent('')
@@ -465,7 +470,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     setContextMenu(null)
   }
 
-  const deleteMessage = async (msg: any, everyone: boolean) => {
+  const deleteMessage = async (msg: MessageWithReactions, everyone: boolean) => {
       if (everyone) {
           const sentTime = new Date(msg.created_at).getTime()
           const now = new Date().getTime()
@@ -479,13 +484,13 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       } else {
           // Add self to deleted_for
           const { data: dbMsg } = await supabase.from('messages').select('deleted_for').eq('id', msg.id).single()
-          const deletedFor = [...(dbMsg?.deleted_for || []), currentUser.id]
+          const deletedFor = [...(dbMsg?.deleted_for || []), currentUser!.id]
           await supabase.from('messages').update({ deleted_for: deletedFor }).eq('id', msg.id)
       }
       setContextMenu(null)
   }
 
-  const setExpiry = async (msg: any, time: string) => {
+  const setExpiry = async (msg: MessageWithReactions, time: string) => {
       const now = new Date()
       let expiresAt = null
       if (time === 'After viewing') expiresAt = now.toISOString()
@@ -497,7 +502,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       setContextMenu(null)
   }
 
-  const toggleConvSetting = async (key: string, value: any) => {
+  const toggleConvSetting = async (key: string, value: string | boolean | null) => {
       await supabase.from('conversations').update({ [key]: value }).eq('id', conversationId)
       setBgContextMenu(null)
   }
@@ -508,7 +513,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       const msgIds = messages.map(m => m.id)
       for (const id of msgIds) {
           const { data: msg } = await supabase.from('messages').select('deleted_for').eq('id', id).single()
-          const deletedFor = [...(msg?.deleted_for || []), currentUser.id]
+          const deletedFor = [...(msg?.deleted_for || []), currentUser!.id]
           await supabase.from('messages').update({ deleted_for: deletedFor }).eq('id', id)
       }
       setMessages([])
@@ -702,7 +707,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                                 src={msg.attachment_url} 
                                 alt="attachment" 
                                 className="rounded-lg max-w-full cursor-zoom-in hover:brightness-110 transition-all border border-white/10 shadow-lg" 
-                                onClick={() => setLightboxImage(msg.attachment_url)}
+                                onClick={() => setLightboxImage(msg.attachment_url || null)}
                               />
                               {msg.decryptedContent && !msg.decryptedContent.startsWith('[IMAGE]:') && (
                                   <div className="px-1 py-1">{msg.decryptedContent}</div>
@@ -722,7 +727,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                                   <div className="flex flex-col flex-1 min-w-0">
                                       <span className="text-[10px] font-black uppercase opacity-60">Document</span>
                                       <span className="text-xs font-bold truncate">{msg.attachment_name || 'Generic File'}</span>
-                                      <span className="text-[9px] opacity-40 font-mono">{(msg.attachment_size / 1024).toFixed(1)} KB</span>
+                                      <span className="text-[9px] opacity-40 font-mono">{(msg.attachment_size || 0) / 1024 > 0 ? ((msg.attachment_size || 0) / 1024).toFixed(1) : '0'} KB</span>
                                   </div>
                               </a>
                               {msg.decryptedContent && !msg.decryptedContent.startsWith('[FILE]:') && (
@@ -734,7 +739,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                             src={imageUrl!} 
                             alt="attachment" 
                             className="rounded-lg max-w-full cursor-pointer hover:brightness-110 transition-all" 
-                            onClick={() => setLightboxImage(imageUrl)}
+                            onClick={() => setLightboxImage(imageUrl || null)}
                           />
                       ) : editingId === msg.id ? (
                           <div className="flex flex-col gap-2 min-w-[200px]">
@@ -758,9 +763,9 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                           </div>
                       )}
                       
-                      {msg.message_reactions?.length > 0 && (
+                      {msg.message_reactions && msg.message_reactions.length > 0 && (
                         <div className={`flex gap-1 mt-2 flex-wrap ${isOwn ? 'justify-end' : 'justify-start'}`}>
-                          {(Object.entries((msg.message_reactions || []).reduce((acc: any, r: any) => {
+                          {(Object.entries((msg.message_reactions || []).reduce((acc, r: MessageReaction) => {
                             acc[r.emoji] = (acc[r.emoji] || 0) + 1;
                             return acc;
                           }, {} as Record<string, number>)) as [string, number][]).map(([emoji, count]) => (
@@ -1018,11 +1023,11 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                         {['👍', '❤️', '😂', '😮', '😢', '🔥'].map(e => <button key={e} onClick={() => toggleReaction(contextMenu.msg.id, e)} className="hover:scale-125 transition-all">{e}</button>)}
                     </div>
                 )}
-                <button onClick={() => { if (contextMenu) navigator.clipboard.writeText(contextMenu.msg.decryptedContent); setContextMenu(null); }} className="ctx-btn"><Copy size={16} /> Copy text</button>
+                <button onClick={() => { if (contextMenu) navigator.clipboard.writeText(contextMenu.msg.decryptedContent || ''); setContextMenu(null); }} className="ctx-btn"><Copy size={16} /> Copy text</button>
                 {contextMenu && contextMenu.isOwn ? (
                     <>
                         {contextMenu && !contextMenu.msg.content.startsWith('[IMAGE]:') && (
-                            <button onClick={() => { if (contextMenu) { setEditingId(contextMenu.msg.id); setEditContent(contextMenu.msg.decryptedContent); } setContextMenu(null); }} className="ctx-btn">
+                            <button onClick={() => { if (contextMenu) { setEditingId(contextMenu.msg.id); setEditContent(contextMenu.msg.decryptedContent || ''); } setContextMenu(null); }} className="ctx-btn">
                                 <Pencil size={16} /> Edit message
                             </button>
                         )}

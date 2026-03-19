@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { User, AtSign, FileText, Rocket, CheckCircle2, AlertCircle, Loader2, ArrowRight, Github, Twitter, Instagram, Globe, Lock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { User as SupabaseUser } from '@supabase/supabase-js'
 
 export default function Onboarding() {
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,7 @@ export default function Onboarding() {
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [skills, setSkills] = useState('')
   const [isPublic, setIsPublic] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
   const [usernameMessage, setUsernameMessage] = useState('')
   
@@ -125,9 +126,10 @@ export default function Onboarding() {
       
       router.push(`/profile/${username}`)
       router.refresh()
-    } catch (error: any) {
-      console.error('Onboarding error:', error.message)
-      alert(error.message)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unknown error occurred'
+      console.error('Onboarding error:', message)
+      alert(message)
     } finally {
       setLoading(false)
     }

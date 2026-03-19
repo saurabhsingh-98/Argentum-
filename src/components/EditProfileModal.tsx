@@ -5,11 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Camera, AtSign, User, FileText, Rocket, Github, Twitter, Instagram, Globe, Save, Loader2, AlertCircle, CheckCircle2, Lock, Globe2, Search, Briefcase, ChevronDown } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
+import { Database } from '@/types/database'
+
 interface EditProfileModalProps {
   isOpen: boolean
   onClose: () => void
-  profile: any
-  onUpdate: (updatedProfile: any) => void
+  profile: Database['public']['Tables']['users']['Row']
+  onUpdate: (updatedProfile: Database['public']['Tables']['users']['Row']) => void
 }
 
 export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }: EditProfileModalProps) {
@@ -91,7 +93,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         .getPublicUrl(filePath)
 
       setAvatarUrl(publicUrl)
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error uploading avatar:', error)
       setStatus({ type: 'error', message: 'Error uploading image.' })
     } finally {
@@ -150,8 +152,8 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         onClose()
         setStatus(null)
       }, 1000)
-    } catch (error: any) {
-      setStatus({ type: 'error', message: error.message })
+    } catch (error) {
+      setStatus({ type: 'error', message: error instanceof Error ? error.message : 'An unknown error occurred' })
     } finally {
       setLoading(false)
     }

@@ -2,17 +2,16 @@
 
 import Link from 'next/link'
 import { 
-  CheckCircle2, 
   MessageCircle, 
   Flag, 
   MoreHorizontal, 
   ArrowUp, 
   Handshake, 
   Share2, 
-  Bookmark,
-  Link2,
-  Check,
-  Zap
+  Bookmark, 
+  Link2, 
+  Check, 
+  Zap 
 } from 'lucide-react'
 import { Database } from '@/types/database'
 import ReactionButton from './ReactionButton'
@@ -22,32 +21,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getGradientFromUsername, getInitials } from '@/lib/utils/ui'
 import GitHubEmbed from './GitHubEmbed'
 
-type Post = Database['public']['Tables']['posts']['Row'] & {
-  users: Database['public']['Tables']['users']['Row'] | null
-  post_reactions?: any[]
-  comments_count?: number
-}
+import { Post, PostReaction } from '@/types/post'
 
 export default function PostCard({ 
   post, 
   isOwner, 
-  isPinned, 
-  onPin,
   currentUserId,
   onReport
 }: { 
   post: Post, 
   isOwner?: boolean, 
-  isPinned?: boolean,
-  onPin?: (postId: string) => void,
   currentUserId?: string,
   onReport?: (postId: string) => void
 }) {
   const supabase = createClient()
   const [commentCount, setCommentCount] = useState(post.comments_count || 0)
-  const [reactions, setReactions] = useState<any[]>(post.post_reactions || [])
+  const [reactions, setReactions] = useState<PostReaction[]>(post.post_reactions || [])
   const [showMenu, setShowMenu] = useState(false)
-  const [upvotes, setUpvotes] = useState(0) // Default to 0, fetch if needed
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +59,7 @@ export default function PostCard({
   }
 
   // Extract skills (mocking if not present, but real app should have them in user object)
-  const skills = (post.users as any)?.skills || ['React', 'Node.js', 'PostgreSQL']
+  const skills = post.users?.skills || ['React', 'Node.js', 'PostgreSQL']
   
   // Extract code snippet preview
   const codeMatch = post.content.match(/```(?:\w+)?\n([\s\S]*?)\n```/)
@@ -84,8 +74,8 @@ export default function PostCard({
       className={`
         relative group bg-card rounded-2xl border border-border transition-all duration-300 hover:border-foreground/20 hover:shadow-2xl
         ${post.verification_status === 'verified' ? 'border-l-2 border-l-green-500 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)]' : ''}
-        ${(post as any).is_priority ? 'border-amber-500 bg-gradient-to-br from-card via-amber-500/5 to-amber-500/10 shadow-[0_0_50px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20' : ''}
-        ${(post.category as any) === 'Speak' && !(post as any).is_priority ? 'border-amber-500/40 bg-card hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
+        ${post.is_priority ? 'border-amber-500 bg-gradient-to-br from-card via-amber-500/5 to-amber-500/10 shadow-[0_0_50px_rgba(245,158,11,0.08)] ring-1 ring-amber-500/20' : ''}
+        ${post.category === 'Speak' && !post.is_priority ? 'border-amber-500/40 bg-card hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
       `}
     >
       <div className="p-5 flex flex-col h-full">
@@ -115,12 +105,12 @@ export default function PostCard({
                     Author
                   </span>
                 )}
-                {(post as any).is_priority && (
+                {post.is_priority && (
                   <span className="px-1.5 py-0.5 rounded bg-amber-500 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-[0_0_20px_rgba(34,197,94,0.2)] animate-pulse">
                     <Zap size={8} fill="currentColor" /> Priority Transmission
                   </span>
                 )}
-                {(post.category as any) === 'Speak' && !(post as any).is_priority && (
+                {post.category === 'Speak' && !post.is_priority && (
                   <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-[8px] font-black text-amber-600 uppercase tracking-widest flex items-center gap-1">
                     <Zap size={8} fill="currentColor" /> Speak
                   </span>
@@ -198,7 +188,7 @@ export default function PostCard({
             </div>
           )}
 
-          {(post as any).imported_from_github && (
+          {post.imported_from_github && (
             <GitHubEmbed 
                repoName={post.title.replace('Ship Log: ', '')} 
                stars={128} 

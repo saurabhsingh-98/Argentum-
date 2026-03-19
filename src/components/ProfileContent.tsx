@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Github, Globe, Award, Flame, Zap, Twitter, Instagram, Edit3, Share2, Calendar, Rocket, Lock, Globe2, AtSign, Search, Pin, MessageCircle, Loader2, ArrowUpRight, ArrowLeft, Settings } from 'lucide-react'
+import { Github, Globe, Award, Flame, Zap, Instagram, Edit3, Share2, Calendar, Rocket, Lock, AtSign, Search, MessageCircle, Loader2, ArrowUpRight, ArrowLeft, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PostCard from '@/components/PostCard'
@@ -9,14 +9,18 @@ import EmptyState from '@/components/EmptyState'
 import EditProfileModal from '@/components/EditProfileModal'
 import FollowButton from '@/components/FollowButton'
 import { createClient } from '@/lib/supabase/client'
+import { Database } from '@/types/database'
 import ReportModal from './ReportModal'
 import StreakModal from './StreakModal'
 import FollowListModal from './FollowListModal'
-import { motion, useSpring, useTransform, animate } from 'framer-motion'
+import { animate } from 'framer-motion'
+import { User } from '@supabase/supabase-js'
+
+import { Post } from '@/types/post'
 
 interface ProfileContentProps {
-  initialProfile: any
-  posts: any[]
+  initialProfile: Database['public']['Tables']['users']['Row'] & { total_upvotes_received?: number }
+  posts: Post[]
   isOwner: boolean
 }
 
@@ -35,9 +39,8 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const [followModalTab, setFollowModalTab] = useState<'followers' | 'following'>('followers')
   const supabase = createClient()
   const router = useRouter()
-
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }: any) => {
+    supabase.auth.getUser().then(({ data: { user } }: { data: { user: User | null } }) => {
       if (user) setCurrentUserId(user.id)
     })
     
@@ -75,7 +78,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     return () => clearTimeout(timer)
   }, [profile.id, supabase])
 
-  const handleUpdateProfile = (updatedProfile: any) => {
+  const handleUpdateProfile = (updatedProfile: Database['public']['Tables']['users']['Row'] & { total_upvotes_received?: number }) => {
     setProfile(updatedProfile)
   }
 
@@ -227,7 +230,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
             <div className="w-28 h-28 rounded-[2.5rem] border-2 border-border bg-card flex items-center justify-center relative shadow-glow">
               <div className="absolute inset-0 bg-foreground/5 blur-3xl rounded-full" />
               <span className="text-4xl font-black text-foreground drop-shadow-glow relative z-10">
-                {profile.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || profile.username?.[0]?.toUpperCase()}
+                {profile.display_name?.split(' ').map((word) => word[0]).join('').toUpperCase() || profile.username?.[0]?.toUpperCase()}
               </span>
               <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-background border border-border flex items-center justify-center shadow-xl">
                 <Lock size={18} className="text-foreground/40" />
@@ -499,7 +502,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                 
                 {posts && posts.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {sortedPosts.map((post: any, index: number) => (
+                    {sortedPosts.map((post, index) => (
                       <div 
                           key={post.id} 
                           style={getAnimationStyle('slideBottom', 350 + (index * 50))}
@@ -507,8 +510,6 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                         <PostCard 
                             post={post} 
                             isOwner={computedIsOwner}
-                            isPinned={post.id === profile.pinned_post_id}
-                            onPin={handlePin}
                             currentUserId={currentUserId || undefined}
                             onReport={(id) => setReportingPostId(id)}
                         />
@@ -562,7 +563,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   )
 }
 
-function StatsCard({ label, value, icon, isStreak }: { label: string, value: any, icon: React.ReactNode, isStreak?: boolean }) {
+function StatsCard({ label, value, icon, isStreak }: { label: string, value: number | string, icon: React.ReactNode, isStreak?: boolean }) {
   const [displayValue, setDisplayValue] = useState(0)
 
   useEffect(() => {

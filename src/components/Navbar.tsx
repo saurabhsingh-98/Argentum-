@@ -28,6 +28,10 @@ import AccountSwitcher from './AccountSwitcher'
 import { motion, AnimatePresence } from 'framer-motion'
 import StreakModal from './StreakModal'
 import { useSearch } from '@/context/SearchContext'
+import { User as SupabaseUser, Session } from '@supabase/supabase-js'
+import { Database } from '@/types/database'
+
+type Profile = Database['public']['Tables']['users']['Row']
 
 interface NavbarProps {
   onSearchClick?: () => void
@@ -37,8 +41,8 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const supabase = createClient()
   const router = useRouter()
   const pathname = usePathname()
-  const [user, setUser] = useState<any>(null)
-  const [profile, setProfile] = useState<any>(null)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
+  const [profile, setProfile] = useState<Profile | Partial<Profile> | null>(null)
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [showStreakModal, setShowStreakModal] = useState(false)
@@ -77,7 +81,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
     }
     setup()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
       setUser(session?.user ?? null)
       if (session?.user) setup()
       else setProfile(null)

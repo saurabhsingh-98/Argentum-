@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export default function SessionManager() {
   const supabase = createClient()
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: any, session: any) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       try {
         if (event === 'SIGNED_IN' && session) {
           // Get user profile for metadata
@@ -37,7 +38,7 @@ export default function SessionManager() {
           }
 
           // Update or add
-          const index = accounts.findIndex((a: any) => a.id === newAccount.id)
+          const index = accounts.findIndex((a: { id: string }) => a.id === newAccount.id)
           if (index > -1) {
             accounts[index] = newAccount
           } else {

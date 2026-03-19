@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { getGradientFromUsername, getInitials } from '@/lib/utils/ui'
 import FollowButton from './FollowButton'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Database } from '@/types/database'
+
+type UserProfile = Database['public']['Tables']['users']['Row']
 
 interface FollowListModalProps {
   isOpen: boolean
@@ -19,13 +22,13 @@ interface FollowListModalProps {
 export default function FollowListModal({ isOpen, onClose, userId, username, initialTab }: FollowListModalProps) {
   const [activeTab, setActiveTab] = useState(initialTab)
   const [searchQuery, setSearchQuery] = useState('')
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<UserProfile[]>([])
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
   const [totalCount, setTotalCount] = useState(0)
   const observer = useRef<IntersectionObserver | null>(null)
-  const lastUserRef = useCallback((node: any) => {
+  const lastUserRef = useCallback((node: HTMLElement | null) => {
     if (loading) return
     if (observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries => {
@@ -60,13 +63,13 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
           .range(start, end)
       }
 
-      const { data, count, error } = await query
+      const { data, count, error } = await query as { data: any[] | null, count: number | null, error: any }
 
       if (error) throw error
 
-      const formattedUsers = data?.map((item: any) => activeTab === 'followers' ? item.follower : item.following) || []
+      const formattedUsers = data?.map((item) => activeTab === 'followers' ? item.follower : item.following) || []
       
-      const filteredUsers = formattedUsers.filter((u: any) => 
+      const filteredUsers = formattedUsers.filter((u: UserProfile) => 
         u.username.toLowerCase().includes(searchQuery.toLowerCase()) || 
         (u.display_name && u.display_name.toLowerCase().includes(searchQuery.toLowerCase()))
       )

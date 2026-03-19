@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { ThumbsUp, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { PostReaction } from '@/types/post'
 
 const REACTION_TYPES = [
   { type: 'like', emoji: '👍', label: 'Like', color: 'rgba(59, 130, 246, 0.5)', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.5)]' },
@@ -17,14 +18,14 @@ const REACTION_TYPES = [
 
 interface ReactionButtonProps {
   postId: string
-  initialReactions?: any[]
+  initialReactions?: PostReaction[]
   currentUserId?: string
 }
 
 export default function ReactionButton({ postId, initialReactions = [], currentUserId }: ReactionButtonProps) {
   const supabase = createClient()
   const router = useRouter()
-  const [reactions, setReactions] = useState<any[]>(initialReactions)
+  const [reactions, setReactions] = useState<PostReaction[]>(initialReactions)
   const [showPicker, setShowPicker] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -70,7 +71,13 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
         setReactions(prev => prev.map(r => r.user_id === currentUserId ? { ...r, reaction: type } : r))
       }
     } else {
-      setReactions(prev => [...prev, { user_id: currentUserId, reaction: type, post_id: postId }])
+      setReactions(prev => [...prev, { 
+        id: 'temp-' + Date.now(),
+        user_id: currentUserId, 
+        reaction: type, 
+        post_id: postId,
+        created_at: new Date().toISOString()
+      }])
     }
 
     try {
@@ -95,13 +102,13 @@ export default function ReactionButton({ postId, initialReactions = [], currentU
   }
 
   const userReaction = reactions.find(r => r.user_id === currentUserId)
-  const reactionCounts = reactions.reduce((acc: any, r) => {
+  const reactionCounts = reactions.reduce((acc: Record<string, number>, r) => {
     acc[r.reaction] = (acc[r.reaction] || 0) + 1
     return acc
   }, {})
 
   const sortedReactions = Object.entries(reactionCounts)
-    .sort(([, a]: any, [, b]: any) => b - a)
+    .sort(([, a], [, b]) => (b as number) - (a as number))
     .slice(0, 3)
 
   const currentReactionInfo = userReaction 

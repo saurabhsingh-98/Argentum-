@@ -17,13 +17,30 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Database } from '@/types/database'
+import { User } from '@supabase/supabase-js'
+
+type NotificationWithUser = Database['public']['Tables']['notifications']['Row'] & {
+  from_user: {
+    id: string
+    username: string
+    display_name: string | null
+    avatar_url: string | null
+  }
+}
+
+interface NotificationGroups {
+  Today: NotificationWithUser[]
+  Yesterday: NotificationWithUser[]
+  Older: NotificationWithUser[]
+}
 
 export default function NotificationsPage() {
   const supabase = createClient()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [notifications, setNotifications] = useState<any[]>([])
-  const [user, setUser] = useState<any>(null)
+  const [notifications, setNotifications] = useState<NotificationWithUser[]>([])
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -59,7 +76,7 @@ export default function NotificationsPage() {
     }
   }
 
-  const markAsRead = async (id: string, link?: string) => {
+  const markAsRead = async (id: string, link: string | null) => {
     try {
       await supabase
         .from('notifications')
@@ -115,8 +132,8 @@ export default function NotificationsPage() {
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' })
   }
 
-  const groupNotifications = (notifs: any[]) => {
-    const groups: any = {
+  const groupNotifications = (notifs: NotificationWithUser[]): NotificationGroups => {
+    const groups: NotificationGroups = {
       Today: [],
       Yesterday: [],
       Older: []
@@ -191,7 +208,7 @@ export default function NotificationsPage() {
             </div>
           ) : (
             <div className="flex flex-col gap-10">
-              {Object.entries(grouped).map(([title, items]: [string, any]) => (
+              {Object.entries(grouped).map(([title, items]) => (
                 items.length > 0 && (
                   <div key={title} className="flex flex-col gap-4">
                     <div className="flex items-center gap-3">
@@ -199,7 +216,7 @@ export default function NotificationsPage() {
                        <div className="h-px flex-1 bg-border" />
                     </div>
                     <div className="flex flex-col gap-2">
-                      {items.map((n: any) => (
+                      {items.map((n: NotificationWithUser) => (
                         <div 
                           key={n.id}
                           onClick={() => markAsRead(n.id, n.link)}
@@ -212,7 +229,7 @@ export default function NotificationsPage() {
                               <img src={n.from_user.avatar_url} alt="avatar" className="w-full h-full object-cover" />
                             ) : (
                               <span className="text-xs font-black">
-                                {n.from_user.display_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || n.from_user.username?.[0].toUpperCase()}
+                                {n.from_user.display_name?.split(' ').map((word) => word[0]).join('').toUpperCase() || n.from_user.username?.[0].toUpperCase()}
                               </span>
                             )}
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-background border border-border flex items-center justify-center shadow-xl">

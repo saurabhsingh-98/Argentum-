@@ -11,19 +11,21 @@ import AccountSwitcher from '@/components/AccountSwitcher'
 import { Settings, Users, LogOut, User, ShieldAlert, Key as KeyIcon } from 'lucide-react'
 import KeyBackupModal from '@/components/KeyBackupModal'
 import KeyRecoveryModal from '@/components/KeyRecoveryModal'
+import { ChatUser, ProcessedConversation, ConversationWithParticipants } from '@/types/chat'
+import { Database } from '@/types/database'
 
 const supabase = createClient()
 
 export default function MessagesPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [conversations, setConversations] = useState<any[]>([])
-  const [filteredConversations, setFilteredConversations] = useState<any[]>([])
+  const [conversations, setConversations] = useState<ProcessedConversation[]>([])
+  const [filteredConversations, setFilteredConversations] = useState<ProcessedConversation[]>([])
   const [user, setUser] = useState<any>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [encryptionStatus, setEncryptionStatus] = useState<string>('loading')
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<Database['public']['Tables']['users']['Row'] | null>(null)
   const [showBackupModal, setShowBackupModal] = useState(false)
   const [showRecoveryModal, setShowRecoveryModal] = useState(false)
 
@@ -108,7 +110,7 @@ export default function MessagesPage() {
 
       const secretKey = getStoredSecretKey()
       
-      const processedConversations = data.map((conv: any) => {
+      const processedConversations = (data as ConversationWithParticipants[]).map((conv): ProcessedConversation => {
         const otherParticipant = conv.participant_1 === userId 
           ? conv.participant_2_profile 
           : conv.participant_1_profile
@@ -187,7 +189,7 @@ export default function MessagesPage() {
               <ShieldAlert size={16} className="text-orange-500 shrink-0" />
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-orange-500">Unprotected Account</p>
-                <p className="text-[11px] text-orange-500/60 font-medium leading-relaxed">Your messages aren&apos;t backed up. You&apos;ll lose access if you lose this device.</p>
+                <p className="text-[11px] text-orange-500/60 font-medium leading-relaxed">Your messages aren{"'"}t backed up. You{"'"}ll lose access if you lose this device.</p>
                 <button 
                   onClick={() => setShowBackupModal(true)}
                   className="text-[10px] font-black uppercase tracking-widest text-white hover:text-orange-500 transition-colors"
@@ -205,7 +207,7 @@ export default function MessagesPage() {
               <KeyIcon size={16} className="text-red-500 shrink-0" />
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-red-500">Messages Locked</p>
-                <p className="text-[11px] text-red-500/60 font-medium leading-relaxed">This device doesn&apos;t have your keys. Set up backup on your other device to unlock, or reset to start fresh.</p>
+                <p className="text-[11px] text-red-500/60 font-medium leading-relaxed">This device doesn{"'"}t have your keys. Set up backup on your other device to unlock, or reset to start fresh.</p>
                 <button 
                   onClick={async () => {
                     if (confirm("Resetting keys will make all existing messages unreadable. You will only be able to read new messages sent after this reset. Continue?")) {

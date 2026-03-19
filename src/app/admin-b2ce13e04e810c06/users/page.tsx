@@ -21,19 +21,21 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
+import { Database } from '@/types/database'
+import { UserWithAdminFields } from '@/types/admin'
 
 const ADMIN_SEGMENT = 'b2ce13e04e810c06';
 
 export default function UsersManagement() {
   const supabase = createClient()
   const { token: csrfToken } = useCsrfToken()
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<UserWithAdminFields[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
-  const [showBanModal, setShowBanModal] = useState<any>(null)
-  const [showDeleteModal, setShowDeleteModal] = useState<any>(null)
+  const [showBanModal, setShowBanModal] = useState<UserWithAdminFields | null>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState<UserWithAdminFields | null>(null)
   
   const [banReason, setBanReason] = useState('')
   const [banDuration, setBanDuration] = useState('permanent')
@@ -60,7 +62,7 @@ export default function UsersManagement() {
     return () => clearTimeout(timer)
   }, [search, page])
 
-  const handleModeration = async (action: string, userId: string, details: any = {}) => {
+  const handleModeration = async (action: string, userId: string, details: { username?: string } = {}) => {
     if (!csrfToken) return alert('CSRF token missing. Please refresh.')
 
     // In a real app, we'd call an API route that checks the CSRF token in middleware
@@ -160,7 +162,7 @@ export default function UsersManagement() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 group/email cursor-pointer" onClick={() => navigator.clipboard.writeText(item.email)}>
+                    <div className="flex items-center gap-2 group/email cursor-pointer" onClick={() => navigator.clipboard.writeText(item.email || '')}>
                        <span className="text-xs font-medium text-foreground/40 group-hover/email:text-blue-400 transition-colors uppercase tracking-tighter">{item.email || 'NO_AUTH_EMAIL'}</span>
                     </div>
                   </td>

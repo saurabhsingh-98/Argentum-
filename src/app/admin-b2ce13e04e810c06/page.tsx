@@ -28,11 +28,34 @@ import {
   Line
 } from 'recharts'
 
+import { Database } from '@/types/database'
+import { AdminAuditLogWithUser, SecurityAlert } from '@/types/admin'
+
 const ADMIN_SEGMENT = 'b2ce13e04e810c06';
+
+interface DashboardStats {
+  totalUsers: number
+  totalPosts: number
+  openReports: number
+  openIssues: number
+  verifiedPosts: number
+  statusUpdatesToday: number
+}
+
+interface DashboardCharts {
+  userGrowth: { name: string; users: number }[]
+  postActivity: { name: string; posts: number }[]
+}
+
+interface DashboardActivity {
+  auditLogs: AdminAuditLogWithUser[]
+  newUsers: Database['public']['Tables']['users']['Row'][]
+  securityAlerts: SecurityAlert[]
+}
 
 export default function AdminOverview() {
   const supabase = createClient()
-  const [stats, setStats] = useState<any>({
+  const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalPosts: 0,
     openReports: 0,
@@ -40,11 +63,11 @@ export default function AdminOverview() {
     verifiedPosts: 0,
     statusUpdatesToday: 0
   })
-  const [charts, setCharts] = useState<any>({
+  const [charts, setCharts] = useState<DashboardCharts>({
     userGrowth: [],
     postActivity: []
   })
-  const [activity, setActivity] = useState<any>({
+  const [activity, setActivity] = useState<DashboardActivity>({
     auditLogs: [],
     newUsers: [],
     securityAlerts: []
@@ -110,9 +133,9 @@ export default function AdminOverview() {
       ])
 
       setActivity({
-        auditLogs: logs || [],
-        newUsers: users || [],
-        securityAlerts: alerts || []
+        auditLogs: (logs as unknown as AdminAuditLogWithUser[]) || [],
+        newUsers: (users as any) || [],
+        securityAlerts: (alerts as unknown as SecurityAlert[]) || []
       })
 
       setLoading(false)
@@ -224,10 +247,10 @@ export default function AdminOverview() {
            <div className="flex-1 overflow-y-auto max-h-[400px]">
               {activity.securityAlerts.length > 0 ? (
                 <div className="divide-y divide-red-500/10">
-                  {activity.securityAlerts.map((alert: any) => (
+                  {activity.securityAlerts.map((alert) => (
                     <div key={alert.id} className="p-5 hover:bg-red-500/5 transition-colors group">
                        <p className="text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">{alert.type.replace(/_/g, ' ')}</p>
-                       <p className="text-xs font-bold text-foreground mb-2">{alert.details?.message || 'Suspicious activity detected'}</p>
+                       <p className="text-xs font-bold text-foreground mb-2">{(alert.details as any)?.message || 'Suspicious activity detected'}</p>
                        <div className="flex items-center justify-between text-[9px] font-mono text-foreground/40">
                           <span>IP: {alert.ip_address}</span>
                           <button className="text-red-500/60 hover:text-red-400 transition-colors uppercase font-black">Resolve</button>
@@ -256,7 +279,7 @@ export default function AdminOverview() {
             <button className="text-[10px] font-black uppercase tracking-widest text-foreground/40 hover:text-foreground transition-colors">View All Tracker →</button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {activity.auditLogs.map((log: any) => (
+            {activity.auditLogs.map((log) => (
               <div key={log.id} className="p-5 flex items-center gap-4 hover:bg-foreground/[0.02] transition-colors border-b border-border last:border-0">
                 <div className="w-10 h-10 rounded-2xl border border-border overflow-hidden bg-foreground/5 flex items-center justify-center text-xs font-black text-red-500">
                     {log.users?.avatar_url ? <img src={log.users.avatar_url} className="w-full h-full object-cover" /> : log.users?.username?.[0].toUpperCase() || 'A'}
@@ -283,7 +306,7 @@ export default function AdminOverview() {
             </h3>
           </div>
           <div className="flex-1 p-6 space-y-6">
-             {activity.newUsers.map((builder: any) => (
+             {activity.newUsers.map((builder) => (
               <div key={builder.id} className="flex items-center gap-3">
                  <div className="w-10 h-10 rounded-2xl border border-border overflow-hidden bg-foreground/5 flex items-center justify-center text-xs font-black text-blue-500">
                     {builder.avatar_url ? <img src={builder.avatar_url} className="w-full h-full object-cover" /> : builder.username[0].toUpperCase()}
