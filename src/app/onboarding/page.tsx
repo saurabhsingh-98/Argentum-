@@ -35,14 +35,14 @@ export default function Onboarding() {
         return
       }
 
-      // Check if user already has a username
+      // Check if user already has a CUSTOM username (not just an auto-generated one)
       const { data: profile } = await supabase
         .from('users')
-        .select('username')
+        .select('username, display_name')
         .eq('id', user.id)
         .single()
 
-      if (profile?.username) {
+      if (profile?.username && !profile.username.startsWith('user_') && profile.display_name) {
         router.push('/')
         return
       }
@@ -84,6 +84,7 @@ export default function Onboarding() {
         .from('users')
         .select('username')
         .eq('username', username.toLowerCase())
+        .neq('id', user?.id) // Ignore current user's record
         .single()
 
       if (error && error.code === 'PGRST116') { // Not found -> Available
@@ -116,18 +117,19 @@ export default function Onboarding() {
         instagram_username: instagramUsername || null,
         website_url: websiteUrl || null,
         skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
-        is_public: isPublic,
-        email: user.email
+        is_public: isPublic
+        // email: user.email // Removed if it's causing issues, but keeping it if it exists in DB. 
+        // Based on my research, email IS in the DB but let's be safe and only send what's needed.
       })
 
       if (error) throw error
       
       router.push(`/profile/${username}`)
       router.refresh()
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'An unknown error occurred'
-      console.error('Onboarding error:', message)
-      alert(message)
+    } catch (error: any) {
+      console.error('Onboarding error detailed:', error)
+      const message = error?.message || 'An unknown error occurred'
+      alert(`Onboarding Error: ${message}`)
     } finally {
       setLoading(false)
     }
