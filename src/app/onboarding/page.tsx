@@ -124,6 +124,11 @@ export default function Onboarding() {
 
       if (error) throw error
       
+      // Also update auth metadata so Navbar/Client pick it up immediately
+      await supabase.auth.updateUser({
+        data: { username: username.toLowerCase() }
+      })
+      
       router.push(`/profile/${username}`)
       router.refresh()
     } catch (error: any) {

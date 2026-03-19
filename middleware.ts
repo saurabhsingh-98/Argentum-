@@ -96,14 +96,19 @@ export async function middleware(request: NextRequest) {
 
     // 🚀 Force Onboarding for logged in users without username
     if (user && path !== '/onboarding' && !path.startsWith('/auth') && !path.startsWith('/api') && path !== '/not-found') {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('username')
-        .eq('id', user.id)
-        .single()
+      // Check metadata first (fast)
+      const metadataUsername = user.user_metadata?.username || user.user_metadata?.user_name;
+      
+      if (!metadataUsername) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('username')
+          .eq('id', user.id)
+          .maybeSingle()
 
-      if (!profile?.username) {
-        return NextResponse.redirect(new URL('/onboarding', request.url))
+        if (!profile?.username) {
+          return NextResponse.redirect(new URL('/onboarding', request.url))
+        }
       }
     }
 
