@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, getUserWithTimeout } from '@/lib/supabase/client'
 import { 
   User, 
   Lock, 
@@ -52,12 +52,23 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const setup = async () => {
+      // Safety timeout for the entire setup
+      const setupTimeout = setTimeout(() => {
+        if (loading) {
+          console.warn('Settings setup taking too long, forcing load completion')
+          setLoading(false)
+        }
+      }, 10000)
+
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const { user, error } = await getUserWithTimeout()
+        
+        if (!user || error) {
+          console.warn('SettingsPage: Auth failed or timed out', error)
           router.push('/auth/login')
           return
         }
+
         setUser(user)
 
         const { data: prof, error: profError } = await supabase
@@ -74,6 +85,7 @@ export default function SettingsPage() {
       } catch (err) {
         console.error('Settings setup error:', err)
       } finally {
+        clearTimeout(setupTimeout)
         setLoading(false)
         const savedCompact = typeof window !== 'undefined' ? localStorage.getItem('appearance_compact') === 'true' : false
         setCompactMode(savedCompact)

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, getUserWithTimeout } from '@/lib/supabase/client'
 import { MessageCircle, Search, Loader2, Plus, Lock, AtSign, ArrowLeft, Home } from 'lucide-react'
 import Link from 'next/link'
 import { decryptMessage, getStoredSecretKey, initializeEncryption, resetKeys } from '@/lib/crypto'
@@ -32,9 +32,19 @@ export default function MessagesPage() {
   useEffect(() => {
     let channel: any
     const checkAuth = async () => {
+      // Safety timeout
+      const authTimeout = setTimeout(() => {
+        if (loading) {
+          console.warn('Messages auth taking too long, forcing load completion')
+          setLoading(false)
+        }
+      }, 10000)
+
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const { user, error } = await getUserWithTimeout()
+        
+        if (!user || error) {
+          console.warn('MessagesPage: Auth failed or timed out', error)
           router.push('/auth/login')
           return
         }
@@ -71,6 +81,8 @@ export default function MessagesPage() {
           .subscribe()
       } catch (err) {
         console.error('MessagesPage critical error:', err)
+      } finally {
+        clearTimeout(authTimeout)
         setLoading(false)
       }
     }

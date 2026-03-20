@@ -8,7 +8,7 @@ import PostCard from '@/components/PostCard'
 import EmptyState from '@/components/EmptyState'
 import EditProfileModal from '@/components/EditProfileModal'
 import FollowButton from '@/components/FollowButton'
-import { createClient } from '@/lib/supabase/client'
+import { createClient, getUserWithTimeout } from '@/lib/supabase/client'
 import { Database } from '@/types/database'
 import ReportModal from './ReportModal'
 import StreakModal from './StreakModal'
@@ -40,7 +40,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const supabase = createClient()
   const router = useRouter()
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }: { data: { user: User | null } }) => {
+    getUserWithTimeout().then(({ user }) => {
       if (user) setCurrentUserId(user.id)
     })
     
@@ -59,7 +59,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     const timer = setTimeout(() => setAnimateState(true), 10)
 
     const fetchFollowData = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { user } = await getUserWithTimeout()
       
       const [followers, following, followingState] = await Promise.all([
         supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_id', profile.id),

@@ -1,16 +1,21 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export default function SessionManager() {
   const supabase = createClient()
+  const lastUserId = useRef<string | null>(null)
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       try {
         if (event === 'SIGNED_IN' && session) {
+          // Only fetch if user ID changed or we don't have it yet
+          if (lastUserId.current === session.user.id) return
+          lastUserId.current = session.user.id
+
           // Get user profile for metadata
           const { data: profile, error: profileError } = await supabase
             .from('users')
@@ -23,7 +28,12 @@ export default function SessionManager() {
           }
 
           const saved = localStorage.getItem('saved_accounts')
-          const accounts = saved ? JSON.parse(saved) : []
+          let accounts = []
+          try {
+            accounts = saved ? JSON.parse(saved) : []
+          } catch {
+            accounts = []
+          }
 
           const newAccount = {
             id: session.user.id,
@@ -46,6 +56,8 @@ export default function SessionManager() {
           }
 
           localStorage.setItem('saved_accounts', JSON.stringify(accounts))
+        } else if (event === 'SIGNED_OUT') {
+          lastUserId.current = null
         }
       } catch (err) {
         console.error('SessionManager error:', err)
@@ -56,6 +68,7 @@ export default function SessionManager() {
       subscription.unsubscribe()
     }
   }, [supabase])
+
 
   return null
 }
