@@ -43,19 +43,39 @@ export default function BootLoader() {
     <div className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center gap-16 overflow-hidden transition-all duration-1000 font-sans">
       {/* Clean Minimal Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card to-transparent" />
-      </div>
+          {/* Logo & Brand Unit */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="flex flex-col items-center gap-6"
+          >
+            <motion.div 
+               animate={{ 
+                 y: [0, -10, 0],
+                 filter: ["drop-shadow(0 0 10px rgba(192, 192, 192, 0.4))", "drop-shadow(0 0 30px rgba(192, 192, 192, 0.8))", "drop-shadow(0 0 10px rgba(192, 192, 192, 0.4))"]
+               }}
+               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+               className="relative"
+            >
+              <div className="absolute inset-x-0 bottom-0 h-4 bg-white/20 blur-2xl rounded-full" />
+              <img src="/logo.png" alt="Argentum" className="h-40 w-auto object-contain logo-blend" />
+            </motion.div>
 
-      {/* Center Brand Block */}
-      <div className="relative flex flex-col items-center gap-12 z-10">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="relative group"
-        >
-          <img src="/logo.png" alt="Argentum" className="w-48 h-auto object-contain silver-glow" />
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="flex flex-col items-center"
+            >
+              <h1 className="brand-text text-5xl tracking-[0.4em] font-black">
+                Argentum
+              </h1>
+              <p className="text-[10px] text-muted font-bold uppercase tracking-[0.6em] mt-2 opacity-50">
+                Protocol of Builders
+              </p>
+            </motion.div>
+          </motion.div>
       </div>
 
       {/* Progress Block */}

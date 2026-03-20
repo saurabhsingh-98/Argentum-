@@ -112,13 +112,26 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         <div className="mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
           {/* Left Section: Logo */}
           <div className="flex items-center gap-2 shrink-0">
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="flex items-center gap-3 group logo-container relative">
               <motion.div 
-                whileHover={{ scale: 1.05 }}
-                className="relative overflow-hidden"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="relative overflow-visible"
               >
-                <img src="/logo.png" alt="Argentum" className="h-10 w-auto object-contain" />
+                <div className="logo-hover-glow" />
+                <img 
+                  src="/logo.png" 
+                  alt="Argentum" 
+                  className="h-10 w-auto object-contain logo-blend" 
+                />
               </motion.div>
+              <div className="flex flex-col">
+                <span className="brand-text text-lg tracking-[0.3em] font-black">
+                  Argentum
+                </span>
+                <span className="text-[7px] text-muted font-bold uppercase tracking-[0.4em] -mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
+                  Protocol of Builders
+                </span>
+              </div>
             </Link>
           </div>
 
