@@ -10,29 +10,28 @@ export default function CategoryFilter({
   onSelect: (cat: string) => void 
 }) {
   return (
-    <div className="flex items-center gap-4 overflow-x-visible pb-14 pt-4 px-2 no-scrollbar perspective-container">
+    <div className="flex items-center gap-4 overflow-x-visible pb-14 pt-4 px-2 no-scrollbar glass-perspective">
       {categories.map((cat) => (
         <div key={cat} className="flex-shrink-0 group">
           <div className="relative transform-style-3d">
             {/* The "Well" or Base (Always visible, providing depth) */}
-            <div className="absolute inset-0 translate-y-2 rounded-xl bg-background border border-border opacity-40 shadow-inner" />
+            <div className="absolute inset-0 translate-y-2 rounded-xl bg-background border border-border opacity-40 shadow-inner glass:bg-white/5 glass:border-white/10" />
             
             <button
               onClick={() => onSelect(cat)}
               className={`
                 relative px-7 py-3 rounded-xl text-[11px] font-black tracking-[0.15em] uppercase transition-all duration-500 transform-style-3d border box-border
                 ${selected === cat 
-                  ? 'bg-foreground glass:bg-white/20 glass:text-white glass:backdrop-blur-xl text-background border-foreground/20 -translate-y-2 shadow-silver-lux' 
-                  : 'bg-card glass:glass-card text-foreground/40 border-border hover:border-border/50 hover:text-foreground translate-y-0 hover:-translate-y-1 shadow-flat'
+                  ? 'bg-foreground text-background border-foreground/20 -translate-y-2 shadow-silver-lux glass:glass-button-3d glass:active glass:!border-white/50' 
+                  : 'bg-card text-foreground/40 border-border hover:border-border/50 hover:text-foreground translate-y-0 hover:-translate-y-1 shadow-flat glass:glass-button-3d'
                 }
-                active:translate-y-[-2px] active:scale-[0.98]
               `}
             >
               <span className="relative z-10">{cat}</span>
               
               {/* 3D Side panels (to avoid "cut in half" look) */}
               {selected === cat && (
-                <div className="absolute inset-0 rounded-xl pointer-events-none">
+                <div className="absolute inset-0 rounded-xl pointer-events-none glass:hidden">
                   <div className="absolute bottom-[-10px] left-0 right-0 h-[10px] bg-foreground/10 rounded-b-xl origin-top transform-rotate-x-90" />
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-foreground/5 to-transparent" />
                 </div>

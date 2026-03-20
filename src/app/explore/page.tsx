@@ -84,11 +84,13 @@ function ExploreContent() {
                </p>
             </div>
             
-            <div className="flex p-1 bg-foreground/5 rounded-full border border-border md:w-auto w-full">
+            <div className="flex p-1 bg-foreground/5 glass:bg-white/5 rounded-full border border-border glass:border-white/10 md:w-auto w-full glass-perspective">
               <button
                 onClick={() => setActiveTab('builds')}
                 className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === 'builds' ? 'bg-foreground text-background shadow-xl' : 'text-foreground/40 hover:text-foreground'
+                  activeTab === 'builds' 
+                    ? 'bg-foreground text-background shadow-xl glass:glass-button-3d glass:active' 
+                    : 'text-foreground/40 hover:text-foreground glass:hover:bg-white/5'
                 }`}
               >
                 <Zap size={14} /> Builds
@@ -96,7 +98,9 @@ function ExploreContent() {
               <button
                 onClick={() => setActiveTab('builders')}
                 className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  activeTab === 'builders' ? 'bg-foreground text-background shadow-xl' : 'text-foreground/40 hover:text-foreground'
+                  activeTab === 'builders' 
+                    ? 'bg-foreground text-background shadow-xl glass:glass-button-3d glass:active' 
+                    : 'text-foreground/40 hover:text-foreground glass:hover:bg-white/5'
                 }`}
               >
                 <Users size={14} /> Builders
@@ -113,20 +117,20 @@ function ExploreContent() {
                 placeholder={`Search ${activeTab === 'builds' ? 'projects, code, tags...' : 'builders, skills, names...'}`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-card border border-border rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground focus:outline-none focus:border-foreground/30 transition-all placeholder:text-foreground/10"
+                className="w-full bg-card glass:glass-input border border-border glass:border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm text-foreground focus:outline-none focus:border-foreground/30 glass:focus:border-white/30 transition-all placeholder:text-foreground/10"
               />
             </div>
 
             {/* Category Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 w-full lg:w-auto no-scrollbar">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 w-full lg:w-auto no-scrollbar glass-perspective">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-2 px-5 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-2 px-6 py-2.5 rounded-full border text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                     selectedCategory === cat.id 
-                      ? 'bg-green-500 border-green-500 text-black shadow-lg shadow-green-900/20' 
-                      : 'bg-card border-border text-foreground/40 hover:text-foreground hover:border-foreground/20'
+                      ? 'bg-green-500 border-green-500 text-black shadow-lg shadow-green-900/20 glass:glass-button-3d glass:active glass:!border-white/50' 
+                      : 'bg-card glass:glass-button-3d border-border text-foreground/40 hover:text-foreground hover:border-foreground/20'
                   }`}
                 >
                   {cat.icon}

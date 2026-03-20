@@ -55,7 +55,7 @@ export default function LoginPage() {
       return
     }
 
-    const { error } = isLogin 
+    const { data: authData, error } = isLogin 
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ 
           email, 
@@ -69,13 +69,41 @@ export default function LoginPage() {
         })
 
     if (error) {
-      setError(error.message)
+      if (error.message.includes("Email not confirmed")) {
+        setError("Please verify your email address before signing in.")
+      } else {
+        setError(error.message)
+      }
       setIsLoading(false)
     } else if (!isLogin) {
-      setError("Check your email for the confirmation link!")
+      setError("Success! Check your email for the confirmation link to activate your account.")
+      setIsLoading(false)
+    } else if (isLogin && authData.user && !authData.user.email_confirmed_at && authData.user.app_metadata.provider === 'email') {
+      setError("Please confirm your email address to continue.")
       setIsLoading(false)
     } else {
       setIsLoading(false)
+    }
+  }
+
+  const resendVerification = async () => {
+    if (!email) {
+      setError("Please enter your email first")
+      return
+    }
+    setIsLoading(true)
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${getURL()}auth/callback`
+      }
+    })
+    setIsLoading(false)
+    if (error) {
+      setError(error.message)
+    } else {
+      setError("Verification link resent! Check your inbox.")
     }
   }
 
@@ -144,9 +172,19 @@ export default function LoginPage() {
           </AnimatePresence>
 
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-red-500 text-xs font-bold animate-shake">
-              <AlertCircle size={14} />
-              <span>{error}</span>
+            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex flex-col gap-3 text-red-500 text-xs font-bold animate-shake">
+              <div className="flex items-center gap-3">
+                <AlertCircle size={14} />
+                <span>{error}</span>
+              </div>
+              {(error.includes("verify") || error.includes("confirm")) && !error.includes("resent") && (
+                <button 
+                  onClick={resendVerification}
+                  className="text-[10px] uppercase tracking-widest text-white hover:text-green-400 transition-colors text-left font-black"
+                >
+                  Resend Verification Link →
+                </button>
+              )}
             </div>
           )}
 

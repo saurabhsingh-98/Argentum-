@@ -132,6 +132,49 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
     localStorage.setItem('ag_disappearing_messages', val)
   }
 
+  const [pushEnabled, setPushEnabled] = useState(false)
+  const [checkingPush, setCheckingPush] = useState(false)
+
+  useEffect(() => {
+    async function checkPush() {
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.ready
+        const sub = await reg.pushManager.getSubscription()
+        setPushEnabled(!!sub)
+      }
+    }
+    checkPush()
+  }, [])
+
+  const handleTogglePush = async () => {
+    const { NotificationService } = await import('@/lib/notifications/NotificationService')
+    setCheckingPush(true)
+    try {
+      if (pushEnabled) {
+        await NotificationService.unsubscribe()
+        setPushEnabled(false)
+      } else {
+        const granted = await NotificationService.requestPermission()
+        if (granted) {
+          const sub = await NotificationService.subscribe()
+          if (sub) {
+            setPushEnabled(true)
+            alert('Push notifications enabled!')
+          } else {
+            alert('Failed to subscribe to push notifications. Ensure VAPID keys are configured.')
+          }
+        } else {
+          alert('Notification permission denied.')
+        }
+      }
+    } catch (err) {
+      console.error('Error toggling push:', err)
+      alert('An error occurred while setting up notifications.')
+    } finally {
+      setCheckingPush(false)
+    }
+  }
+
   const handleConnect = async (provider: 'github' | 'google') => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -335,9 +378,17 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
                        ))}
                     </div>
 
-                    <button className="w-full mt-4 p-4 rounded-2xl bg-card border border-border text-xs font-black uppercase tracking-widest text-text-primary hover:brightness-110 transition-all flex items-center justify-center gap-3">
-                       <Smartphone size={16} />
-                       Enable Browser Push Notifications
+                    <button 
+                      onClick={handleTogglePush}
+                      disabled={checkingPush}
+                      className={`w-full mt-4 p-4 rounded-2xl bg-card border border-border text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${pushEnabled ? 'text-green-500 silver-glow' : 'text-text-primary hover:brightness-110'}`}
+                    >
+                       {checkingPush ? (
+                         <Loader2 className="w-4 h-4 animate-spin" />
+                       ) : (
+                         <Smartphone size={16} />
+                       )}
+                       {pushEnabled ? 'Browser Push Notifications Active' : 'Enable Browser Push Notifications'}
                     </button>
                   </div>
                 )}
