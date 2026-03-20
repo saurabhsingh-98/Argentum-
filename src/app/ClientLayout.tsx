@@ -1,7 +1,6 @@
 "use client"
 
 import { usePathname } from 'next/navigation'
-import BootLoader from '@/components/BootLoader'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CommandPalette from '@/components/CommandPalette'
@@ -22,7 +21,6 @@ function LayoutContent({ children, isMessages, isAuth, isPageMounted }: {
 
   return (
     <>
-      <BootLoader />
       {/* Background Layer: Mesh for Glass, Blobs for Dark, Grid for Light (handled in CSS) */}
       <div className={`fixed inset-0 z-[-1] transition-opacity duration-1000 ${theme === 'glass' ? 'opacity-100' : 'opacity-0'}`}>
         <div className="mesh-gradient-bg" />
