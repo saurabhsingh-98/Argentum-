@@ -4,7 +4,7 @@
  */
 
 interface RequestOptions extends RequestInit {
-  token?: string;
+  token?: string | null;
 }
 
 export async function apiClient(url: string, options: RequestOptions = {}) {
@@ -27,13 +27,24 @@ export async function apiClient(url: string, options: RequestOptions = {}) {
 
   try {
     const response = await fetch(url, config);
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      // Handle specific error cases
-      if (response.status === 403 && data.error === 'CSRF token missing') {
-        throw new Error('Security session expired. Please refresh the page.');
+      // Handle security-specific error cases with helpful messages
+      if (response.status === 403) {
+        if (data.error === 'CSRF token missing') {
+          throw new Error('Security session expired or blocked. Please refresh the page.');
+        }
+        if (data.error === 'Invalid security token') {
+          throw new Error('Security mismatch. Please try refreshing or logging out/in.');
+        }
+        throw new Error(data.error || 'Access Denied: You do not have permission for this action.');
       }
+      
+      if (response.status === 401) {
+        throw new Error('Unauthorized: Please log in as an administrator.');
+      }
+
       throw new Error(data.error || `Request failed with status ${response.status}`);
     }
 

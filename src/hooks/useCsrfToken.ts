@@ -9,15 +9,21 @@ export function useCsrfToken() {
   const refreshToken = async () => {
     try {
       setLoading(true)
-      const res = await fetch('/api/admin/csrf')
+      console.log('[CSRF] Fetching new token...')
+      const res = await fetch('/api/admin/csrf', {
+        credentials: 'include'
+      })
       if (res.ok) {
         const data = await res.json()
+        console.log('[CSRF] Token acquired.')
         setToken(data.token)
       } else {
+        const text = await res.text().catch(() => 'No body')
+        console.warn(`[CSRF] Failed to fetch token: ${res.status} ${text}`)
         setToken(null)
       }
     } catch (e) {
-      console.error('Failed to fetch CSRF token')
+      console.error('[CSRF] Error during refresh:', e)
       setToken(null)
     } finally {
       setLoading(false)
