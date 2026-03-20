@@ -11,8 +11,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
           <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2 group w-fit">
-              <div className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card group-hover:border-primary-silver transition-all duration-500">
-                <span className="text-sm font-bold text-primary group-hover:text-primary-silver transition-colors">Ag</span>
+              <div className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card group-hover:border-primary-silver transition-all duration-500 overflow-hidden relative">
+                <img src="/logo.png" alt="Ag" className="w-7 h-7 object-contain relative z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/5 to-transparent" />
               </div>
               <span className="text-[12px] font-bold tracking-[0.4em] text-muted uppercase group-hover:text-primary transition-colors">ARGENTUM</span>
             </Link>

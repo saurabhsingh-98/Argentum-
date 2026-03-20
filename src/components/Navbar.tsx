@@ -115,9 +115,10 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             <Link href="/" className="flex items-center gap-2.5 group">
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-8 h-8 rounded-lg border border-border flex items-center justify-center bg-card shadow-premium group-hover:border-primary-silver transition-all duration-300"
+                className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card shadow-premium group-hover:border-primary-silver transition-all duration-300 relative overflow-hidden"
               >
-                <span className="text-xs font-black text-primary italic group-hover:text-primary-silver transition-colors">Ag</span>
+                <img src="/logo.png" alt="Ag" className="w-7 h-7 object-contain relative z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/5 to-transparent" />
               </motion.div>
               <motion.span 
                 whileHover={{ letterSpacing: "0.5em" }}

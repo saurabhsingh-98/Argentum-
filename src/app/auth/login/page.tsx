@@ -126,8 +126,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative z-10">
         <div className="flex flex-col items-center gap-8 mb-12">
           <Link href="/" className="flex flex-col items-center gap-4 group">
-            <div className="w-16 h-16 rounded-2xl border border-silver/40 flex items-center justify-center bg-[#0d0d0d] silver-glow transition-all duration-700 group-hover:rotate-[10deg] group-hover:scale-110">
-              <span className="text-2xl font-bold text-silver">Ag</span>
+            <div className="w-20 h-20 rounded-2xl border border-silver/40 flex items-center justify-center bg-[#0d0d0d] silver-glow transition-all duration-700 group-hover:rotate-[10deg] group-hover:scale-110 overflow-hidden relative">
+              <img src="/logo.png" alt="Ag" className="w-14 h-14 object-contain relative z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/10 to-transparent" />
             </div>
             <div className="flex flex-col items-center">
               <span className="text-[12px] font-black tracking-[0.6em] text-silver uppercase">ARGENTUM</span>
