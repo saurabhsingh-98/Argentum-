@@ -72,8 +72,8 @@ export default async function FeedPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 lg:px-6 py-10">
-        <div className="flex flex-col lg:flex-row gap-10">
+      <div className="w-full px-4 lg:px-12 py-10">
+        <div className="flex flex-col lg:flex-row gap-10 justify-between">
           {/* Main Feed */}
           <main className="flex-1 max-w-4xl">
             <header className="mb-10">
