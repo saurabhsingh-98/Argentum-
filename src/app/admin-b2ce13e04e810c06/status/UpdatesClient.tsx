@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send, Mail, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -10,8 +10,22 @@ export default function UpdatesClient() {
   const [content, setContent] = useState('')
   const [sending, setSending] = useState(false)
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+  const [stats, setStats] = useState<{ total: number, verified: number } | null>(null)
   
   const supabase = createClient() as any
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { count: total } = await supabase.from('users').select('*', { count: 'exact', head: true })
+        const { count: verified } = await supabase.from('users').select('*', { count: 'exact', head: true }).not('email', 'is', null)
+        setStats({ total: total || 0, verified: verified || 0 })
+      } catch (e) {
+        console.error('Failed to fetch stats:', e)
+      }
+    }
+    fetchStats()
+  }, [])
 
   const handleSendUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -113,11 +127,11 @@ export default function UpdatesClient() {
             <div className="space-y-4">
               <div className="flex justify-between items-center text-sm font-medium">
                 <span className="text-foreground/40">Total Active Users</span>
-                <span className="text-foreground">Calculating...</span>
+                <span className="text-foreground">{stats ? stats.total : 'Calculating...'}</span>
               </div>
               <div className="flex justify-between items-center text-sm font-medium">
                 <span className="text-foreground/40">Email Verified Users</span>
-                <span className="text-foreground">Calculating...</span>
+                <span className="text-foreground">{stats ? stats.verified : 'Calculating...'}</span>
               </div>
               <div className="h-px bg-blue-500/10 my-2" />
               <div className="text-[10px] text-blue-500/60 font-black uppercase tracking-widest">
