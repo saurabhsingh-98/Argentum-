@@ -24,17 +24,21 @@ function LayoutContent({ children, isMessages, isAuth, isPageMounted }: {
     <>
       <BootLoader />
       {/* Background Layer: Mesh for Glass, Blobs for Dark, Grid for Light (handled in CSS) */}
-      {theme === 'glass' && <div className="mesh-gradient-bg" />}
+      <div className={`fixed inset-0 z-[-1] transition-opacity duration-1000 ${theme === 'glass' ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="mesh-gradient-bg" />
+      </div>
       
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[1] mix-blend-overlay glass-noise" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
       
-      {theme !== 'light' && (
-        <>
-          <div className="glow-blob opacity-[0.05] dark:opacity-[0.03] glass:opacity-[0.1]" />
-          <div className="glow-blob opacity-[0.05] dark:opacity-[0.03] glass:opacity-[0.1]" style={{ animationDelay: '-5s', left: '60%', top: '40%' }} />
-          <div className="glow-blob opacity-[0.05] dark:opacity-[0.03] glass:opacity-[0.1]" style={{ animationDelay: '-10s', left: '10%', top: '70%', width: '600px', height: '600px' }} />
-        </>
-      )}
+      <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        {theme !== 'light' && (
+          <>
+            <div className="glow-blob opacity-[0.07] dark:opacity-[0.04] glass:opacity-[0.15]" />
+            <div className="glow-blob opacity-[0.07] dark:opacity-[0.04] glass:opacity-[0.15]" style={{ animationDelay: '-5s', left: '60%', top: '40%' }} />
+            <div className="glow-blob opacity-[0.07] dark:opacity-[0.04] glass:opacity-[0.15]" style={{ animationDelay: '-10s', left: '10%', top: '70%', width: '600px', height: '600px' }} />
+          </>
+        )}
+      </div>
 
       {!isMessages && !isAuth && <Navbar />}
       <main className={`min-h-screen ${!isMessages && !isAuth ? 'pt-4' : ''} transition-all duration-400 ease-out ${isPageMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>

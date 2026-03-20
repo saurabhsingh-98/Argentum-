@@ -74,50 +74,52 @@
 }
 
 .light {
-  --background: #F8F9FA;
-  --foreground: #1A1A1A;
+  --background: #F4F5F7;
+  --foreground: #111827;
   --card: #FFFFFF;
-  --border: #E8E8E8;
-  --text-primary: #1A1A1A;
-  --text-secondary: #4F4F4F;
-  --text-muted: #8E8E8E;
-  --accent: var(--primary-silver);
-  --border-accent: var(--soft-silver);
+  --card-overlay: rgba(255, 255, 255, 0.85);
+  --border: #D1D5DB; /* Darker border for better visibility */
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --accent: #9CA3AF;
+  --border-accent: #E5E7EB;
   --bg-surface: #FFFFFF;
 }
 
 .dark {
   /* Cyber Silver */
-  --background: #0A0A0B;
-  --foreground: #FFFFFF;
-  --card: #121214;
-  --border: #242427;
-  --text-primary: #F8F9FB;
-  --text-secondary: #A1A1AA;
-  --text-muted: #71717A;
-  --accent: var(--primary-silver);
+  --background: #0D0D0F;
+  --foreground: #F9FAFB;
+  --card: #161618;
+  --card-overlay: rgba(22, 22, 24, 0.8);
+  --border: #2D2D31; /* Slightly brighter border */
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --accent: #C0C0C0;
   --border-accent: #3F3F46;
   --bg-surface: #18181B;
   
-  --silver-glow-accent: 0 0 15px rgba(192, 192, 192, 0.15);
-  --silver-neon: 0 0 10px rgba(192, 192, 192, 0.4);
+  --silver-glow-accent: 0 0 20px rgba(192, 192, 192, 0.1);
+  --silver-neon: 0 0 10px rgba(192, 192, 192, 0.3);
 }
 
 .glass {
-  /* Liquid Silver */
-  --background: #020203;
+  /* Liquid Silver - more translucent, less "pure black" */
+  --background: #050507;
   --foreground: #FFFFFF;
-  --card: rgba(255, 255, 255, 0.03);
+  --card: rgba(255, 256, 255, 0.03);
   --card-overlay: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.15); /* More visible border */
   --text-primary: #FFFFFF;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-muted: rgba(255, 255, 255, 0.45);
   --accent: #E8E8E8;
-  --border-accent: rgba(192, 192, 192, 0.3);
+  --border-accent: rgba(192, 192, 192, 0.35);
   --bg-surface: rgba(255, 255, 255, 0.02);
   
-  --glass-blur: blur(20px);
+  --glass-blur: blur(25px);
 }
 
 /* 6. Premium Transitions */
