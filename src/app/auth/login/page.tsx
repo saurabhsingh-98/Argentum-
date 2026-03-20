@@ -125,13 +125,14 @@ export default function LoginPage() {
       
       <div className="w-full max-w-md relative z-10">
         <div className="flex flex-col items-center gap-8 mb-12">
-          <Link href="/" className="flex flex-col items-center gap-4 group">
-            <div className="w-24 h-24 rounded-[2rem] border border-silver/40 flex items-center justify-center bg-[#0d0d0d] silver-glow transition-all duration-700 group-hover:rotate-[10deg] group-hover:scale-110 overflow-hidden relative shadow-2xl">
-              <img src="/logo.png" alt="Ag" className="w-16 h-16 object-contain relative z-10" />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/10 to-transparent" />
-            </div>
+          <Link href="/" className="flex flex-col items-center gap-6 mb-12 group">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="relative"
+            >
+              <img src="/logo.png" alt="Argentum" className="w-40 h-auto object-contain silver-glow transition-all duration-700" />
+            </motion.div>
             <div className="flex flex-col items-center">
-              <span className="text-[12px] font-black tracking-[0.6em] text-silver uppercase">ARGENTUM</span>
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Protocol of Builders</span>
             </div>
           </Link>
