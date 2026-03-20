@@ -39,20 +39,20 @@ export default function BootLoader() {
   const brand = "ARGENTUM"
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center gap-16 overflow-hidden transition-all duration-1000 font-sans">
+    <div className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center gap-16 overflow-hidden transition-all duration-1000 font-sans">
       {/* Clean Minimal Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0d0d0d] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card to-transparent" />
       </div>
 
       {/* Center Brand Block */}
       <div className="relative flex flex-col items-center gap-8 z-10">
         <div className="relative group">
-          <div className="w-24 h-24 rounded-2xl border-2 border-silver/40 flex items-center justify-center bg-[#0d0d0d] silver-glow relative overflow-hidden transition-all duration-700 group-hover:scale-110">
-            <span className="text-3xl font-black text-white tracking-widest selection:bg-transparent">Ag</span>
+          <div className="w-24 h-24 rounded-2xl border-2 border-border flex items-center justify-center bg-card silver-glow relative overflow-hidden transition-all duration-700 group-hover:scale-110">
+            <span className="text-3xl font-black text-primary tracking-widest selection:bg-transparent">Ag</span>
             
             {/* Subtle Loading Glow */}
-            <div className="absolute inset-0 bg-gradient-to-t from-silver/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/5 to-transparent" />
           </div>
         </div>
         
@@ -60,10 +60,10 @@ export default function BootLoader() {
           {brand.split("").map((char, i) => (
             <span 
               key={i} 
-              className="text-sm font-black text-silver tracking-[0.8em] animate-slide-up-char"
+              className="text-sm font-black text-muted tracking-[0.8em] animate-slide-up-char"
               style={{ animationDelay: `${i * 80}ms` }}
             >
-              {char}
+              <span className="glass:glass-text">{char}</span>
             </span>
           ))}
         </div>
@@ -71,22 +71,22 @@ export default function BootLoader() {
 
       {/* Progress Block */}
       <div className="w-72 flex flex-col gap-4 items-center z-10">
-        <div className="w-full h-[4px] bg-white/5 rounded-full overflow-hidden relative border border-white/5">
+        <div className="w-full h-[4px] bg-foreground/5 rounded-full overflow-hidden relative border border-border">
           <div 
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-silver via-white to-silver transition-all duration-300 ease-out"
+            className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-silver via-white-silver to-primary-silver transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="flex justify-between w-full font-mono">
             <div className="flex flex-col">
-                <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Protocol Sync</span>
-                <span className="text-[10px] font-bold text-silver uppercase animate-pulse">
+                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Protocol Sync</span>
+                <span className="text-[10px] font-bold text-primary uppercase animate-pulse">
                     {status}
                 </span>
             </div>
             <div className="flex flex-col items-end">
-                <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Complete</span>
-                <span className="text-[10px] font-bold text-silver">
+                <span className="text-[9px] font-black text-muted uppercase tracking-widest">Complete</span>
+                <span className="text-[10px] font-bold text-primary">
                     {Math.round(progress)}%
                 </span>
             </div>

@@ -5,18 +5,18 @@ export default function Footer() {
   return (
     <footer className="w-full border-t border-border bg-card py-20 relative overflow-hidden">
       {/* Background Decorative Element */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-silver/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-silver/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 translate-y-1/2" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
           <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
             <Link href="/" className="flex items-center gap-2 group w-fit">
-              <div className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card group-hover:silver-glow transition-all duration-500">
-                <span className="text-sm font-bold silver-glow-text">Ag</span>
+              <div className="w-10 h-10 rounded-xl border border-border flex items-center justify-center bg-card group-hover:border-primary-silver transition-all duration-500">
+                <span className="text-sm font-bold text-primary group-hover:text-primary-silver transition-colors">Ag</span>
               </div>
-              <span className="text-[12px] font-bold tracking-[0.4em] text-foreground/20 uppercase group-hover:text-foreground/40 transition-colors">ARGENTUM</span>
+              <span className="text-[12px] font-bold tracking-[0.4em] text-muted uppercase group-hover:text-primary transition-colors">ARGENTUM</span>
             </Link>
-            <p className="text-foreground/40 text-sm max-w-xs leading-relaxed italic">
+            <p className="text-muted text-sm max-w-xs leading-relaxed italic">
               "Build in public. Prove it forever." <br />
               The source of truth for creators.
             </p>
@@ -64,7 +64,7 @@ function FooterLink({ href, children }: { href: string, children: React.ReactNod
   return (
     <Link 
       href={href} 
-      className="text-[11px] text-foreground/40 hover:text-foreground transition-all duration-300 font-bold uppercase tracking-tighter hover:translate-x-1 inline-block"
+      className="text-[11px] text-muted hover:text-primary transition-all duration-300 font-bold uppercase tracking-tighter hover:translate-x-1 inline-block"
     >
       {children}
     </Link>
@@ -76,7 +76,7 @@ function SocialLink({ icon, href }: { icon: React.ReactNode, href: string }) {
     <Link 
       href={href} 
       target="_blank"
-      className="w-10 h-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-foreground/40 hover:text-foreground hover:border-foreground/40 transition-all duration-300"
+      className="w-10 h-10 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-muted hover:text-primary hover:border-primary-silver transition-all duration-300"
     >
       {icon}
     </Link>

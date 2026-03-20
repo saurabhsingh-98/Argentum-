@@ -321,6 +321,29 @@ export interface Database {
           created_at?: string
         }
       }
+      streak_history: {
+        Row: {
+          id: string
+          user_id: string
+          post_date: string
+          post_count: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          post_date: string
+          post_count?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          post_date?: string
+          post_count?: number
+          created_at?: string
+        }
+      }
     }
     Functions: {
       increment_upvotes: {

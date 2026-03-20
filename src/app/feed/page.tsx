@@ -1,5 +1,6 @@
 // Build trigger: standardized routing and visibility updates
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import FeedWithFilter from '@/components/FeedWithFilter'
 import SpeakHighlights from '@/components/SpeakHighlights'
 import { Flame, TrendingUp, Users, Target } from 'lucide-react'
@@ -8,6 +9,14 @@ export const dynamic = 'force-dynamic'
 
 export default async function FeedPage() {
   const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/auth/login')
+  }
 
   if (!supabase) {
     return (
@@ -36,7 +45,7 @@ export default async function FeedPage() {
       .from('posts')
       .select('category')
       .eq('status', 'published')
-      .is('category', 'not.null'),
+      .not('category', 'is', null),
     supabase
       .from('posts')
       .select('*, users(id, username, display_name, avatar_url, bio, currently_building)')

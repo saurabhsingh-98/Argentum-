@@ -16,10 +16,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('dark')
 
   const applyTheme = (newTheme: Theme) => {
+    document.documentElement.setAttribute('data-theme-changing', 'true')
+    
     document.documentElement.classList.remove('light', 'dark', 'glass')
     document.documentElement.classList.add(newTheme)
     setThemeState(newTheme)
     localStorage.setItem('ag_theme', newTheme)
+
+    setTimeout(() => {
+      document.documentElement.removeAttribute('data-theme-changing')
+    }, 500)
   }
 
   useEffect(() => {

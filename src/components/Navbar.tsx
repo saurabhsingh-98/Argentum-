@@ -114,13 +114,13 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             <Link href="/" className="flex items-center gap-2.5 group">
               <motion.div 
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-8 h-8 rounded-lg border border-border flex items-center justify-center bg-card shadow-premium group-hover:border-silver transition-all duration-300"
+                className="w-8 h-8 rounded-lg border border-border flex items-center justify-center bg-card shadow-premium group-hover:border-primary-silver transition-all duration-300"
               >
-                <span className="text-xs font-black text-foreground italic group-hover:silver-glow-text">Ag</span>
+                <span className="text-xs font-black text-primary italic group-hover:text-primary-silver transition-colors">Ag</span>
               </motion.div>
               <motion.span 
                 whileHover={{ letterSpacing: "0.5em" }}
-                className="text-[11px] font-black tracking-[0.4em] text-silver/40 group-hover:text-silver glass:glass-text transition-all duration-500 hidden md:block"
+                className="text-[11px] font-black tracking-[0.4em] text-muted group-hover:text-primary-silver glass:glass-text transition-all duration-500 hidden md:block"
               >
                 ARGENTUM
               </motion.span>
@@ -135,12 +135,12 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                   key={link.name} 
                   href={link.href} 
                   className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all relative py-1
-                    ${pathname === link.href ? 'text-foreground' : 'text-foreground/40 hover:text-foreground'}
+                    ${pathname === link.href ? 'text-primary' : 'text-muted hover:text-primary'}
                   `}
                 >
                   <span className="glass:glass-text">{link.name}</span>
                   {pathname === link.href && (
-                    <motion.div layoutId="nav-underline" className="absolute -bottom-1 left-0 right-0 h-px bg-green-500" />
+                    <motion.div layoutId="nav-underline" className="absolute -bottom-1 left-0 right-0 h-px bg-primary-silver" />
                   )}
                 </Link>
               ))}
@@ -152,10 +152,10 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               className="flex-1 max-w-xl relative hidden md:block group cursor-text"
             >
               <div className="flex items-center gap-3 px-4 py-2 rounded-full glass-search">
-                <Search size={16} className="text-foreground/20" />
-                <div className="text-sm text-foreground/30 flex-1">Search builds, builders, tags...</div>
+                <Search size={16} className="text-muted" />
+                <div className="text-sm text-muted flex-1">Search builds, builders, tags...</div>
                 <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded border border-border bg-foreground/5">
-                  <span className="text-[8px] font-black text-foreground/30 tracking-widest uppercase">Cmd+K</span>
+                  <span className="text-[8px] font-black text-muted tracking-widest uppercase">Cmd+K</span>
                 </div>
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             {/* Mobile Search Trigger (Always Visible) */}
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="w-9 h-9 flex md:hidden items-center justify-center text-foreground/40 hover:text-foreground hover:bg-foreground/5 rounded-full transition-all mr-1"
+              className="w-9 h-9 flex md:hidden items-center justify-center text-muted hover:text-primary hover:bg-foreground/5 rounded-full transition-all mr-1"
             >
               <Search size={18} />
             </button>
@@ -176,7 +176,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                 <div className="flex items-center gap-1 md:gap-3">
                   <Link 
                     href="/messages"
-                    className="w-9 h-9 flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-foreground/5 rounded-full transition-all relative"
+                    className="w-9 h-9 flex items-center justify-center text-muted hover:text-primary hover:bg-foreground/5 rounded-full transition-all relative"
                   >
                     <MessageCircle size={18} />
                     <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-green-500 rounded-full border-2 border-background" />
@@ -201,7 +201,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 group/streak hover:border-orange-500/40 transition-all"
                 >
                    <Flame size={14} className="text-orange-500 group-hover:scale-110 transition-transform" />
-                   <span className="text-xs font-black text-foreground">{profile?.streak_count || 0}</span>
+                   <span className="text-xs font-black text-primary">{profile?.streak_count || 0}</span>
                 </button>
 
                 {/* Profile Circle */}
@@ -252,10 +252,10 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                                   )}
                                </div>
                                <div className="flex flex-col min-w-0">
-                                  <span className="text-sm font-bold text-foreground truncate">
+                                  <span className="text-sm font-bold text-primary truncate">
                                     {profile?.display_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Builder'}
                                   </span>
-                                  <span className="text-[10px] text-foreground/30 font-mono truncate">
+                                  <span className="text-[10px] text-muted font-mono truncate">
                                     @{profile?.username || user?.user_metadata?.username || user?.email?.split('@')[0] || 'anonymous'}
                                   </span>
                                </div>
@@ -272,7 +272,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                             <div className="h-px bg-border my-1" />
                             <button 
                               onClick={() => { setShowAccountSwitcher(true); setShowDropdown(false); }}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-foreground/60 hover:text-foreground hover:bg-foreground/5 rounded-xl transition-all"
+                              className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-secondary hover:text-primary hover:bg-foreground/5 rounded-xl transition-all"
                             >
                               <Users size={14} /> Switch Account
                             </button>
@@ -326,7 +326,7 @@ function DropdownItem({ icon, label, href, onClick }: { icon: React.ReactNode, l
     <Link 
       href={href} 
       onClick={onClick}
-      className="flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-foreground/60 hover:text-foreground hover:bg-foreground/5 rounded-xl transition-all"
+      className="flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-secondary hover:text-primary hover:bg-foreground/5 rounded-xl transition-all"
     >
       {icon}
       <span>{label}</span>
@@ -336,7 +336,7 @@ function DropdownItem({ icon, label, href, onClick }: { icon: React.ReactNode, l
 
 function MobileNavItem({ icon, label, href, active }: { icon: React.ReactNode, label: string, href: string, active: boolean }) {
   return (
-    <Link href={href} className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-green-500' : 'text-foreground/40 hover:text-foreground'}`}>
+    <Link href={href} className={`flex flex-col items-center gap-1 transition-all ${active ? 'text-primary' : 'text-muted hover:text-primary'}`}>
       {icon}
       <span className="text-[8px] font-black uppercase tracking-widest">{label}</span>
     </Link>
