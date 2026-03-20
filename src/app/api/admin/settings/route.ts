@@ -1,17 +1,23 @@
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
 import { createHmac } from 'crypto';
 import { NextResponse } from 'next/server';
 
+// Initialize with service role for admin privileges
+const getAdminClient = () => createSupabaseClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = getAdminClient();
     const { data: settings, error } = await supabase
       .from('platform_settings')
       .select('key, value');
 
     if (error) throw error;
 
-    // Convert to a cleaner object { maintenance_mode: false, ... }
     const settingsObj = (settings || []).reduce((acc: any, curr: any) => {
       acc[curr.key] = curr.value;
       return acc;
@@ -31,6 +37,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
     }
 
+    // 1. Auth & Admin Check (Using regular server client to verify session)
     const supabase = await createClient();
     const { data: { user: adminUser } } = await supabase.auth.getUser();
 
@@ -41,7 +48,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // CSRF Validation
+    // 2. CSRF Validation
     const secret = process.env.CSRF_SECRET!;
     const today = new Date().toISOString().split('T')[0];
     const expectedToken = createHmac('sha256', secret)
@@ -52,8 +59,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid CSRF token' }, { status: 403 });
     }
 
-    // Update settings table
-    const { error } = await supabase
+    // 3. Update settings table using admin client to bypass RLS
+    const supabaseAdmin = getAdminClient();
+    const { error } = await supabaseAdmin
       .from('platform_settings')
       .upsert({ 
         key, 
