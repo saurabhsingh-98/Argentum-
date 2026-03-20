@@ -136,7 +136,7 @@ export async function decryptPrivateKey(encryptedData: string, password: string)
 }
 
 export const initializeEncryption = async (forceReset: boolean = false) => {
-  const supabase = createClient()
+  const supabase = createClient() as any
   if (!supabase) return
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -185,7 +185,7 @@ export const initializeEncryption = async (forceReset: boolean = false) => {
 }
 
 export const resetKeys = async () => {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 

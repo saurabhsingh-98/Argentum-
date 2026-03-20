@@ -38,7 +38,7 @@ interface NotificationsClientProps {
 }
 
 export default function NotificationsClient({ initialUser, initialNotifications }: NotificationsClientProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [notifications, setNotifications] = useState<NotificationWithUser[]>(initialNotifications)

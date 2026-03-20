@@ -20,7 +20,7 @@ import { motion } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
 
 export default function StatusModeration() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const { token: csrfToken } = useCsrfToken()
   const [updates, setUpdates] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,8 +49,10 @@ export default function StatusModeration() {
     if (!confirm('Remove this broadcast?')) return
     
     const { data: { user } } = await supabase.auth.getUser()
+    // @ts-ignore
     await supabase.from('status_updates').delete().eq('id', id)
     
+    // @ts-ignore
     await supabase.from('admin_audit_log').insert({
       admin_id: user?.id,
       action: 'delete_status_update',

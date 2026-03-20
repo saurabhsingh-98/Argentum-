@@ -10,7 +10,7 @@ import { User as SupabaseUser } from '@supabase/supabase-js'
 import { Database } from '@/types/database'
 
 export default function NotificationBell() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const [unreadCount, setUnreadCount] = useState(0)
   const [user, setUser] = useState<SupabaseUser | null>(null)

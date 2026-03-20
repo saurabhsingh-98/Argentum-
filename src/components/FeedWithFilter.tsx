@@ -9,7 +9,7 @@ export default function FeedWithFilter({ initialPosts }: { initialPosts: any[] }
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [posts, setPosts] = useState(initialPosts)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const handleCategoryChange = async (category: string) => {
     setIsTransitioning(true)

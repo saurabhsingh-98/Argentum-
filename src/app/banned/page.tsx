@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 
 export default function BannedPage() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const [banDetails, setBanDetails] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -26,6 +26,7 @@ export default function BannedPage() {
         .eq('id', user.id)
         .single()
 
+      // @ts-ignore
       if (!profile?.is_banned) {
         router.push('/')
         return

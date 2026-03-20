@@ -37,7 +37,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const [isStreakModalOpen, setIsStreakModalOpen] = useState(false)
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false)
   const [followModalTab, setFollowModalTab] = useState<'followers' | 'following'>('followers')
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   useEffect(() => {
     getUserWithTimeout().then(({ user }) => {

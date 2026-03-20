@@ -30,7 +30,7 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [showBackupModal, setShowBackupModal] = useState(false)
   const [showRecoveryModal, setShowRecoveryModal] = useState(false)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     let channel: any

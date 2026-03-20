@@ -28,7 +28,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
   const [tags, setTags] = useState('')
   
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

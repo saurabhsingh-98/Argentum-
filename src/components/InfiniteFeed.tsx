@@ -18,7 +18,7 @@ export default function InfiniteFeed({ initialPosts, category }: InfiniteFeedPro
   const [page, setPage] = useState(1)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [reportingPostId, setReportingPostId] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }: any) => {

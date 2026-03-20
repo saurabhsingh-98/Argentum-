@@ -37,7 +37,7 @@ export default function KeyBackupModal({ isOpen, onClose, onSuccess, isSettingsM
   const [hint, setHint] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     if (!isOpen) {

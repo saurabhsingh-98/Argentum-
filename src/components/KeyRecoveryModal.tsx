@@ -36,7 +36,7 @@ export default function KeyRecoveryModal({ isOpen, onClose, onSuccess }: KeyReco
   const [lockoutUntil, setLockoutUntil] = useState<number | null>(null)
   const [remainingTime, setRemainingTime] = useState(0)
   const [hint, setHint] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     if (isOpen) {

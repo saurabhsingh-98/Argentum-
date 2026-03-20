@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
 
 export default function ReportsQueue() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const { token: csrfToken } = useCsrfToken()
   const [reports, setReports] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

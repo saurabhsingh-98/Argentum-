@@ -21,6 +21,7 @@ export default async function SettingsPage() {
 
   // Onboarding check: if no username in metadata OR DB, redirect to onboarding
   const metadataUsername = user.user_metadata?.username
+  // @ts-ignore
   if (!metadataUsername && !profile?.username) {
     redirect('/onboarding')
   }

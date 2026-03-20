@@ -20,7 +20,7 @@ interface ReportModalProps {
 }
 
 export default function ReportModal({ isOpen, onClose, postId, currentUserId }: ReportModalProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [reason, setReason] = useState('')
   const [details, setDetails] = useState('')
   const [loading, setLoading] = useState(false)

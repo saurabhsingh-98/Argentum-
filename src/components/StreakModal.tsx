@@ -18,7 +18,7 @@ interface StreakModalProps {
 }
 
 export default function StreakModal({ isOpen, onClose, userId }: StreakModalProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [history, setHistory] = useState<StreakHistory[]>([])
   const [loading, setLoading] = useState(true)
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())

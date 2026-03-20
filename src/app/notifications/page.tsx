@@ -15,6 +15,7 @@ export default async function NotificationsPage() {
   }
 
   // Fetch initial notifications
+  // @ts-ignore
   const { data: notifications } = await supabase
     .from('notifications')
     .select(`

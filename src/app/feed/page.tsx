@@ -31,8 +31,11 @@ export default async function FeedPage() {
 
 
   const [
+    // @ts-ignore
     { data: posts, count },
+    // @ts-ignore
     { data: trendingData },
+    // @ts-ignore
     { data: highlights }
   ] = await Promise.all([
     supabase

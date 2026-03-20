@@ -13,7 +13,7 @@ export default function CommandPalette() {
   const [loading, setLoading] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {

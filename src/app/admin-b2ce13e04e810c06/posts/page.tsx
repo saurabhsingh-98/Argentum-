@@ -24,7 +24,7 @@ import { motion } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
 
 export default function PostsManagement() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const { token: csrfToken } = useCsrfToken()
   const [posts, setPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

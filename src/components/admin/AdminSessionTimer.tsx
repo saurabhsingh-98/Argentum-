@@ -12,7 +12,7 @@ export default function AdminSessionTimer() {
   const [timeLeft, setTimeLeft] = useState(SESSION_TIMEOUT)
   const [isExpiring, setIsExpiring] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const handleLogout = useCallback(async (reason: string) => {
     await supabase.auth.signOut()

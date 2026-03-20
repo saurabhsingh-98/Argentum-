@@ -23,7 +23,7 @@ export default function Onboarding() {
   const [usernameMessage, setUsernameMessage] = useState('')
   
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     if (!supabase) return

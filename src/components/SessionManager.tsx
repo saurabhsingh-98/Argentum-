@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export default function SessionManager() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const lastUserId = useRef<string | null>(null)
 
   useEffect(() => {

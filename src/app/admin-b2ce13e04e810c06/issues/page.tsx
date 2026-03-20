@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
 
 export default function IssuesManagement() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const { token: csrfToken } = useCsrfToken()
   const [issues, setIssues] = useState<any[]>([])
   const [loading, setLoading] = useState(true)

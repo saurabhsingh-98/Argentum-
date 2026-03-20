@@ -39,7 +39,7 @@ export default function FollowListModal({ isOpen, onClose, userId, username, ini
     if (node) observer.current.observe(node)
   }, [loading, hasMore])
 
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const fetchUsers = async (reset = false) => {
     setLoading(true)

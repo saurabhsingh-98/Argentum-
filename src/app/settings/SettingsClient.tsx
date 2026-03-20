@@ -39,7 +39,7 @@ interface SettingsClientProps {
 }
 
 export default function SettingsClient({ initialUser, initialProfile }: SettingsClientProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [activeSection, setActiveSection] = useState<SettingsSection>('account')

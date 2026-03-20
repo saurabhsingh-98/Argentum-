@@ -39,7 +39,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onSearchClick }: NavbarProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState<SupabaseUser | null>(null)

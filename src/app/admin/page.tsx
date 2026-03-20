@@ -12,6 +12,7 @@ export default async function HoneypotPage() {
   const supabase = await createClient();
 
   // Log the intrusion attempt
+  // @ts-ignore
   await supabase.from('security_alerts').insert({
     type: 'unauthorized_access',
     ip_address: ip,

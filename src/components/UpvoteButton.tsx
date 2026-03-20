@@ -13,7 +13,7 @@ export default function UpvoteButton({
   initialUpvotes: number,
   isUpvoted?: boolean
 }) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [upvotes, setUpvotes] = useState(initialUpvotes)
   const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted || false)
   const [isLoading, setIsLoading] = useState(false)

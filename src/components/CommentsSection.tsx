@@ -27,7 +27,7 @@ interface CommentsSectionProps {
 }
 
 export default function CommentsSection({ postId, postOwnerId, currentUserId }: CommentsSectionProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState('')
   const [replyTo, setReplyTo] = useState<Comment | null>(null)

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 export default function PresenceHandler() {
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout

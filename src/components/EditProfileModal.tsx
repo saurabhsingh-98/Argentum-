@@ -33,7 +33,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
   
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   // Real-time username check
   useEffect(() => {

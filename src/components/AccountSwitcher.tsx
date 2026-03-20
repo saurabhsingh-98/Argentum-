@@ -16,7 +16,7 @@ interface SavedAccount {
 }
 
 export default function AccountSwitcher({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const [accounts, setAccounts] = useState<SavedAccount[]>([])
   const [loading, setLoading] = useState<string | null>(null)

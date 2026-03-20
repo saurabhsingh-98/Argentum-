@@ -23,7 +23,7 @@ interface ReactionButtonProps {
 }
 
 export default function ReactionButton({ postId, initialReactions = [], currentUserId }: ReactionButtonProps) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
   const [reactions, setReactions] = useState<PostReaction[]>(initialReactions)
   const [showPicker, setShowPicker] = useState(false)

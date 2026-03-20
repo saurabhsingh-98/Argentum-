@@ -27,7 +27,7 @@ export function SessionProvider({
   const [session, setSession] = useState<Session | null>(initialSession)
   const [user, setUser] = useState<User | null>(initialSession?.user ?? null)
   const [isLoading, setIsLoading] = useState(!initialSession)
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function SessionProvider({
       getSession()
     }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       setSession(session)
       setUser(session?.user ?? null)
       setIsLoading(false)

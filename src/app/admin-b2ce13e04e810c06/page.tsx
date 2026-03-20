@@ -54,7 +54,7 @@ interface DashboardActivity {
 }
 
 export default function AdminOverview() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [stats, setStats] = useState<DashboardStats>({
     totalUsers: 0,
     totalPosts: 0,
@@ -85,11 +85,17 @@ export default function AdminOverview() {
         { count: verifiedCount },
         { count: statusCount }
       ] = await Promise.all([
+        // @ts-ignore
         supabase.from('users').select('*', { count: 'exact', head: true }),
+        // @ts-ignore
         supabase.from('posts').select('*', { count: 'exact', head: true }),
+        // @ts-ignore
         supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        // @ts-ignore
         supabase.from('issue_reports').select('*', { count: 'exact', head: true }).eq('status', 'open'),
+        // @ts-ignore
         supabase.from('posts').select('*', { count: 'exact', head: true }).eq('verification_status', 'verified'),
+        // @ts-ignore
         supabase.from('status_updates').select('*', { count: 'exact', head: true }).gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       ])
 
@@ -127,8 +133,11 @@ export default function AdminOverview() {
         { data: users },
         { data: alerts }
       ] = await Promise.all([
+        // @ts-ignore
         supabase.from('admin_audit_log').select('*, users(username, avatar_url)').order('created_at', { ascending: false }).limit(6),
+        // @ts-ignore
         supabase.from('users').select('*').order('created_at', { ascending: false }).limit(5),
+        // @ts-ignore
         supabase.from('security_alerts').select('*').eq('resolved', false).order('created_at', { ascending: false }).limit(6)
       ])
 

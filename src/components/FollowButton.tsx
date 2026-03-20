@@ -15,7 +15,7 @@ export default function FollowButton({ followingId, initialIsFollowing, onCountC
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const [loading, setLoading] = useState(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   useEffect(() => {
     setIsFollowing(initialIsFollowing)

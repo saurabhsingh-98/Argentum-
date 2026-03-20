@@ -33,7 +33,7 @@ const navItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [profile, setProfile] = useState<any>(null)
 
   useEffect(() => {

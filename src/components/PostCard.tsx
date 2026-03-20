@@ -34,7 +34,7 @@ export default function PostCard({
   currentUserId?: string,
   onReport?: (postId: string) => void
 }) {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [commentCount, setCommentCount] = useState(post.comments_count || 0)
   const [reactions, setReactions] = useState<PostReaction[]>(post.post_reactions || [])
   const [showMenu, setShowMenu] = useState(false)
@@ -42,7 +42,9 @@ export default function PostCard({
   useEffect(() => {
     const fetchData = async () => {
       const [{ count: cCount }, { data: reactData }] = await Promise.all([
+        // @ts-ignore
         supabase.from('comments').select('*', { count: 'exact', head: true }).eq('post_id', post.id),
+        // @ts-ignore
         supabase.from('post_reactions').select('*, users(username, avatar_url, display_name)').eq('post_id', post.id)
       ])
       if (cCount !== null) setCommentCount(cCount)

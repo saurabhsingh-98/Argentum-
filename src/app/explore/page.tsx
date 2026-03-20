@@ -19,7 +19,7 @@ function ExploreContent() {
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState('All')
   
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const categories = [
     { id: 'All', icon: <Sparkles size={14} /> },

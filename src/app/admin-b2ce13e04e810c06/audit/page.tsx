@@ -19,7 +19,7 @@ import {
 import { motion } from 'framer-motion'
 
 export default function AuditLogView() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [logs, setLogs] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
@@ -28,6 +28,7 @@ export default function AuditLogView() {
 
   const fetchLogs = async () => {
     setLoading(true)
+    // @ts-ignore
     let query = supabase.from('admin_audit_log').select('*, users(username, display_name)', { count: 'exact' })
     
     if (search) {

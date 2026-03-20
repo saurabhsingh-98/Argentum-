@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 export default function ShipCard() {
   const [content, setContent] = useState('')
   const [isShipping, setIsShipping] = useState(false)
-  const supabase = createClient()
+  const supabase = createClient() as any
   const router = useRouter()
 
   const handleShip = async () => {

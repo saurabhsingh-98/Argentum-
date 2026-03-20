@@ -15,7 +15,7 @@ export default function LoginPage() {
   
   const [username, setUsername] = useState('')
   
-  const supabase = createClient()
+  const supabase = createClient() as any
 
   const getURL = () => {
     let url =

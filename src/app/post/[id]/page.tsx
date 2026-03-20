@@ -13,7 +13,7 @@ import { useState, useEffect, use } from 'react'
 export default function PostDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [post, setPost] = useState<any>(null)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)

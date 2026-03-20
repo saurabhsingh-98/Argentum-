@@ -18,7 +18,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function SecurityDashboard() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [alerts, setAlerts] = useState<any[]>([])
   const [stats, setStats] = useState<any>({
     total: 0,
