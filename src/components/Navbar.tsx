@@ -112,20 +112,13 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         <div className="mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
           {/* Left Section: Logo */}
           <div className="flex items-center gap-2 shrink-0">
-            <Link href="/" className="flex items-center gap-2.5 group">
+            <Link href="/" className="flex items-center gap-3 group">
               <motion.div 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-12 h-12 rounded-xl border border-border flex items-center justify-center bg-card shadow-premium group-hover:border-primary-silver transition-all duration-300 relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                className="relative overflow-hidden"
               >
-                <img src="/logo.png" alt="Ag" className="w-9 h-9 object-contain relative z-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/5 to-transparent" />
+                <img src="/logo.png" alt="Argentum" className="h-10 w-auto object-contain" />
               </motion.div>
-              <motion.span 
-                whileHover={{ letterSpacing: "0.5em" }}
-                className="text-[11px] font-black tracking-[0.4em] text-muted group-hover:text-primary-silver glass:glass-text transition-all duration-500 hidden md:block"
-              >
-                ARGENTUM
-              </motion.span>
             </Link>
           </div>
 

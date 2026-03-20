@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 
 export default function BootLoader() {
   const [show, setShow] = useState(false)
@@ -46,27 +47,15 @@ export default function BootLoader() {
       </div>
 
       {/* Center Brand Block */}
-      <div className="relative flex flex-col items-center gap-8 z-10">
-        <div className="relative group">
-          <div className="w-28 h-28 rounded-[2rem] border border-border flex items-center justify-center bg-card silver-glow relative overflow-hidden transition-all duration-700 group-hover:scale-110 shadow-2xl">
-            <img src="/logo.png" alt="Argentum Logo" className="w-20 h-20 object-contain relative z-10" />
-            
-            {/* Subtle Loading Glow */}
-            <div className="absolute inset-0 bg-gradient-to-t from-primary-silver/10 to-transparent" />
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-1.5 overflow-hidden">
-          {brand.split("").map((char, i) => (
-            <span 
-              key={i} 
-              className="text-sm font-black text-muted tracking-[0.8em] animate-slide-up-char"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <span className="glass:glass-text">{char}</span>
-            </span>
-          ))}
-        </div>
+      <div className="relative flex flex-col items-center gap-12 z-10">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative group"
+        >
+          <img src="/logo.png" alt="Argentum" className="w-48 h-auto object-contain silver-glow" />
+        </motion.div>
       </div>
 
       {/* Progress Block */}
