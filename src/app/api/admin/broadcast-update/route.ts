@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
@@ -32,11 +33,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing subject or content' }, { status: 400 });
     }
 
-    // 2. Initialize Resend inside the handler to prevent build-time errors
+    // 2. Dynamic import Resend inside the handler to prevent build-time evaluation
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: 'Resend API key not configured' }, { status: 500 });
+       console.error('RESEND_API_KEY is missing');
+       return NextResponse.json({ error: 'Resend API key not configured' }, { status: 500 });
     }
+
+    // Use dynamic import to completely hide Resend from static analysis
+    const { Resend } = await import('resend');
     const resend = new Resend(apiKey);
 
     // 3. Fetch all users to send email to
