@@ -11,12 +11,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     notFound()
   }
 
+  const decodedUsername = decodeURIComponent(username)
+
   // Fetch user profile - resilient select
   // @ts-ignore
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, instagram_username, website_url, is_public, skills, open_to_work, looking_for, pinned_post_id')
-    .eq('username', username.toLowerCase())
+    .select('id, username, display_name, avatar_url, bio, currently_building, streak_count, created_at, github_username, instagram_username, website_url, is_public, skills, open_to_work, looking_for, pinned_post_id, user_type, is_verified')
+    .ilike('username', decodedUsername)
     .single()
 
   if (profileError || !profile) {
