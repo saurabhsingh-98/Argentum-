@@ -182,7 +182,9 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
   const computedIsOwner = isOwner || (currentUserId === profile.id)
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-silver/30 relative">
+    <div className={`min-h-screen text-foreground selection:bg-silver/30 relative ${
+      profile.user_type === 'company' && profile.is_verified ? 'company-theme bg-[#050505]' : 'bg-background'
+    }`}>
       {/* Floating Navigation */}
       <div className="fixed top-6 left-6 z-[100] flex items-center gap-2">
         <button 
@@ -207,12 +209,22 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
       </div>
       {/* Hero Header Area */}
       <div className="relative h-64 md:h-80 w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/20 to-background" />
-        <div className="mesh-gradient-bg opacity-40" />
+        <div className={`absolute inset-0 bg-gradient-to-b from-blue-600/20 to-transparent ${
+          profile.user_type === 'company' && profile.is_verified ? 'opacity-20' : ''
+        }`} />
+        <div className={`mesh-gradient-bg opacity-40 ${
+          profile.user_type === 'company' && profile.is_verified ? 'grayscale contrast-125' : ''
+        }`} />
         <div className="absolute inset-0 bg-background/40 backdrop-blur-3xl" />
         
+        {profile.user_type === 'company' && profile.is_verified && (
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        )}
+        
         <div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none animate-pulse" 
+          className={`absolute top-1/4 left-1/4 w-96 h-96 blur-[120px] rounded-full pointer-events-none animate-pulse ${
+            profile.user_type === 'company' && profile.is_verified ? 'bg-silver/20' : 'bg-blue-500/10'
+          }`} 
           style={{ animationDuration: '8s' }}
         />
         <div 

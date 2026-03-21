@@ -739,3 +739,38 @@ body::after {
   z-index: 10;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
+
+/* 14. Unique Company Profile Theme */
+.company-theme {
+  --background: #050505;
+  --foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.05);
+  --border: rgba(192, 192, 192, 0.2);
+  --accent: #C0C0C0;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #52525b;
+}
+
+.company-theme::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(192, 192, 192, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(192, 192, 192, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.company-theme .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border-color: rgba(192, 192, 192, 0.2);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.company-theme .silver-metallic {
+  background: linear-gradient(135deg, #ffffff, #a1a1aa);
+  box-shadow: 0 0 30px rgba(192, 192, 192, 0.4);
+}
