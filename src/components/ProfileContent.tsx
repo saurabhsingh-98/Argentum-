@@ -268,7 +268,10 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                   style={getAnimationStyle('fade', 0, 'avatar')}
                 >
                   <div className="absolute -inset-1 bg-gradient-to-br from-foreground/20 to-foreground/5 rounded-[2.2rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-border bg-card overflow-hidden flex items-center justify-center relative">
+                  <div className={`w-32 h-32 md:w-40 md:h-40 rounded-[2rem] border-2 border-border bg-card overflow-hidden flex items-center justify-center relative transition-all duration-700 ${
+                    profile.user_type === 'company' && profile.is_verified ? 'company-glow' : 
+                    profile.streak_count >= 30 ? 'elite-builder-glow' : ''
+                  }`}>
                     {profile.avatar_url ? (
                       <img 
                         src={profile.avatar_url} 
@@ -295,6 +298,12 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
                     <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter drop-shadow-glow">
                       {profile.display_name}
                     </h1>
+                    {profile.user_type === 'company' && profile.is_verified && (
+                      <div className="px-3 py-1 rounded-full bg-silver/20 border border-silver/40 flex items-center gap-2 shadow-[0_0_15px_rgba(192,192,192,0.3)]">
+                        <Award size={12} className="text-silver-bright" />
+                        <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Verified Hub</span>
+                      </div>
+                    )}
                     {!profile.is_public && (
                       <div className="px-3 py-1 rounded-full bg-foreground/5 border border-border flex items-center gap-2">
                         <Lock size={12} className="text-foreground/40" />

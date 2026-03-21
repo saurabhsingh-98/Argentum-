@@ -103,7 +103,8 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
   const navLinks = [
     { name: 'Feed', href: '/feed' },
-    { name: 'Explore', href: '/explore' }
+    { name: 'Explore', href: '/explore' },
+    { name: 'Collab', href: '/collab' }
   ]
 
   return (

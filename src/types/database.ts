@@ -34,6 +34,8 @@ export interface Database {
           key_backup_created_at: string | null
           last_seen: string | null
           is_online: boolean
+          user_type: 'builder' | 'company'
+          is_verified: boolean
           created_at: string
         }
         Insert: {
@@ -60,6 +62,8 @@ export interface Database {
           key_backup_created_at?: string | null
           last_seen?: string | null
           is_online?: boolean
+          user_type?: 'builder' | 'company'
+          is_verified?: boolean
           created_at?: string
         }
         Update: {
@@ -86,6 +90,8 @@ export interface Database {
           key_backup_created_at?: string | null
           last_seen?: string | null
           is_online?: boolean
+          user_type?: 'builder' | 'company'
+          is_verified?: boolean
           created_at?: string
         }
       }
@@ -105,6 +111,7 @@ export interface Database {
           hcs_sequence_num: number | null
           verification_status: 'unverified' | 'pending' | 'verified'
           verified_at: string | null
+          is_collab: boolean
           created_at: string
         }
         Insert: {
@@ -122,6 +129,7 @@ export interface Database {
           hcs_sequence_num?: number | null
           verification_status?: 'unverified' | 'pending' | 'verified'
           verified_at?: string | null
+          is_collab?: boolean
           created_at?: string
         }
         Update: {
@@ -139,6 +147,7 @@ export interface Database {
           hcs_sequence_num?: number | null
           verification_status?: 'unverified' | 'pending' | 'verified'
           verified_at?: string | null
+          is_collab?: boolean
           created_at?: string
         }
       }

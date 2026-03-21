@@ -22,7 +22,10 @@ export default function BuilderCard({ user }: BuilderCardProps) {
 
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl border border-border bg-bg-surface flex items-center justify-center relative overflow-hidden ring-1 ring-border-muted group-hover:ring-border-accent transition-all">
+          <div className={`w-14 h-14 rounded-2xl border border-border bg-bg-surface flex items-center justify-center relative overflow-hidden ring-1 ring-border-muted group-hover:ring-border-accent transition-all ${
+            user.user_type === 'company' && user.is_verified ? 'company-glow' : 
+            user.streak_count >= 30 ? 'elite-builder-glow' : ''
+          }`}>
             {user.avatar_url ? (
               <img src={user.avatar_url} alt="avatar" className="w-full h-full object-cover" />
             ) : (
@@ -34,6 +37,12 @@ export default function BuilderCard({ user }: BuilderCardProps) {
               {user.display_name || user.username}
             </h3>
             <span className="text-[11px] text-text-muted font-mono tracking-tighter">@{user.username}</span>
+            {user.user_type === 'company' && user.is_verified && (
+              <div className="mt-1 flex items-center gap-1 text-[8px] font-black text-silver uppercase tracking-widest">
+                <ShieldCheck size={10} />
+                Verified
+              </div>
+            )}
           </div>
         </div>
         

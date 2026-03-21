@@ -19,5 +19,6 @@ export type Post = Omit<Database['public']['Tables']['posts']['Row'], 'category'
   comments_count?: number
   is_priority?: boolean
   imported_from_github?: boolean
+  is_collab?: boolean
   category: Database['public']['Tables']['posts']['Row']['category'] | 'Speak'
 }

@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { hashContent } from '@/lib/utils/hash'
 import { calculateStreak } from '@/lib/utils/streak'
 import MarkdownEditor from '@/components/MarkdownEditor'
-import { ChevronLeft, Globe, Lock, Zap, Plus, Loader2 } from 'lucide-react'
+import { ChevronLeft, Globe, Lock, Zap, Plus, Loader2, Github, Check, AlertCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { User } from '@supabase/supabase-js'
@@ -26,9 +26,38 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
   const [category, setCategory] = useState('Other')
   const [status, setStatus] = useState<'published' | 'private'>('published')
   const [tags, setTags] = useState('')
+  const [githubUrl, setGithubUrl] = useState('')
+  const [isFetchingGithub, setIsFetchingGithub] = useState(false)
+  const [isCollab, setIsCollab] = useState(false)
   
   const router = useRouter()
   const supabase = createClient() as any
+
+  const fetchGithubRepo = async () => {
+    if (!githubUrl.includes('github.com/')) return
+    
+    setIsFetchingGithub(true)
+    try {
+      const repoPath = githubUrl.split('github.com/')[1].split('?')[0].split('#')[0]
+      if (!repoPath) throw new Error('Invalid GitHub URL')
+
+      const response = await fetch(`https://api.github.com/repos/${repoPath}`)
+      if (!response.ok) throw new Error('Repository not found')
+      
+      const data = await response.json()
+      
+      setTitle(data.name)
+      setContent(`### [${data.full_name}](https://github.com/${data.full_name})\n\n${data.description || 'No description provided.'}\n\n---\n*Imported from GitHub*`)
+      setCategory(data.language === 'TypeScript' || data.language === 'JavaScript' ? 'DevTools' : 'Other')
+      if (data.topics) {
+        setTags(data.topics.join(', '))
+      }
+    } catch (err: any) {
+      alert(err.message)
+    } finally {
+      setIsFetchingGithub(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,6 +81,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
           category: finalCategory as any,
           status,
           is_priority: isPriority,
+          is_collab: isCollab,
           tags: tags.split(',').map(t => t.trim()).filter(Boolean),
           verification_status: 'unverified'
         })
@@ -184,6 +214,32 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
               </button>
             </div>
           </div>
+          
+          {/* GitHub Import Section */}
+          {!isSpeak && (
+            <div className="max-w-xl mx-auto w-full">
+              <div className="bg-card/30 backdrop-blur-xl border border-border rounded-2xl p-4 flex gap-3 shadow-xl">
+                <div className="flex-1 relative group">
+                  <Github size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/20 group-focus-within:text-foreground transition-colors" />
+                  <input 
+                    type="text"
+                    value={githubUrl}
+                    onChange={(e) => setGithubUrl(e.target.value)}
+                    placeholder="https://github.com/user/repo"
+                    className="w-full bg-background border border-border rounded-xl py-2.5 pl-10 pr-4 text-[11px] text-foreground focus:outline-none focus:border-foreground/30 transition-all font-mono"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={fetchGithubRepo}
+                  disabled={isFetchingGithub || !githubUrl.includes('github.com/')}
+                  className="px-6 py-2.5 bg-foreground/5 hover:bg-foreground/10 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-30"
+                >
+                  {isFetchingGithub ? <Loader2 size={12} className="animate-spin" /> : 'Fetch Repo'}
+                </button>
+              </div>
+            </div>
+          )}
 
           <motion.div 
             layout
@@ -333,6 +389,55 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
                 </div>
               </div>
             </div>
+
+            {/* Collaboration Toggle */}
+            {!isSpeak && (
+              <div className={`p-8 rounded-[2rem] border transition-all duration-500 overflow-hidden relative group ${
+                isCollab 
+                  ? 'bg-blue-500/10 border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.1)]' 
+                  : 'bg-card/50 border-border hover:border-gray-800'
+              }`}>
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+                  <div className="flex gap-4">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
+                      isCollab ? 'bg-blue-500 text-white shadow-[0_0_30px_rgba(59,130,246,0.5)]' : 'bg-white/5 text-gray-500'
+                    }`}>
+                      <Check size={24} className={isCollab ? 'animate-bounce' : ''} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-3">
+                         <h3 className={`text-xs font-black uppercase tracking-[0.2em] ${isCollab ? 'text-blue-500' : 'text-foreground'}`}>
+                          Open for Collaboration
+                         </h3>
+                      </div>
+                      <p className={`text-[11px] leading-relaxed max-w-sm ${isCollab ? 'text-blue-500/60' : 'text-gray-500'}`}>
+                        Mark this build as open for partnership, seeking co-founders, or contributors. It will appear in the Collab Hub.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${isCollab ? 'text-blue-500' : 'text-foreground/20'}`}>
+                      {isCollab ? 'Active' : 'Disabled'}
+                    </span>
+                    <button 
+                      type="button"
+                      onClick={() => setIsCollab(!isCollab)}
+                      className={`relative w-16 h-8 rounded-full transition-all duration-500 outline-none ${
+                        isCollab ? 'bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)]' : 'bg-white/5 border border-border'
+                      }`}
+                    >
+                      <motion.div 
+                        animate={{ x: isCollab ? 36 : 4 }}
+                        className={`absolute top-1 w-6 h-6 rounded-[0.6rem] shadow-xl ${
+                          isCollab ? 'bg-black' : 'bg-gray-600'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <button
               type="submit"
