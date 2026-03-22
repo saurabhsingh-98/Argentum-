@@ -1,11 +1,12 @@
 // Build trigger: standardized routing and visibility updates
 import { createClient } from '@/lib/supabase/server'
+import { unstable_cache } from 'next/cache'
 import { redirect } from 'next/navigation'
 import FeedWithFilter from '@/components/FeedWithFilter'
 import SpeakHighlights from '@/components/SpeakHighlights'
 import { Flame, TrendingUp, Users, Target } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -30,11 +31,24 @@ export default async function FeedPage() {
   }
 
 
+  const getTrendingTags = unstable_cache(
+    async () => {
+      const supabaseInner = await createClient()
+      const { data } = await supabaseInner
+        .from('posts')
+        .select('category')
+        .eq('status', 'published')
+        .not('category', 'is', null)
+      return data
+    },
+    ['trending-tags'],
+    { revalidate: 300 }
+  )
+
   const [
     // @ts-ignore
     { data: posts, count },
-    // @ts-ignore
-    { data: trendingData },
+    trendingData,
     // @ts-ignore
     { data: highlights }
   ] = await Promise.all([
@@ -44,11 +58,7 @@ export default async function FeedPage() {
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .limit(10),
-    supabase
-      .from('posts')
-      .select('category')
-      .eq('status', 'published')
-      .not('category', 'is', null),
+    getTrendingTags(),
     supabase
       .from('posts')
       .select('*, users(id, username, display_name, avatar_url, bio, currently_building)')

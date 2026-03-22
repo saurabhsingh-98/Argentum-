@@ -6,9 +6,12 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ReactionButton from '@/components/ReactionButton'
 import CommentsSection from '@/components/CommentsSection'
 import ReportModal from '@/components/ReportModal'
-import { Calendar, Hash, ShieldCheck, Tag, User, Flag, MessageCircle, ArrowLeft } from 'lucide-react'
+import { Calendar, ShieldCheck, Tag, Flag, ArrowLeft, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { useState, useEffect, use } from 'react'
+import VerificationBadge from '@/components/VerificationBadge'
+import CollabApplyButton from '@/components/CollabApplyButton'
+import CollabRequestsPanel from '@/components/CollabRequestsPanel'
 
 export default function PostDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -18,6 +21,43 @@ export default function PostDetail({ params }: { params: Promise<{ id: string }>
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+  const [verifying, setVerifying] = useState(false)
+
+  const topicId = process.env.NEXT_PUBLIC_HEDERA_TOPIC_ID
+
+  const handleVerifyOnChain = async () => {
+    if (!post) return
+    setVerifying(true)
+    try {
+      const res = await fetch('/api/blockchain/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId: post.id }),
+      })
+      const data = await res.json()
+      if (data.status === 'verified' || data.status === 'already_verified') {
+        setPost((prev: any) => ({
+          ...prev,
+          verification_status: 'verified',
+          hcs_sequence_num: data.hcs_sequence_num ?? prev.hcs_sequence_num,
+          nft_token_id: data.nft_token_id ?? prev.nft_token_id,
+        }))
+      } else if (data.status === 'unverified') {
+        setPost((prev: any) => ({ ...prev, verification_status: 'unverified' }))
+      }
+    } catch (err) {
+      console.error('Verify on chain failed:', err)
+    } finally {
+      setVerifying(false)
+    }
+  }
+
+  const canVerify =
+    currentUser &&
+    post &&
+    currentUser.id === post.user_id &&
+    post.status === 'published' &&
+    post.verification_status === 'unverified'
   
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +152,27 @@ export default function PostDetail({ params }: { params: Promise<{ id: string }>
                 currentUserId={currentUser?.id} 
               />
             </div>
+            {post.is_collab && (
+              <div className="flex flex-col gap-2 pt-4 border-t border-white/5">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Collaboration</span>
+                <CollabApplyButton
+                  postId={post.id}
+                  isCollab={post.is_collab}
+                  postAuthorId={post.user_id}
+                  currentUserId={currentUser?.id ?? null}
+                />
+              </div>
+            )}
           </div>
+
+          {/* Collab Requests Panel (visible to post author only) */}
+          {post.is_collab && (
+            <CollabRequestsPanel
+              postId={post.id}
+              currentUserId={currentUser?.id ?? null}
+              postAuthorId={post.user_id}
+            />
+          )}
 
           {/* Verification Panel */}
           <div className="glass-card p-6 border-accent/20 bg-accent/[0.02]">
@@ -121,38 +181,36 @@ export default function PostDetail({ params }: { params: Promise<{ id: string }>
               <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-accent">Verification</h3>
             </div>
 
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1.5 font-mono">
-                <span className="text-[10px] text-gray-500 uppercase flex items-center gap-1.5">
-                    <Hash size={10} />
-                    Content Hash (SHA-256)
-                </span>
-                <span className="text-xs text-white break-all p-2 bg-white/5 rounded-lg border border-white/5">
-                  {post.content_hash || 'UNHASHED'}
-                </span>
-              </div>
+            <VerificationBadge
+              verificationStatus={post.verification_status}
+              hcsSequenceNum={post.hcs_sequence_num}
+              nftTokenId={post.nft_token_id}
+              contentHash={post.content_hash}
+              verifiedAt={post.verified_at}
+              topicId={topicId}
+            />
 
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-500">HCS Sequence</span>
-                <span className="text-gray-700 italic">Confirmed</span>
+            {canVerify && (
+              <div className="mt-6 pt-4 border-t border-white/5">
+                <button
+                  onClick={handleVerifyOnChain}
+                  disabled={verifying}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent text-xs font-bold uppercase tracking-wider hover:bg-accent/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {verifying ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-accent" />
+                      Anchoring…
+                    </>
+                  ) : (
+                    <>
+                      <Zap size={14} />
+                      Verify on Chain
+                    </>
+                  )}
+                </button>
               </div>
-
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-500">NFT Token</span>
-                <span className="text-gray-700 italic">Coming Soon</span>
-              </div>
-
-              <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-gray-400 uppercase">Status</span>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                  post.verification_status === 'verified' 
-                    ? 'bg-accent/20 text-accent' 
-                    : 'bg-white/5 text-gray-500'
-                }`}>
-                  {post.verification_status}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Author Card */}

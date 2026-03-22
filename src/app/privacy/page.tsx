@@ -1,84 +1,73 @@
-"use client"
+import type { Metadata } from 'next'
+import Link from 'next/link'
 
-import { ShieldCheck, Mail, Lock } from 'lucide-react'
-import { motion } from 'framer-motion'
+export const metadata: Metadata = {
+  title: 'Privacy Policy | Argentum',
+  description: 'How Argentum collects, uses, and protects your data.',
+}
+
+const LAST_UPDATED = 'March 22, 2026'
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white pt-32 pb-20 px-4">
-      <div className="container mx-auto max-w-4xl">
-        <header className="mb-16">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-silver">
-              <ShieldCheck size={20} />
-            </div>
-            <span className="text-xs font-black uppercase tracking-[0.3em] text-gray-500">Privacy Standards</span>
-          </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black tracking-tight mb-4"
-          >
-            Privacy Policy
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-gray-500"
-          >
-            Last updated: March 18, 2026
-          </motion.p>
-        </header>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-3xl mx-auto px-6 py-16">
+        <Link href="/" className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary transition-colors mb-8 inline-block">
+          ← Back to Argentum
+        </Link>
 
-        <div className="space-y-12">
-          <Section title="1. Information We Collect" content="We collect account information you provide (username, display name, bio) and GitHub OAuth data (username, email, avatar). We also store the builds you publish and basic usage data to improve the platform experience." />
+        <h1 className="text-5xl font-black tracking-tighter mb-3">Privacy Policy</h1>
+        <p className="text-[10px] font-mono text-text-muted mb-12">Last updated: {LAST_UPDATED}</p>
 
-          <Section title="2. How We Use Your Information" content="Your data is used to provide service functionality, authenticate your identity, and calculate build stats/streaks. We NEVER sell your data to third parties and we NEVER use your data for advertising." />
+        <div className="flex flex-col gap-10 text-sm text-text-secondary leading-relaxed">
 
-          <Section title="3. End-to-End Encryption" content="Direct messages are encrypted on your device before being transmitted. We store only the encrypted ciphertext. We cannot read your private communications, and private keys reside only on your device locally." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">1. Data We Collect</h2>
+            <p>When you create an account we collect your email address, username, display name, and optional profile information such as a bio and avatar. When you post build logs we store the post content, title, category, and a SHA-256 content hash. We also collect standard server logs including IP addresses for security and abuse prevention.</p>
+          </section>
 
-          <Section title="4. On-Chain Data" content="When you verify a build, a cryptographic hash is submitted to the Hedera network. This record is public and permanent. Only the content hash is stored on-chain, never your personal information or the full content body." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">2. How We Use Your Data</h2>
+            <p>We use your data to operate the Argentum platform: authenticating you, displaying your profile, delivering notifications, and providing the build feed. We do not sell your personal data to third parties. Aggregated, anonymised analytics may be used to improve the platform.</p>
+          </section>
 
-          <Section title="5. Data Storage & Security" content="Your data is stored securely on Supabase servers located in Northeast Asia (Tokyo). We use industry-standard encryption at rest and in transit. Regular backups are performed to ensure data integrity." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">3. End-to-End Encryption</h2>
+            <p>Direct messages on Argentum are end-to-end encrypted using NaCl (TweetNaCl). Your private key is generated on your device and never transmitted to our servers. We cannot read your messages. If you lose your private key without a backup, your message history becomes permanently inaccessible.</p>
+          </section>
 
-          <Section title="6. Your Rights" content="You have the right to access, export, or delete your data at any time via your Account Settings. Deleting an account is permanent and removes all your profile data from our databases (excluding on-chain hashes)." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">4. On-Chain Data</h2>
+            <p>When you verify a build log, a content hash and metadata are submitted to the Hedera Consensus Service (HCS). This data is permanently recorded on a public blockchain and cannot be deleted. Do not include personal information in post content you intend to verify on-chain.</p>
+          </section>
 
-          <Section title="7. Third Party Services" content="We use Supabase for authentication and database management, GitHub for OAuth login, Hedera Hashgraph for build verification, and Vercel for hosting. These services have their own respective privacy policies." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">5. Data Storage</h2>
+            <p>Your data is stored in Supabase (PostgreSQL) hosted on AWS infrastructure. Media attachments are stored in Supabase Storage. Data is retained for as long as your account is active. You may request deletion of your account and associated data at any time.</p>
+          </section>
 
-          <Section title="8. Cookies" content="Argentum uses only essential cookies for authentication and session management. We do not use tracking, advertising, or third-party analytics cookies." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">6. Your Rights</h2>
+            <p>You have the right to access, correct, export, or delete your personal data. To exercise these rights, contact us at <a href="mailto:privacy@argentum.build" className="underline hover:text-primary transition-colors">privacy@argentum.build</a>. We will respond within 30 days.</p>
+          </section>
 
-          <Section title="9. Contact Information" content="For any privacy concerns or data requests, please contact us at privacy@argentum.io or use the in-app reporting system." />
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">7. Third-Party Services</h2>
+            <p>We use the following third-party services: Supabase (database and auth), Hedera Hashgraph (blockchain verification), Resend (transactional email), and Vercel (hosting). Each service has its own privacy policy governing their data handling.</p>
+          </section>
+
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">8. Cookies</h2>
+            <p>We use session cookies set by Supabase Auth to keep you logged in. We do not use tracking or advertising cookies. You can clear cookies at any time through your browser settings, which will log you out.</p>
+          </section>
+
+          <section>
+            <h2 className="text-base font-black text-text-primary mb-3">9. Contact</h2>
+            <p>For privacy-related questions or requests, email <a href="mailto:privacy@argentum.build" className="underline hover:text-primary transition-colors">privacy@argentum.build</a>.</p>
+          </section>
+
         </div>
-
-        <footer className="mt-20 pt-12 border-t border-white/5 flex flex-col items-center gap-6">
-          <div className="flex items-center gap-2 text-gray-500">
-            <Lock size={16} />
-            <span className="text-sm">Argentum is committed to builder privacy by design.</span>
-          </div>
-          <p className="text-[10px] text-gray-700 font-bold uppercase tracking-widest text-center">
-             © 2026 Argentum Technologies. Privacy Protected.
-          </p>
-        </footer>
       </div>
     </div>
-  )
-}
-
-function Section({ title, content }: { title: string, content: string }) {
-  return (
-    <motion.section 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="bg-[#111] border border-white/5 rounded-3xl p-8 hover:border-white/10 transition-all"
-    >
-      <h2 className="text-xl font-black text-white mb-4 tracking-tight">{title}</h2>
-      <p className="text-gray-400 leading-relaxed text-sm">{content}</p>
-    </motion.section>
   )
 }

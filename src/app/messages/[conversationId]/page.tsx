@@ -63,6 +63,10 @@ import Lightbox from '@/components/Lightbox'
 import KeyBackupModal from '@/components/KeyBackupModal'
 import KeyRecoveryModal from '@/components/KeyRecoveryModal'
 import CallModal from '@/components/CallModal'
+import DisappearingMessageSettings from '@/components/DisappearingMessageSettings'
+import MessageExpiryIndicator from '@/components/MessageExpiryIndicator'
+import EmojiPicker from '@/components/EmojiPicker'
+import ReactionDisplay, { ReactionGroup } from '@/components/ReactionDisplay'
 import { ChatUser, MessageWithReactions, ConversationWithParticipants, MessageReaction } from '@/types/chat'
 import { User as SupabaseUser } from '@supabase/supabase-js'
 import { Database } from '@/types/database'
@@ -105,6 +109,9 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
+  
+  const [disappearingMessages, setDisappearingMessages] = useState<'off' | '24h' | '7d'>('off')
+  const [hoveredMessageId, setHoveredMessageId] = useState<string | null>(null)
   
   // Voice Recording State
   const [isRecording, setIsRecording] = useState(false)
@@ -204,6 +211,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         const other = conv.participant_1 === user.id ? conv.participant_2_profile : conv.participant_1_profile
         setConversation(conv)
         setOtherParticipant(other)
+        setDisappearingMessages(((conv as any).disappearing_messages as 'off' | '24h' | '7d') || 'off')
 
         const muted = localStorage.getItem(`muted_${conversationId}`) === 'true'
         setIsMuted(muted)
@@ -756,6 +764,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                 <Video size={20} />
              </button>
              
+             <DisappearingMessageSettings
+               conversationId={conversationId}
+               currentSetting={disappearingMessages}
+               onSettingChange={(setting) => setDisappearingMessages(setting)}
+             />
+             
              <AnimatePresence>
                 {showSearch && (
                   <motion.div
@@ -872,7 +886,15 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                   <div 
                     className={`max-w-[75%] md:max-w-[60%] group relative`}
                     onContextMenu={(e) => handleContextMenu(e, msg, isOwn)}
+                    onMouseEnter={() => setHoveredMessageId(msg.id)}
+                    onMouseLeave={() => setHoveredMessageId(null)}
                   >
+                    <EmojiPicker
+                      visible={hoveredMessageId === msg.id}
+                      onSelect={(emoji) => toggleReaction(msg.id, emoji)}
+                      onClose={() => setHoveredMessageId(null)}
+                    />
+                    <MessageExpiryIndicator expiresAt={msg.expires_at ?? null}>
                     <div className={`relative px-4 py-3 text-sm leading-relaxed ${
                       isOwn 
                         ? 'silver-metallic text-[#050505] rounded-2xl rounded-br-none' 
@@ -953,19 +975,20 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                       
                       {msg.message_reactions && msg.message_reactions.length > 0 && (
                         <div className={`flex gap-1 mt-2 flex-wrap ${isOwn ? 'justify-end' : 'justify-start'}`}>
-                          {(Object.entries((msg.message_reactions || []).reduce((acc, r: MessageReaction) => {
-                            acc[r.emoji] = (acc[r.emoji] || 0) + 1;
-                            return acc;
-                          }, {} as Record<string, number>)) as [string, number][]).map(([emoji, count]) => (
-                            <button
-                              key={emoji}
-                              onClick={() => toggleReaction(msg.id, emoji)}
-                              className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-white/10 hover:bg-white/20 border border-white/10 transition-all font-bold"
-                            >
-                              <span>{emoji}</span>
-                              {count > 1 && <span className="text-white/60">{count}</span>}
-                            </button>
-                          ))}
+                          <ReactionDisplay
+                            reactions={(Object.entries((msg.message_reactions || []).reduce((acc, r: MessageReaction) => {
+                              if (!acc[r.emoji]) acc[r.emoji] = { count: 0, usernames: [], reactedByMe: false }
+                              acc[r.emoji].count++
+                              if (r.user_id === currentUser.id) acc[r.emoji].reactedByMe = true
+                              return acc
+                            }, {} as Record<string, { count: number; usernames: string[]; reactedByMe: boolean }>)) as [string, { count: number; usernames: string[]; reactedByMe: boolean }][]).map(([emoji, data]): ReactionGroup => ({
+                              emoji,
+                              count: data.count,
+                              usernames: data.usernames,
+                              reactedByMe: data.reactedByMe
+                            }))}
+                            onToggle={(emoji) => toggleReaction(msg.id, emoji)}
+                          />
                         </div>
                       )}
 
@@ -975,6 +998,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
                           </div>
                       )}
                     </div>
+                    </MessageExpiryIndicator>
                     
                     <div className={`mt-1.5 px-1 flex items-center gap-2 ${isOwn ? 'justify-end' : 'justify-start'}`}>
                       <span className="text-[9px] font-bold text-gray-600 uppercase tracking-widest">

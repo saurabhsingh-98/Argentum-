@@ -8,15 +8,17 @@ import {
   FileText, 
   AlertTriangle, 
   CheckCircle2, 
-  Trash2, 
-  ExternalLink,
-  MoreVertical,
-  Clock,
-  Filter,
-  RefreshCcw
+  RefreshCcw,
+  Clock
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
+
+const severityStyles: Record<string, string> = {
+  low: 'bg-green-500/10 border-green-500/20 text-green-500',
+  medium: 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500',
+  high: 'bg-red-500/10 border-red-500/20 text-red-500',
+}
 
 export default function ReportsQueue() {
   const supabase = createClient() as any
@@ -60,8 +62,7 @@ export default function ReportsQueue() {
       admin_id: user?.id,
       action: 'resolve_report',
       target_type: 'report',
-      target_id: id,
-      details: { resolution }
+      target_id: id
     })
 
     fetchReports()
@@ -76,6 +77,7 @@ export default function ReportsQueue() {
         </div>
         <div className="flex items-center gap-2">
            <button onClick={() => setFilter('pending')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'pending' ? 'bg-red-500 text-black shadow-lg shadow-red-500/20' : 'bg-foreground/5 text-foreground/40'}`}>Pending</button>
+           <button onClick={() => setFilter('resolved')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'resolved' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-foreground/5 text-foreground/40'}`}>Resolved</button>
            <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-foreground/10 text-foreground' : 'bg-foreground/5 text-foreground/40'}`}>History</button>
            <button onClick={fetchReports} className="p-2 bg-foreground/5 rounded-xl text-foreground/40 hover:text-foreground transition-all"><RefreshCcw size={16} /></button>
         </div>
@@ -96,16 +98,18 @@ export default function ReportsQueue() {
               <div className="flex flex-col md:flex-row gap-8">
                  <div className="flex-1 space-y-4">
                     <div className="flex items-center gap-3">
-                       <span className="px-2 py-1 bg-red-500/10 border border-red-500/20 text-red-500 text-[8px] font-black uppercase tracking-widest rounded-lg">High Severity</span>
+                       <span className={`px-2 py-1 border text-[8px] font-black uppercase tracking-widest rounded-lg ${severityStyles[report.severity] || severityStyles.medium}`}>
+                         {report.severity || 'medium'} severity
+                       </span>
                        <span className="text-[10px] font-mono text-foreground/40 uppercase flex items-center gap-1.5"><Clock size={10} /> {new Date(report.created_at).toLocaleString()}</span>
                     </div>
 
                     <div className="space-y-1">
                        <div className="flex items-center gap-2 text-xs font-bold text-foreground/40">
                           <User size={12} className="text-red-500" />
-                          <span className="text-foreground">@{report.reporter?.username}</span> reported 
+                          <span className="text-foreground">@{report.reporter?.username || report.reporter?.display_name || 'unknown'}</span> reported 
                           {report.target_user_id ? (
-                            <span className="text-red-400">@{report.target_user?.username}</span>
+                            <span className="text-red-400">@{report.target_user?.username || report.target_user?.display_name}</span>
                           ) : (
                             <span className="text-blue-400">Post ID: {report.target_post_id}</span>
                           )}

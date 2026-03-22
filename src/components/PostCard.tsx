@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   MessageCircle, 
   Flag, 
@@ -11,7 +12,8 @@ import {
   Bookmark, 
   Link2, 
   Check, 
-  Zap 
+  Zap,
+  Users
 } from 'lucide-react'
 import { Database } from '@/types/database'
 import ReactionButton from './ReactionButton'
@@ -35,9 +37,9 @@ export default function PostCard({
   onReport?: (postId: string) => void
 }) {
   const supabase = createClient() as any
-  const [commentCount, setCommentCount] = useState(post.comments_count || 0)
-  const [reactions, setReactions] = useState<PostReaction[]>(post.post_reactions || [])
   const [showMenu, setShowMenu] = useState(false)
+  const [reactions, setReactions] = useState<PostReaction[]>(post.post_reactions || [])
+  const [avatarError, setAvatarError] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,8 +91,8 @@ export default function PostCard({
                 className="w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-black text-text-primary shadow-lg overflow-hidden border border-border"
                 style={{ background: post.users?.avatar_url ? 'none' : getGradientFromUsername(post.users?.username || 'builder') }}
               >
-                {post.users?.avatar_url ? (
-                  <img src={post.users.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                {post.users?.avatar_url && !avatarError ? (
+                  <Image src={post.users.avatar_url} alt="avatar" width={36} height={36} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
                 ) : (
                   getInitials(post.users?.display_name || null, post.users?.username || 'B')
                 )}
@@ -115,6 +117,11 @@ export default function PostCard({
                 {post.category === 'Speak' && !post.is_priority && (
                   <span className="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-[8px] font-black text-amber-600 uppercase tracking-widest flex items-center gap-1">
                     <Zap size={8} fill="currentColor" /> Speak
+                  </span>
+                )}
+                {post.is_collab && (
+                  <span className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-[8px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-1">
+                    <Users size={8} /> Collab
                   </span>
                 )}
               </div>

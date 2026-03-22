@@ -4,21 +4,15 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { 
   Search, 
-  Filter, 
   Trash2, 
   ShieldCheck, 
-  ShieldAlert, 
-  Eye, 
-  EyeOff,
-  Clock,
-  MessageCircle,
-  Heart,
   ExternalLink,
-  Crown,
   Zap,
   ChevronLeft,
   ChevronRight,
-  MoreHorizontal
+  MoreHorizontal,
+  Heart,
+  MessageCircle
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useCsrfToken } from '@/hooks/useCsrfToken'
@@ -38,10 +32,12 @@ export default function PostsManagement() {
     let query = supabase.from('posts').select('*, users(username, display_name, avatar_url)', { count: 'exact' })
     
     if (search) {
-      query = query.or(`content.ilike.%${search}%,id.eq.${search}`)
+      query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`)
     }
 
     if (filter === 'verified') query = query.eq('verification_status', 'verified')
+    if (filter === 'unverified') query = query.eq('verification_status', 'unverified')
+    if (filter === 'pending') query = query.eq('verification_status', 'pending')
     if (filter === 'speak') query = query.eq('category', 'Speak')
 
     const { data, count } = await query
@@ -64,19 +60,22 @@ export default function PostsManagement() {
 
     if (action === 'verify') {
       // @ts-ignore
-      await supabase.from('posts').update({ verification_status: 'verified' }).eq('id', postId)
+      await supabase.from('posts').update({ 
+        verification_status: 'verified',
+        verified_at: new Date().toISOString()
+      }).eq('id', postId)
       // @ts-ignore
-      await supabase.from('admin_audit_log').insert({ admin_id: adminUser?.id, action: 'verify_post', target_type: 'post', target_id: postId })
+      await supabase.from('admin_audit_log').insert({ admin_id: adminUser?.id, action: 'admin_verify_post', target_type: 'post', target_id: postId })
     } else if (action === 'unverify') {
       // @ts-ignore
-      await supabase.from('posts').update({ verification_status: 'none' }).eq('id', postId)
+      await supabase.from('posts').update({ verification_status: 'none', verified_at: null }).eq('id', postId)
       // @ts-ignore
       await supabase.from('admin_audit_log').insert({ admin_id: adminUser?.id, action: 'unverify_post', target_type: 'post', target_id: postId })
     } else if (action === 'delete') {
       if (!confirm('Permanent deletion. Proceed?')) return
       await supabase.from('posts').delete().eq('id', postId)
       // @ts-ignore
-      await supabase.from('admin_audit_log').insert({ admin_id: adminUser?.id, action: 'delete_post', target_type: 'post', target_id: postId })
+      await supabase.from('admin_audit_log').insert({ admin_id: adminUser?.id, action: 'admin_delete_post', target_type: 'post', target_id: postId })
     }
 
     fetchPosts()
@@ -93,7 +92,7 @@ export default function PostsManagement() {
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" />
           <input 
             type="text" 
-            placeholder="Search logs/content..."
+            placeholder="Search title or content..."
             className="pl-12 pr-6 py-3 bg-card border border-border rounded-2xl w-full text-xs font-bold outline-none border-red-500/0 focus:border-red-500/30 transition-all"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -103,8 +102,10 @@ export default function PostsManagement() {
 
       <div className="flex items-center gap-4 text-gray-500 overflow-x-auto pb-2 scrollbar-hide">
          <button onClick={() => setFilter('all')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-white/10 text-white' : 'hover:text-white'}`}>All Logs</button>
-         <button onClick={() => setFilter('speak')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'speak' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'hover:text-white'}`}>Speak Broadcasts</button>
-         <button onClick={() => setFilter('verified')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'verified' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'hover:text-white'}`}>Verified Entries</button>
+         <button onClick={() => setFilter('speak')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'speak' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'hover:text-white'}`}>Speak</button>
+         <button onClick={() => setFilter('verified')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'verified' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'hover:text-white'}`}>Verified</button>
+         <button onClick={() => setFilter('unverified')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'unverified' ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'hover:text-white'}`}>Unverified</button>
+         <button onClick={() => setFilter('pending')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === 'pending' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' : 'hover:text-white'}`}>Pending</button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -117,7 +118,7 @@ export default function PostsManagement() {
             <div className="flex items-start justify-between mb-4">
                <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center text-xs font-black">
-                     {post.users?.avatar_url ? <img src={post.users.avatar_url} className="w-full h-full object-cover" /> : post.users?.username[0].toUpperCase()}
+                     {post.users?.avatar_url ? <img src={post.users.avatar_url} className="w-full h-full object-cover" /> : post.users?.username?.[0]?.toUpperCase()}
                   </div>
                   <div className="flex flex-col">
                      <span className="text-xs font-bold text-white uppercase tracking-tight">{post.users?.display_name || post.users?.username}</span>
@@ -135,15 +136,32 @@ export default function PostsManagement() {
                </div>
             </div>
 
-            <p className="text-sm text-gray-300 mb-6 leading-relaxed line-clamp-3">{post.content}</p>
+            <p className="text-sm text-gray-300 mb-4 leading-relaxed line-clamp-3">{post.content}</p>
+
+            {(post.content_hash || post.hcs_sequence_num != null) && (
+              <div className="flex items-center gap-4 mb-4 px-3 py-2 bg-white/[0.03] border border-white/5 rounded-xl">
+                {post.content_hash && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-600">Hash</span>
+                    <span className="text-[9px] font-mono text-gray-400">{post.content_hash.slice(0, 16)}</span>
+                  </div>
+                )}
+                {post.hcs_sequence_num != null && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-600">HCS#</span>
+                    <span className="text-[9px] font-mono text-gray-400">{post.hcs_sequence_num}</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {post.image_url && (
-              <div className="aspect-video rounded-3xl overflow-hidden border border-white/5 mb-6 bg-white/2">
+              <div className="aspect-video rounded-3xl overflow-hidden border border-white/5 mb-4 bg-white/2">
                  <img src={post.image_url} className="w-full h-full object-cover" />
               </div>
             )}
 
-            <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+            <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                <div className="flex items-center gap-4 text-gray-500">
                   <div className="flex items-center gap-1.5"><Heart size={14} /> <span className="text-[10px] font-bold">{post.likes_count || 0}</span></div>
                   <div className="flex items-center gap-1.5"><MessageCircle size={14} /> <span className="text-[10px] font-bold">0</span></div>

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
@@ -47,6 +48,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [showStreakModal, setShowStreakModal] = useState(false)
+  const [avatarError, setAvatarError] = useState(false)
   const { setIsOpen: setIsSearchOpen } = useSearch()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -224,15 +226,14 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="w-9 h-9 rounded-full border border-border overflow-hidden bg-card flex items-center justify-center group/avatar hover:border-foreground/30 transition-all"
                   >
-                    {profile?.avatar_url ? (
-                      <img 
+                    {profile?.avatar_url && !avatarError ? (
+                      <Image 
                         src={profile.avatar_url} 
                         alt="avatar" 
+                        width={36}
+                        height={36}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xs font-black text-foreground/40 group-hover/avatar:text-foreground transition-colors uppercase">${profile?.username?.[0] || user.email?.[0]}</span>`;
-                        }}
+                        onError={() => setAvatarError(true)}
                       />
                     ) : (
                       <span className="text-xs font-black text-foreground/40 group-hover/avatar:text-foreground transition-colors uppercase">
@@ -253,13 +254,12 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                             <div className="flex items-center gap-3">
                                <div className="w-10 h-10 rounded-full bg-foreground/5 border border-border flex items-center justify-center overflow-hidden">
                                   {profile?.avatar_url ? (
-                                    <img 
+                                    <Image 
                                       src={profile.avatar_url} 
+                                      alt="avatar"
+                                      width={40}
+                                      height={40}
                                       className="w-full h-full object-cover" 
-                                      onError={(e) => {
-                                        (e.target as HTMLImageElement).style.display = 'none';
-                                        (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="font-black text-xs text-foreground/40">${profile?.username?.[0] || ''}</span>`;
-                                      }}
                                     />
                                   ) : (
                                     <span className="font-black text-xs text-foreground/40">{profile?.username?.[0]}</span>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { MessageCircle, Search, Loader2, Plus, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getStoredSecretKey, initializeEncryption, resetKeys } from '@/lib/crypto'
 import { motion, AnimatePresence } from 'framer-motion'
 import { formatRelativeTime } from '@/lib/utils/time'
@@ -228,9 +229,11 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
                   <div className="relative">
                     <div className="w-12 h-12 rounded-full border border-border overflow-hidden bg-card flex items-center justify-center text-silver group-hover:border-foreground/20 transition-all">
                       {conv.otherParticipant.avatar_url ? (
-                        <img 
+                        <Image 
                           src={conv.otherParticipant.avatar_url} 
                           alt="avatar" 
+                          width={48}
+                          height={48}
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -270,8 +273,11 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
           <div className="flex items-center gap-3 mb-4 px-2">
             <div className="w-9 h-9 rounded-xl border border-white/10 overflow-hidden bg-[#111] flex items-center justify-center text-silver font-black text-xs">
               {initialProfile?.avatar_url ? (
-                <img 
+                <Image 
                  src={initialProfile.avatar_url} 
+                 alt="avatar"
+                 width={36}
+                 height={36}
                  className="w-full h-full object-cover"
                />
               ) : initialUser.email?.[0].toUpperCase()}

@@ -1,0 +1,2 @@
+[functions.expiry-worker]
+schedule = "0 * * * *"

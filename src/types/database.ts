@@ -280,7 +280,7 @@ export interface Database {
           id: string
           user_id: string
           from_user_id: string
-          type: 'upvote' | 'comment' | 'follow' | 'message' | 'verified'
+          type: 'upvote' | 'comment' | 'follow' | 'message' | 'verified' | 'collab_request'
           content: string
           link: string | null
           is_read: boolean
@@ -290,7 +290,7 @@ export interface Database {
           id?: string
           user_id: string
           from_user_id: string
-          type: 'upvote' | 'comment' | 'follow' | 'message' | 'verified'
+          type: 'upvote' | 'comment' | 'follow' | 'message' | 'verified' | 'collab_request'
           content: string
           link?: string | null
           is_read?: boolean
@@ -300,7 +300,7 @@ export interface Database {
           id?: string
           user_id?: string
           from_user_id?: string
-          type?: 'upvote' | 'comment' | 'follow' | 'message' | 'verified'
+          type?: 'upvote' | 'comment' | 'follow' | 'message' | 'verified' | 'collab_request'
           content?: string
           link?: string | null
           is_read?: boolean
@@ -389,6 +389,7 @@ export interface Database {
           action: string
           target_type: string
           target_id: string
+          ip_address: string | null
           created_at: string
         }
         Insert: {
@@ -397,6 +398,7 @@ export interface Database {
           action: string
           target_type: string
           target_id: string
+          ip_address?: string | null
           created_at?: string
         }
         Update: {
@@ -405,6 +407,74 @@ export interface Database {
           action?: string
           target_type?: string
           target_id?: string
+          ip_address?: string | null
+          created_at?: string
+        }
+      }
+      collab_requests: {
+        Row: {
+          id: string
+          post_id: string
+          applicant_id: string
+          message: string | null
+          status: 'pending' | 'accepted' | 'declined'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          applicant_id: string
+          message?: string | null
+          status?: 'pending' | 'accepted' | 'declined'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          applicant_id?: string
+          message?: string | null
+          status?: 'pending' | 'accepted' | 'declined'
+          created_at?: string
+        }
+      }
+      reports: {
+        Row: {
+          id: string
+          reporter_id: string
+          target_post_id: string | null
+          target_user_id: string | null
+          reason: string
+          details: string | null
+          severity: 'low' | 'medium' | 'high'
+          status: 'pending' | 'resolved'
+          resolution: 'dismissed' | 'taken_action' | null
+          resolved_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reporter_id: string
+          target_post_id?: string | null
+          target_user_id?: string | null
+          reason: string
+          details?: string | null
+          severity?: 'low' | 'medium' | 'high'
+          status?: 'pending' | 'resolved'
+          resolution?: 'dismissed' | 'taken_action' | null
+          resolved_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reporter_id?: string
+          target_post_id?: string | null
+          target_user_id?: string | null
+          reason?: string
+          details?: string | null
+          severity?: 'low' | 'medium' | 'high'
+          status?: 'pending' | 'resolved'
+          resolution?: 'dismissed' | 'taken_action' | null
+          resolved_at?: string | null
           created_at?: string
         }
       }

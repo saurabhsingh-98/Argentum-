@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Send, Mail, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useCsrfToken } from '@/hooks/useCsrfToken'
 
 export default function UpdatesClient() {
   const [subject, setSubject] = useState('')
@@ -13,6 +14,7 @@ export default function UpdatesClient() {
   const [stats, setStats] = useState<{ total: number, verified: number } | null>(null)
   
   const supabase = createClient() as any
+  const { token: csrfToken } = useCsrfToken()
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -35,21 +37,22 @@ export default function UpdatesClient() {
     setStatus(null)
 
     try {
-      // In a real app, this would call an API route that uses a service like Resend
-      // For now, we interact with a hypothetical 'platform_updates' table to trigger a hook
-      // or we simulate the API call.
-      
       const response = await fetch('/api/admin/broadcast-update', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken || ''
+        },
         body: JSON.stringify({ subject, content })
       })
 
+      const json = await response.json().catch(() => ({}))
+
       if (!response.ok) {
-        throw new Error('Failed to send broadcast')
+        throw new Error(json.error || 'Failed to send broadcast')
       }
 
-      setStatus({ type: 'success', message: 'Update broadcast initiated successfully!' })
+      setStatus({ type: 'success', message: json.message || 'Update broadcast initiated successfully!' })
       setSubject('')
       setContent('')
     } catch (err: any) {
@@ -145,7 +148,6 @@ export default function UpdatesClient() {
             <div className="space-y-4">
               <button 
                 onClick={async () => {
-                   // This would call an API route to send a real push
                    alert('In a real implementation, this would trigger a push event via Web-Push library to all subscribed user endpoints.')
                 }}
                 className="w-full py-3 rounded-xl border border-border text-[10px] font-black uppercase tracking-widest hover:bg-foreground/5 transition-all"

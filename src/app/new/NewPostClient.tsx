@@ -174,6 +174,9 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
           .eq('id', initialUser.id)
       }
       
+      // Revalidate feed cache
+      fetch('/api/posts/revalidate', { method: 'POST' }).catch(() => {})
+      
       router.push(`/post/${data.id}`)
     } catch (error: any) {
       console.error('Post creation failed:', error)
