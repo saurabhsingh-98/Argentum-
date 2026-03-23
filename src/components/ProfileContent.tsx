@@ -185,8 +185,8 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
     <div className={`min-h-screen text-foreground selection:bg-silver/30 relative ${
       profile.user_type === 'company' && profile.is_verified ? 'company-theme bg-[#050505]' : 'bg-background'
     }`}>
-      {/* Floating Navigation */}
-      <div className="fixed top-6 left-6 z-[100] flex items-center gap-2">
+      {/* Floating Navigation — pushed below the sticky navbar (h-16 = 4rem) */}
+      <div className="fixed top-20 left-6 z-[90] flex items-center gap-2">
         <button 
           onClick={() => router.back()}
           className="p-3 rounded-2xl bg-background/50 backdrop-blur-xl border border-border text-foreground/60 hover:text-foreground hover:bg-background/80 transition-all shadow-xl group"
@@ -196,7 +196,7 @@ export default function ProfileContent({ initialProfile, posts, isOwner }: Profi
         </button>
       </div>
 
-      <div className="fixed top-6 right-6 z-[100] flex items-center gap-3">
+      <div className="fixed top-20 right-6 z-[90] flex items-center gap-3">
         {isOwner && (
           <Link 
             href="/settings"

@@ -41,9 +41,10 @@ export const NotificationService = {
         .from('push_subscriptions')
         .upsert({
           user_id: user.id,
-          subscription: JSON.stringify(subscription),
+          subscription: subscription,
+          endpoint: subscription.endpoint,
           updated_at: new Date().toISOString()
-        });
+        }, { onConflict: 'endpoint' });
       
       if (error) {
         console.error('Failed to save subscription:', error);
