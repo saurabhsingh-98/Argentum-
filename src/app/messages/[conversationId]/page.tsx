@@ -141,21 +141,23 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
   }
 
   // Decryption function that doesn't depend on stale state
-  const decryptContent = (content: string, isOwn: boolean, conv: ConversationWithParticipants, userId: string) => {
+  // NaCl box uses Diffie-Hellman: shared_secret = DH(mySecretKey, theirPublicKey)
+  // This shared secret is identical for both sender and recipient, so we always
+  // decrypt using the OTHER participant's public key + our own secret key.
+  const decryptContent = (content: string, _isOwn: boolean, conv: ConversationWithParticipants, userId: string) => {
     if (content.startsWith('[IMAGE]:') || content.startsWith('[FILE]:') || content.startsWith('[VOICE]:')) return content
     
     const secretKey = getStoredSecretKey()
-    if (!secretKey) return "Encrypted message"
+    if (!secretKey) return content // show raw if no key rather than "Encrypted message"
 
+    // Always use the other participant's public key — DH shared secret is symmetric
     // @ts-ignore
     const otherProfile = conv.participant_1 === userId ? conv.participant_2_profile : conv.participant_1_profile
-    // @ts-ignore
-    const senderProfile = conv.participant_1 === (isOwn ? userId : otherProfile.id) ? conv.participant_1_profile : conv.participant_2_profile
-    const decryptionKey = isOwn ? otherProfile.public_key : senderProfile.public_key
+    const otherPublicKey = otherProfile?.public_key
     
-    if (!decryptionKey) return "Encrypted message"
+    if (!otherPublicKey) return content
 
-    return decryptMessage(content, decryptionKey, secretKey) || "Encrypted message"
+    return decryptMessage(content, otherPublicKey, secretKey) || content
   }
 
   const fetchMessages = async (conv: ConversationWithParticipants, userId: string) => {
@@ -550,11 +552,39 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
   const startRecording = async () => {
     try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("Your browser blocks microphone access on this connection. Ensure you are using HTTPS or localhost.")
+      if (!navigator.mediaDevices?.getUserMedia) {
+        alert("Voice messages require HTTPS. Make sure you're on the secure version of the site.")
+        return
       }
+
+      // Check permission state first if the API is available
+      if (navigator.permissions) {
+        try {
+          const perm = await navigator.permissions.query({ name: 'microphone' as PermissionName })
+          if (perm.state === 'denied') {
+            alert('Microphone is blocked for this site. Go to your browser settings → Site permissions → Microphone and allow it, then refresh.')
+            return
+          }
+        } catch {
+          // permissions API not supported, proceed anyway
+        }
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream)
+
+      // Pick best supported MIME type (webm for Chrome/Firefox, mp4 for Safari)
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm')
+        ? 'audio/webm'
+        : MediaRecorder.isTypeSupported('audio/mp4')
+        ? 'audio/mp4'
+        : ''
+
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream)
+
       mediaRecorderRef.current = mediaRecorder
       audioChunksRef.current = []
 
@@ -563,8 +593,9 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
       }
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' })
-        const file = new File([audioBlob], `voice_${Date.now()}.webm`, { type: 'audio/webm' })
+        const ext = mimeType.includes('mp4') ? 'mp4' : 'webm'
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' })
+        const file = new File([audioBlob], `voice_${Date.now()}.${ext}`, { type: mimeType || 'audio/webm' })
         handleFileUpload(file, 'voice')
         stream.getTracks().forEach(track => track.stop())
       }
@@ -578,9 +609,13 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     } catch (err: any) {
       console.error('Error accessing microphone:', err)
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        alert('Microphone access was denied. Please click the lock icon in your URL bar to allow permissions and try again.')
+        alert('Microphone access was denied. In your browser, click the lock/info icon in the address bar → Site settings → Microphone → Allow, then refresh the page.')
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        alert('No microphone found. Please connect a microphone and try again.')
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        alert('Microphone is in use by another app. Close other apps using the mic and try again.')
       } else {
-        alert(`Microphone access unavailable: ${err.message || 'Unknown error. Check device connections.'}`)
+        alert(`Could not start recording: ${err.message || err.name}`)
       }
     }
   }

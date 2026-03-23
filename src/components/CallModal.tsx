@@ -50,18 +50,50 @@ export default function CallModal({
     const initCall = async () => {
       // 1. Setup local media
       try {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          throw new Error("Your browser blocks media access on this connection. Ensure you are using HTTPS or localhost.")
+        if (!navigator.mediaDevices?.getUserMedia) {
+          alert("Calls require HTTPS. Make sure you're on the secure version of the site.")
+          onClose()
+          return
         }
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: startVideo || (initialIncomingCall?.type === 'video') })
+
+        // Check permission state first if the API is available
+        if (navigator.permissions) {
+          try {
+            const micPerm = await navigator.permissions.query({ name: 'microphone' as PermissionName })
+            if (micPerm.state === 'denied') {
+              alert('Microphone is blocked. Go to browser Settings → Site permissions → Microphone → Allow this site, then refresh.')
+              onClose()
+              return
+            }
+            if (startVideo || initialIncomingCall?.type === 'video') {
+              const camPerm = await navigator.permissions.query({ name: 'camera' as PermissionName })
+              if (camPerm.state === 'denied') {
+                alert('Camera is blocked. Go to browser Settings → Site permissions → Camera → Allow this site, then refresh.')
+                onClose()
+                return
+              }
+            }
+          } catch {
+            // permissions API not supported, proceed anyway
+          }
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: startVideo || (initialIncomingCall?.type === 'video')
+        })
         localStream.current = stream
         if (localVideoRef.current) localVideoRef.current.srcObject = stream
       } catch (err: any) {
         console.error('Failed to get local media', err)
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          alert('Microphone/Camera access was denied. Please click the lock icon in your URL bar to allow permissions and try again.')
+          alert('Microphone/Camera access was denied. In your browser, click the lock icon in the address bar → Site settings → allow Microphone and Camera, then refresh.')
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          alert('No microphone or camera found. Please connect a device and try again.')
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          alert('Microphone/Camera is in use by another app. Close other apps and try again.')
         } else {
-          alert(`Could not access microphone/camera: ${err.message || 'Unknown error. Check device connections.'}`)
+          alert(`Could not access microphone/camera: ${err.message || err.name}`)
         }
         onClose()
         return
