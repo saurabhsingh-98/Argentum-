@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Globe, Award, Flame, Zap, Twitter, Edit3, Share2, MapPin, Calendar, Rocket } from 'lucide-react'
+import { Github, Globe, Award, Flame, Zap, Twitter, Edit3, Share2, MapPin, Calendar, Rocket, Briefcase, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import PostCard from '@/components/PostCard'
 import EmptyState from '@/components/EmptyState'
@@ -100,8 +100,14 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                 <div className="flex items-center gap-2 text-gray-500 font-mono mt-1">
                   <span className="text-sm">@{profile.username}</span>
                   <div className="w-1 h-1 rounded-full bg-gray-800" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Builder</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider">{profile.user_type === 'company' ? 'Company' : 'Builder'}</span>
                 </div>
+                {profile.open_to_work && (
+                  <div className="mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-500">
+                    <CheckCircle2 size={12} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Open to Work</span>
+                  </div>
+                )}
               </div>
 
               {/* Actions */}
@@ -173,6 +179,31 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                     </Link>
                   )}
                 </div>
+
+                {/* Skills */}
+                {profile.skills && profile.skills.length > 0 && (
+                  <div className="flex flex-col gap-2 mt-2">
+                    <span className="text-[10px] font-black text-foreground/30 uppercase tracking-widest">Skills</span>
+                    <div className="flex flex-wrap gap-2">
+                      {profile.skills.map((skill) => (
+                        <span key={skill} className="px-3 py-1 rounded-full bg-foreground/5 border border-border text-[10px] font-bold text-foreground/60 uppercase tracking-wider">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Looking For */}
+                {profile.looking_for && (
+                  <div className="flex items-start gap-3 mt-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
+                    <Briefcase size={14} className="text-blue-400 mt-0.5 shrink-0" />
+                    <div>
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-0.5">Looking For</span>
+                      <span className="text-xs text-foreground/60">{profile.looking_for}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

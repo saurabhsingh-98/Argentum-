@@ -21,7 +21,11 @@ import {
   ShieldAlert,
   Moon,
   Smartphone,
-  CheckCircle
+  CheckCircle,
+  Link2,
+  Keyboard,
+  Monitor,
+  SlidersHorizontal
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User as SupabaseUser } from '@supabase/supabase-js'
@@ -32,7 +36,7 @@ import { resetKeys } from '@/lib/crypto'
 import { Loader2 } from 'lucide-react'
 import TwoFactorModal from '@/components/TwoFactorModal'
 
-type SettingsSection = 'account' | 'privacy' | 'notifications' | 'messaging' | 'security' | 'appearance' | 'danger'
+type SettingsSection = 'account' | 'privacy' | 'notifications' | 'messaging' | 'security' | 'appearance' | 'integrations' | 'shortcuts' | 'sessions' | 'feed' | 'danger'
 
 interface SettingsClientProps {
   initialUser: SupabaseUser
@@ -250,6 +254,10 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
     { id: 'messaging', label: 'Messaging', icon: MessageSquare },
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'appearance', label: 'Appearance', icon: Layout },
+    { id: 'integrations', label: 'Integrations', icon: Link2 },
+    { id: 'shortcuts', label: 'Shortcuts', icon: Keyboard },
+    { id: 'sessions', label: 'Sessions', icon: Monitor },
+    { id: 'feed', label: 'Feed Preferences', icon: SlidersHorizontal },
     { id: 'danger', label: 'Danger Zone', icon: ShieldAlert },
   ]
 
@@ -616,6 +624,134 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
                              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${compactMode ? 'left-7' : 'left-1'}`} />
                           </button>
                        </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'integrations' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h2 className="text-xl font-black mb-2">Integrations</h2>
+                      <p className="text-sm text-foreground/40">Manage your connected services and social links.</p>
+                    </div>
+                    <div className="space-y-4">
+                      {[
+                        { label: 'GitHub', icon: Github, key: 'github', placeholder: 'yourhandle', color: 'text-foreground/60' },
+                        { label: 'Twitter / X', icon: Chrome, key: 'twitter', placeholder: '@yourhandle', color: 'text-sky-400' },
+                      ].map(({ label, icon: Icon, key, placeholder, color }) => (
+                        <div key={key} className="p-5 bg-card/5 border border-border rounded-2xl flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <Icon size={18} className={color} />
+                            <span className="text-sm font-bold">{label}</span>
+                          </div>
+                          <button
+                            onClick={() => router.push(`/profile/${profile?.username}`)}
+                            className="text-[10px] font-black text-foreground/40 border-b border-border hover:border-foreground transition-all uppercase tracking-widest"
+                          >
+                            Edit in Profile
+                          </button>
+                        </div>
+                      ))}
+                      <p className="text-[10px] text-foreground/30 uppercase tracking-widest text-center pt-2">More integrations coming soon</p>
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'shortcuts' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h2 className="text-xl font-black mb-2">Keyboard Shortcuts</h2>
+                      <p className="text-sm text-foreground/40">Quick reference for all app shortcuts.</p>
+                    </div>
+                    <div className="space-y-3">
+                      {[
+                        { keys: ['G', 'F'], action: 'Go to Feed' },
+                        { keys: ['G', 'P'], action: 'Go to Profile' },
+                        { keys: ['G', 'M'], action: 'Go to Messages' },
+                        { keys: ['G', 'N'], action: 'Go to Notifications' },
+                        { keys: ['N'], action: 'New Post' },
+                        { keys: ['?'], action: 'Show Shortcuts' },
+                        { keys: ['Esc'], action: 'Close Modal / Cancel' },
+                      ].map(({ keys, action }) => (
+                        <div key={action} className="flex items-center justify-between p-4 bg-card/5 border border-border rounded-xl">
+                          <span className="text-sm text-foreground/60">{action}</span>
+                          <div className="flex items-center gap-1">
+                            {keys.map((k, i) => (
+                              <span key={i} className="px-2 py-1 rounded-md bg-foreground/10 border border-border text-[10px] font-black font-mono">{k}</span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'sessions' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h2 className="text-xl font-black mb-2">Session Management</h2>
+                      <p className="text-sm text-foreground/40">View and manage your active sessions.</p>
+                    </div>
+                    <div className="p-6 bg-card/5 border border-border rounded-2xl space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Monitor size={18} className="text-green-500" />
+                          <div>
+                            <p className="text-sm font-bold">Current Session</p>
+                            <p className="text-[10px] text-foreground/40 font-mono">{typeof window !== 'undefined' ? navigator.userAgent.split(' ').slice(-2).join(' ') : 'Browser'}</p>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-black text-green-500 bg-green-500/10 px-2 py-1 rounded-full border border-green-500/20">Active</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-black uppercase tracking-widest hover:bg-red-500/20 transition-all"
+                    >
+                      Sign Out All Sessions
+                    </button>
+                  </div>
+                )}
+
+                {activeSection === 'feed' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h2 className="text-xl font-black mb-2">Feed Preferences</h2>
+                      <p className="text-sm text-foreground/40">Customize how your feed looks and behaves.</p>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="p-5 bg-card/5 border border-border rounded-2xl">
+                        <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-4">Default Category Filter</p>
+                        <div className="flex flex-wrap gap-2">
+                          {['All', 'Web3', 'AI', 'Mobile', 'DevTools', 'Game', 'Speak'].map((cat) => {
+                            const stored = typeof window !== 'undefined' ? localStorage.getItem('ag_feed_category') || 'All' : 'All'
+                            return (
+                              <button
+                                key={cat}
+                                onClick={() => typeof window !== 'undefined' && localStorage.setItem('ag_feed_category', cat)}
+                                className="px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all border-border text-foreground/40 hover:border-foreground/40 hover:text-foreground"
+                              >
+                                {cat}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                      <div className="p-5 bg-card/5 border border-border rounded-2xl flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-bold">Show Priority Posts First</p>
+                          <p className="text-xs text-foreground/40">Hyper-priority transmissions appear at the top</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            const cur = typeof window !== 'undefined' ? localStorage.getItem('ag_priority_first') !== 'false' : true
+                            typeof window !== 'undefined' && localStorage.setItem('ag_priority_first', String(!cur))
+                          }}
+                          className="w-12 h-6 rounded-full relative transition-all bg-green-500"
+                        >
+                          <div className="absolute top-1 left-7 w-4 h-4 bg-white rounded-full transition-all" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}

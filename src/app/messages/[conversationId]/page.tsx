@@ -141,7 +141,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
   // Decryption function that doesn't depend on stale state
   const decryptContent = (content: string, isOwn: boolean, conv: ConversationWithParticipants, userId: string) => {
-    if (content.startsWith('[IMAGE]:')) return content
+    if (content.startsWith('[IMAGE]:') || content.startsWith('[FILE]:') || content.startsWith('[VOICE]:')) return content
     
     const secretKey = getStoredSecretKey()
     if (!secretKey) return "Encrypted message"
@@ -404,8 +404,8 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
     const content = contentOverride || newMessage
     if ((!content.trim() && !attachmentData) || sending || !otherParticipant || !conversation) return
 
-     const secretKey = getStoredSecretKey()
-    if (!secretKey && !content.startsWith('[IMAGE]:')) {
+    const secretKey = getStoredSecretKey()
+    if (!secretKey && !content.startsWith('[IMAGE]:') && !content.startsWith('[FILE]:') && !content.startsWith('[VOICE]:')) {
       if (encryptionStatus === 'needs_recovery') {
         setShowRecoveryModal(true)
       } else if (encryptionStatus === 'missing_private_key') {
@@ -420,7 +420,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
 
     try {
       let finalContent = content
-      if (!content.startsWith('[IMAGE]:')) {
+      if (!content.startsWith('[IMAGE]:') && !content.startsWith('[FILE]:') && !content.startsWith('[VOICE]:')) {
           finalContent = encryptMessage(content, otherParticipant.public_key!, secretKey!)
       }
 

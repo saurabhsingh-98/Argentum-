@@ -28,6 +28,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
   const [tags, setTags] = useState('')
   const [githubUrl, setGithubUrl] = useState('')
   const [isFetchingGithub, setIsFetchingGithub] = useState(false)
+  const [githubImported, setGithubImported] = useState(false)
   const [isCollab, setIsCollab] = useState(false)
   
   const router = useRouter()
@@ -61,6 +62,8 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
       if (data.topics) {
         setTags(data.topics.join(', '))
       }
+      setGithubImported(true)
+      setTimeout(() => setGithubImported(false), 3000)
     } catch (err: any) {
       alert(err.message)
     } finally {
@@ -256,9 +259,9 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
                   type="button"
                   onClick={fetchGithubRepo}
                   disabled={isFetchingGithub || !githubUrl.includes('github.com/')}
-                  className="px-6 py-2.5 bg-foreground/5 hover:bg-foreground/10 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-30"
+                  className={`px-6 py-2.5 border rounded-xl text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-30 flex items-center gap-2 ${githubImported ? 'bg-green-500/10 border-green-500/50 text-green-500' : 'bg-foreground/5 hover:bg-foreground/10 border-border'}`}
                 >
-                  {isFetchingGithub ? <Loader2 size={12} className="animate-spin" /> : 'Fetch Repo'}
+                  {isFetchingGithub ? <Loader2 size={12} className="animate-spin" /> : githubImported ? <><Check size={12} /> Imported</> : 'Fetch Repo'}
                 </button>
               </div>
             </div>

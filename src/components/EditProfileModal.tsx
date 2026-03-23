@@ -29,6 +29,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
   const [skills, setSkills] = useState(profile.skills?.join(', ') || '')
   const [isOpenToWork, setIsOpenToWork] = useState(profile.open_to_work || false)
   const [lookingFor, setLookingFor] = useState(profile.looking_for || '')
+  const [userType, setUserType] = useState<'builder' | 'company'>(profile.user_type || 'builder')
   
   const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
@@ -125,6 +126,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
           skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
           open_to_work: isOpenToWork,
           looking_for: lookingFor || null,
+          user_type: userType,
         })
         .eq('id', profile.id)
 
@@ -150,6 +152,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
         skills: skills.split(',').map((s: string) => s.trim()).filter((s: string) => s !== ''),
         open_to_work: isOpenToWork,
         looking_for: lookingFor || null,
+        user_type: userType,
       })
 
       setStatus({ type: 'success', message: 'Profile updated!' })
@@ -352,10 +355,64 @@ export default function EditProfileModal({ isOpen, onClose, profile, onUpdate }:
                   </div>
                 </div>
 
+                {/* Skills, Open to Work, Looking For, User Type */}
+                <div className="flex flex-col gap-4 pt-4 border-t border-border">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Skills <span className="text-foreground/10 font-normal lowercase">(comma separated)</span></label>
+                    <input
+                      type="text"
+                      value={skills}
+                      onChange={(e) => setSkills(e.target.value)}
+                      placeholder="React, TypeScript, Rust..."
+                      className="w-full bg-foreground/5 border border-border rounded-xl py-3 px-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Looking For <span className="text-foreground/10 font-normal lowercase">(Optional)</span></label>
+                    <input
+                      type="text"
+                      value={lookingFor}
+                      onChange={(e) => setLookingFor(e.target.value)}
+                      placeholder="Co-founder, contributors, investors..."
+                      className="w-full bg-foreground/5 border border-border rounded-xl py-3 px-4 text-sm text-foreground focus:outline-none focus:border-foreground/40 transition-all"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-foreground/5 border border-border">
+                    <div>
+                      <p className="text-sm font-bold">Open to Work</p>
+                      <p className="text-[10px] text-foreground/40">Show a badge on your profile</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsOpenToWork(!isOpenToWork)}
+                      className={`w-12 h-6 rounded-full relative transition-all ${isOpenToWork ? 'bg-green-500' : 'bg-foreground/10 border border-border'}`}
+                    >
+                      <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isOpenToWork ? 'left-7' : 'left-1'}`} />
+                    </button>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Account Type</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {(['builder', 'company'] as const).map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setUserType(type)}
+                          className={`p-3 rounded-xl border text-xs font-black uppercase tracking-widest transition-all ${userType === type ? 'bg-foreground/10 border-foreground/40 text-foreground' : 'border-border text-foreground/40 hover:border-foreground/20'}`}
+                        >
+                          {type === 'builder' ? '🔨 Builder' : '🏢 Company'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Visibility Toggle */}
                 <div className="flex flex-col gap-4 pt-4 border-t border-border">
-                  <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Profile Visibility</label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <label className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest ml-1">Profile Visibility</label>                  <div className="grid grid-cols-2 gap-4">
                     <div 
                       onClick={() => setIsPublic(true)}
                       className={`cursor-pointer p-4 rounded-2xl border transition-all ${
