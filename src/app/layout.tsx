@@ -48,7 +48,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  // Use getUser() (validates with Supabase server) instead of getSession() (reads stale cookie)
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session } } = user
+    ? await supabase.auth.getSession()
+    : { data: { session: null } };
 
     const { data: settings } = await supabase
       .from('platform_settings')

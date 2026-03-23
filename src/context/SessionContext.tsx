@@ -57,29 +57,31 @@ export function SessionProvider({
           clearTimeout(signOutTimer.current)
           signOutTimer.current = null
         }
-        // Only refresh server components on actual sign-in, not on every navigation
-        if (event === 'SIGNED_IN') {
+        // Only refresh server components on the very first sign-in
+        if (event === 'SIGNED_IN' && !hasHadSession.current) {
           router.refresh()
         }
       }
 
       if (event === 'SIGNED_OUT') {
         // Supabase fires SIGNED_OUT transiently during token refresh races on navigation.
-        // Debounce: only treat it as a real logout if the session is still null after 1s.
+        // Debounce: wait 1.5s then re-check. If session is still alive, it was a false alarm.
+        // Do NOT call router.refresh() — that causes server re-renders that show logged-out
+        // state while the token is still being refreshed.
         if (signOutTimer.current) clearTimeout(signOutTimer.current)
         signOutTimer.current = setTimeout(async () => {
-          // Double-check: re-read the session from storage
           const { data: { session: recheck } } = await supabase.auth.getSession()
           if (!recheck) {
-            // Genuinely signed out
+            // Genuinely signed out — update state only, no router.refresh()
             hasHadSession.current = false
-            router.refresh()
+            setSession(null)
+            setUser(null)
           } else {
             // False alarm — session is still alive, restore state
             setSession(recheck)
             setUser(recheck.user)
           }
-        }, 1000)
+        }, 1500)
       }
     })
 
