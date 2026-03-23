@@ -3,15 +3,17 @@
 import { usePathname } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import CommandPalette from '@/components/CommandPalette'
-import PresenceHandler from '@/components/PresenceHandler'
-import SessionManager from '@/components/SessionManager'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
 import { SearchProvider } from '@/context/SearchContext'
 import { ThemeProvider, useTheme } from '@/context/ThemeContext'
 
 import { AnimatePresence, motion } from 'framer-motion'
+
+const CommandPalette = dynamic(() => import('@/components/CommandPalette'), { ssr: false })
+const PresenceHandler = dynamic(() => import('@/components/PresenceHandler'), { ssr: false })
+const SessionManager = dynamic(() => import('@/components/SessionManager'), { ssr: false })
 
 function LayoutContent({ children, isMessages, isAuth, isPageMounted, pathname }: { 
   children: React.ReactNode, 

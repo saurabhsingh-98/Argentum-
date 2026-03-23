@@ -39,39 +39,38 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     notFound()
   }
 
-  // Fetch published posts for this user
+  // Fetch published posts and streak history in parallel
   // @ts-ignore
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('*, users(id, username, display_name, avatar_url, bio, currently_building)')
-    // @ts-ignore
-    .eq('user_id', profile.id)
-    .eq('status', 'published')
-    .order('created_at', { ascending: false })
-
-  // Recalculate streak from history to ensure it's accurate
-  // @ts-ignore
-  const { data: streakHistory } = await supabase
-    .from('streak_history')
-    .select('post_date')
-    // @ts-ignore
-    .eq('user_id', profile.id)
-    .order('post_date', { ascending: false })
+  const [{ data: posts }, { data: streakHistory }] = await Promise.all([
+    supabase
+      .from('posts')
+      .select('*, users(id, username, display_name, avatar_url, bio, currently_building)')
+      // @ts-ignore
+      .eq('user_id', profile.id)
+      .eq('status', 'published')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('streak_history')
+      .select('post_date')
+      // @ts-ignore
+      .eq('user_id', profile.id)
+      .order('post_date', { ascending: false })
+  ])
 
   if (streakHistory && streakHistory.length > 0) {
     const { calculateStreak } = await import('@/lib/utils/streak')
     const { current } = calculateStreak(streakHistory as { post_date: string }[])
     const p = profile as any
     if (current !== p.streak_count) {
-      // @ts-ignore
-      await supabase.from('users').update({ streak_count: current }).eq('id', p.id)
+      // fire-and-forget — don't block page render on a streak update
+      ;(supabase as any).from('users').update({ streak_count: current }).eq('id', p.id).then()
       p.streak_count = current
     }
   } else {
     const p = profile as any
     if (p.streak_count !== 0) {
-      // @ts-ignore
-      await supabase.from('users').update({ streak_count: 0 }).eq('id', p.id)
+      // fire-and-forget
+      ;(supabase as any).from('users').update({ streak_count: 0 }).eq('id', p.id).then()
       p.streak_count = 0
     }
   }
