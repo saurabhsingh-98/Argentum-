@@ -20,6 +20,7 @@ interface DecryptedMediaProps {
  */
 export default function DecryptedMedia({ url, senderPublicKey, type, fileName, className, onClick }: DecryptedMediaProps) {
   const [objectUrl, setObjectUrl] = useState<string | null>(null)
+  const [mimeType, setMimeType] = useState<string>('audio/webm')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -47,8 +48,20 @@ export default function DecryptedMedia({ url, senderPublicKey, type, fileName, c
         const decrypted = decryptFile(encryptedBytes, senderPublicKey, secretKey)
         if (!decrypted) throw new Error('Decryption failed')
 
-        const mimeType = type === 'image' ? 'image/jpeg' : type === 'voice' ? 'audio/webm' : 'application/octet-stream'
-        const blob = new Blob([decrypted.buffer as ArrayBuffer], { type: mimeType })
+        // Detect MIME type from file extension in URL for voice
+        let mime = 'application/octet-stream'
+        if (type === 'image') {
+          mime = 'image/jpeg'
+        } else if (type === 'voice') {
+          // Detect from URL path: .mp4.enc → audio/mp4, .webm.enc → audio/webm
+          const base = url.replace(/\.enc$/, '')
+          if (base.endsWith('.mp4')) mime = 'audio/mp4'
+          else if (base.endsWith('.ogg')) mime = 'audio/ogg'
+          else mime = 'audio/webm'
+        }
+
+        setMimeType(mime)
+        const blob = new Blob([decrypted.buffer as ArrayBuffer], { type: mime })
         const blobUrl = URL.createObjectURL(blob)
         revoke = blobUrl
         setObjectUrl(blobUrl)
@@ -93,7 +106,25 @@ export default function DecryptedMedia({ url, senderPublicKey, type, fileName, c
 
   if (type === 'voice') {
     return (
-      <audio controls src={objectUrl} className={className} />
+      <audio
+        controls
+        preload="metadata"
+        className={className}
+        onLoadedMetadata={(e) => {
+          // Force duration recalculation for blob URLs
+          const audio = e.currentTarget
+          if (audio.duration === Infinity || isNaN(audio.duration)) {
+            audio.currentTime = 1e101
+            audio.ontimeupdate = () => {
+              audio.ontimeupdate = null
+              audio.currentTime = 0
+            }
+          }
+        }}
+      >
+        <source src={objectUrl} type={mimeType} />
+        Your browser does not support audio.
+      </audio>
     )
   }
 

@@ -246,9 +246,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           .subscribe()
         setPresenceChannel(typingChan)
 
-        // WEBRTC SIGNALING
-        const webrtcChan = supabase.channel(`webrtc:${conversationId}`)
-        webrtcChan.on('broadcast', { event: 'webrtc-signal' }, ({ payload }: any) => {
+        // WEBRTC INCOMING CALL LISTENER
+        // We use a separate channel name so it doesn't conflict with CallModal's channel.
+        // CallModal subscribes to `webrtc:${conversationId}` and owns the full signaling.
+        // This channel only listens for 'offer' events to show the incoming call UI.
+        const incomingChan = supabase.channel(`incoming:${conversationId}`)
+        incomingChan.on('broadcast', { event: 'webrtc-signal' }, ({ payload }: any) => {
           if (payload.sender === user.id) return
           if (payload.type === 'offer') {
             setIncomingCall({ type: payload.callType, offer: payload.offer })
@@ -256,7 +259,23 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
             setIsCallModalOpen(true)
           }
         }).subscribe()
-        webrtcChannelRef.current = webrtcChan
+        webrtcChannelRef.current = incomingChan
+
+        // ONLINE PRESENCE — subscribe to realtime changes on the other user's row
+        const presenceChan = supabase
+          .channel(`user-presence:${other.id}`)
+          .on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.${other.id}` },
+            (payload: any) => {
+              setOtherParticipant((prev: any) => prev ? {
+                ...prev,
+                is_online: payload.new.is_online,
+                last_seen: payload.new.last_seen
+              } : prev)
+            }
+          )
+          .subscribe()
 
         // @ts-ignore
         const channel = supabase
@@ -370,6 +389,7 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
         clearInterval(interval)
         if (presenceChannel) presenceChannel.unsubscribe()
         if (webrtcChannelRef.current) webrtcChannelRef.current.unsubscribe()
+        supabase.channel(`user-presence:${conversationId}`).unsubscribe()
     }
   }, [conversationId])
 
