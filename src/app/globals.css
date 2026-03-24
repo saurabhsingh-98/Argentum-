@@ -355,7 +355,7 @@ a:active,
 /* Removed noisy background glows */
 
 @layer base {
-  * {
+  *:not(svg):not(img):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon) {
     border-color: var(--border);
   }
 }

@@ -84,6 +84,7 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
   }, [searchQuery, conversations])
 
   const fetchConversations = async (userId: string) => {
+    setLoading(true)
     try {
       const { data, error } = await supabase
         .from('conversations')
@@ -94,7 +95,7 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
           messages(content, created_at, sender_id)
         `)
         .or(`participant_1.eq.${userId},participant_2.eq.${userId}`)
-        .order('created_at', { ascending: false })
+        .order('updated_at', { ascending: false })
 
       if (error) throw error
 
@@ -103,9 +104,10 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
           ? conv.participant_2_profile 
           : conv.participant_1_profile
 
-        const lastMessage = conv.messages?.length > 0 
-          ? conv.messages[conv.messages.length - 1] 
-          : null
+        const sortedMessages = conv.messages?.slice().sort(
+          (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
+        const lastMessage = sortedMessages?.[0] ?? null
 
         return {
           ...conv,
@@ -119,6 +121,8 @@ export default function MessagesClient({ initialUser, initialProfile }: Messages
       setFilteredConversations(processedConversations)
     } catch (error) {
       console.error('Error fetching conversations:', error)
+    } finally {
+      setLoading(false)
     }
   }
 

@@ -56,8 +56,8 @@ export default function InfiniteFeed({ initialPosts, category }: InfiniteFeedPro
       console.error('Error loading more posts:', error)
     } else {
       if (data && data.length > 0) {
-        setPosts([...posts, ...data])
-        setPage(page + 1)
+        setPosts(prev => [...prev, ...data])
+        setPage(prev => prev + 1)
         setHasMore(data.length === 10)
       } else {
         setHasMore(false)

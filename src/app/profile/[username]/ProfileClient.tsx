@@ -7,6 +7,7 @@ import Link from 'next/link'
 import PostCard from '@/components/PostCard'
 import EmptyState from '@/components/EmptyState'
 import EditProfileModal from '@/components/EditProfileModal'
+import FollowButton from '@/components/FollowButton'
 
 import { Database } from '@/types/database'
 
@@ -16,9 +17,10 @@ interface ProfileClientProps {
   initialProfile: Database['public']['Tables']['users']['Row']
   posts: Post[]
   isOwner: boolean
+  currentUserId?: string
 }
 
-export default function ProfileClient({ initialProfile, posts, isOwner }: ProfileClientProps) {
+export default function ProfileClient({ initialProfile, posts, isOwner, currentUserId }: ProfileClientProps) {
   const [profile, setProfile] = useState(initialProfile)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
@@ -121,9 +123,11 @@ export default function ProfileClient({ initialProfile, posts, isOwner }: Profil
                     <span>Edit Profile</span>
                   </button>
                 ) : (
-                  <button className="flex-1 bg-white/5 border border-white/10 hover:bg-white/10 text-white flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all">
-                    <span>Follow</span>
-                  </button>
+                  <FollowButton
+                    followingId={profile.id}
+                    initialIsFollowing={false}
+                    className="flex-1"
+                  />
                 )}
                 <button className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white transition-all">
                   <Share2 size={18} />

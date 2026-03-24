@@ -61,6 +61,9 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
   const [showTyping, setShowTyping] = useState(true)
   const [showReadReceipts, setShowReadReceipts] = useState(true)
 
+  const [priorityFirst, setPriorityFirst] = useState(true)
+  const [feedCategory, setFeedCategory] = useState('All')
+
   useEffect(() => {
     const savedCompact = typeof window !== 'undefined' ? localStorage.getItem('appearance_compact') === 'true' : false
     setCompactMode(savedCompact)
@@ -68,6 +71,8 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
     
     setShowTyping(typeof window !== 'undefined' ? localStorage.getItem('ag_show_typing') !== 'false' : true)
     setShowReadReceipts(typeof window !== 'undefined' ? localStorage.getItem('ag_read_receipts') !== 'false' : true)
+    setPriorityFirst(typeof window !== 'undefined' ? localStorage.getItem('ag_priority_first') !== 'false' : true)
+    setFeedCategory(typeof window !== 'undefined' ? (localStorage.getItem('ag_feed_category') || 'All') : 'All')
     
     fetchMfaFactors()
   }, [])
@@ -723,18 +728,20 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
                       <div className="p-5 bg-card/5 border border-border rounded-2xl">
                         <p className="text-[10px] font-black text-foreground/40 uppercase tracking-widest mb-4">Default Category Filter</p>
                         <div className="flex flex-wrap gap-2">
-                          {['All', 'Web3', 'AI', 'Mobile', 'DevTools', 'Game', 'Speak'].map((cat) => {
-                            const stored = typeof window !== 'undefined' ? localStorage.getItem('ag_feed_category') || 'All' : 'All'
-                            return (
+                          {['All', 'Web3', 'AI', 'Mobile', 'DevTools', 'Game', 'Speak'].map((cat) => (
                               <button
                                 key={cat}
-                                onClick={() => typeof window !== 'undefined' && localStorage.setItem('ag_feed_category', cat)}
-                                className="px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all border-border text-foreground/40 hover:border-foreground/40 hover:text-foreground"
+                                onClick={() => {
+                                  setFeedCategory(cat)
+                                  localStorage.setItem('ag_feed_category', cat)
+                                }}
+                                className={`px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+                                  feedCategory === cat ? 'border-foreground text-foreground' : 'border-border text-foreground/40 hover:border-foreground/40 hover:text-foreground'
+                                }`}
                               >
                                 {cat}
                               </button>
-                            )
-                          })}
+                            ))}
                         </div>
                       </div>
                       <div className="p-5 bg-card/5 border border-border rounded-2xl flex items-center justify-between">
@@ -744,12 +751,13 @@ export default function SettingsClient({ initialUser, initialProfile }: Settings
                         </div>
                         <button
                           onClick={() => {
-                            const cur = typeof window !== 'undefined' ? localStorage.getItem('ag_priority_first') !== 'false' : true
-                            typeof window !== 'undefined' && localStorage.setItem('ag_priority_first', String(!cur))
+                            const next = !priorityFirst
+                            setPriorityFirst(next)
+                            localStorage.setItem('ag_priority_first', String(next))
                           }}
-                          className="w-12 h-6 rounded-full relative transition-all bg-green-500"
+                          className={`w-12 h-6 rounded-full relative transition-all ${priorityFirst ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'bg-card border border-border'}`}
                         >
-                          <div className="absolute top-1 left-7 w-4 h-4 bg-white rounded-full transition-all" />
+                          <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${priorityFirst ? 'left-7' : 'left-1'}`} />
                         </button>
                       </div>
                     </div>

@@ -17,6 +17,8 @@ export default function NotificationBell() {
   const [toast, setToast] = useState<{ id: string; content: string; type: string } | null>(null)
 
   useEffect(() => {
+    let channel: any
+
     const setup = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -32,7 +34,7 @@ export default function NotificationBell() {
       setUnreadCount(count || 0)
 
       // Subscribe to real-time notifications
-      const channel = supabase
+      channel = supabase
         .channel(`notifications:${user.id}`)
         .on(
           'postgres_changes',
@@ -56,13 +58,13 @@ export default function NotificationBell() {
           }
         )
         .subscribe()
-
-      return () => {
-        supabase.removeChannel(channel)
-      }
     }
 
     setup()
+
+    return () => {
+      if (channel) supabase.removeChannel(channel)
+    }
   }, [])
 
   const showToast = (notification: Database['public']['Tables']['notifications']['Row']) => {
