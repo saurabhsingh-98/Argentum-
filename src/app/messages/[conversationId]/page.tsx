@@ -523,7 +523,12 @@ export default function ChatPage({ params }: { params: Promise<{ conversationId:
           const isBlob = file instanceof Blob && !(file instanceof File)
           let fileName = isBlob ? `file_${Date.now()}.bin` : (file as File).name
           if (type === 'image' && isBlob) fileName = `camera_${Date.now()}.jpg`
-          if (type === 'voice') fileName = `voice_${Date.now()}.webm`
+          if (type === 'voice') {
+            // Derive extension from actual MIME type so Safari mp4 gets .mp4, not .webm
+            const voiceMime = file.type || 'audio/webm'
+            const voiceExt = voiceMime.includes('mp4') ? 'mp4' : voiceMime.includes('ogg') ? 'ogg' : 'webm'
+            fileName = `voice_${Date.now()}.${voiceExt}`
+          }
           
           const fileExt = fileName.split('.').pop()
           const storagePath = `${conversationId}/${Math.random()}.${fileExt}.enc`
