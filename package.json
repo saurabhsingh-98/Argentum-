@@ -32,13 +32,13 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/web-push": "^3.6.4",
-    "@vitest/ui": "^4.1.0",
+    "@vitest/ui": "^4.0.18",
     "eslint": "^9",
     "eslint-config-next": "^16.1.6",
     "fast-check": "^4.6.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.0",
+    "vitest": "^4.0.18",
     "web-push": "^3.6.7"
   }
 }
