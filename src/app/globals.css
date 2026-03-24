@@ -108,25 +108,16 @@
 /* ── Glass theme: ambient background orbs ── */
 .glass body {
   background-color: var(--background);
-}
-
-.glass body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
+  /* Paint orbs directly on body background — no pseudo-element stacking context needed */
+  background-image:
     var(--glass-orb-1),
     var(--glass-orb-2),
     var(--glass-orb-3);
-  pointer-events: none;
-  z-index: 0;
+  background-attachment: fixed;
 }
 
-/* All content sits above the orbs */
-.glass body > * {
-  position: relative;
-  z-index: 1;
-}
+/* NOTE: No body::before and no z-index:1 on body > * 
+   Those rules created stacking contexts that trapped modals/dropdowns inside their parent's z-index */
 
 /* ── Glass card overhaul ── */
 .glass .glass-card {
@@ -215,17 +206,13 @@
   background: rgba(165, 180, 252, 0.45);
 }
 
-/* ── Glass input ── */
-.glass .glass-input,
-.glass input,
-.glass textarea {
+/* ── Glass input — only apply to inputs that don't have their own explicit bg ── */
+.glass .glass-input {
   background: rgba(255, 255, 255, 0.05) !important;
   border-color: rgba(165, 180, 252, 0.2) !important;
   color: var(--text-primary) !important;
 }
-.glass .glass-input:focus,
-.glass input:focus,
-.glass textarea:focus {
+.glass .glass-input:focus {
   background: rgba(255, 255, 255, 0.08) !important;
   border-color: rgba(165, 180, 252, 0.5) !important;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 0 20px rgba(99, 102, 241, 0.1) !important;
@@ -238,12 +225,15 @@
   border-color: rgba(165, 180, 252, 0.35) !important;
 }
 
-/* ── Glass border override ── */
-.glass * {
-  border-color: rgba(180, 200, 255, 0.15);
-}
+/* ── Glass border override — only structural elements, not interactive ones ── */
 .glass .border-border {
   border-color: rgba(180, 200, 255, 0.18) !important;
+}
+.glass .border-b,
+.glass .border-t,
+.glass .border-l,
+.glass .border-r {
+  border-color: rgba(180, 200, 255, 0.15);
 }
 
 /* 6. Premium Theme Transitions */
@@ -377,7 +367,7 @@ a:active,
   border: 1px solid var(--border);
   border-radius: var(--radius);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  /* NOTE: No overflow:hidden here — it clips absolutely-positioned children like dropdowns/tooltips */
   position: relative;
   box-shadow: 
     0 10px 30px -10px rgba(0, 0, 0, 0.1),
@@ -399,7 +389,8 @@ a:active,
     inset 0 -1px 0 0 rgba(255, 255, 255, 0.05); /* Lower depth */
 }
 
-.glass-card:hover {
+/* Hover lift — only for non-interactive cards, not for cards containing dropdowns */
+:not(.glass) .glass-card:hover {
   transform: translateY(-4px);
   border-color: var(--primary-silver) !important;
   box-shadow: var(--silver-glow);

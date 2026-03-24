@@ -248,7 +248,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                           initial={{ opacity: 0, scale: 0.95, y: 10 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                          className="absolute right-0 mt-3 w-60 bg-card border border-border rounded-2xl shadow-3xl z-[150] overflow-hidden shadow-2xl"
+                          className="absolute right-0 mt-3 w-60 bg-card border border-border rounded-2xl shadow-3xl z-[150] shadow-2xl"
                       >
                           <div className="p-4 bg-foreground/[0.02] border-b border-border">
                             <div className="flex items-center gap-3">
