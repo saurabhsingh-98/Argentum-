@@ -6,7 +6,9 @@
 -- 1. Add missing columns to posts table
 ALTER TABLE public.posts 
 ADD COLUMN IF NOT EXISTS is_priority BOOLEAN DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS is_collab BOOLEAN DEFAULT FALSE;
+ADD COLUMN IF NOT EXISTS is_collab BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS content_hash TEXT,
+ADD COLUMN IF NOT EXISTS verification_status TEXT DEFAULT 'unverified';
 
 -- 2. Fix category check constraint to include 'Speak'
 ALTER TABLE public.posts 

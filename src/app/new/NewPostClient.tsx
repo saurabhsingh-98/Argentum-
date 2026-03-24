@@ -128,7 +128,6 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
             user_id: userId,
             title: postType === 'speak' ? `Broadcast: ${title || 'Announcement'}` : title,
             content,
-            content_hash: hash,
             status,
             tags: tags.split(',').map(t => t.trim()).filter(Boolean)
           }

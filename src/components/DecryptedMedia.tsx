@@ -111,14 +111,15 @@ export default function DecryptedMedia({ url, senderPublicKey, type, fileName, c
         preload="metadata"
         className={className}
         onLoadedMetadata={(e) => {
-          // Force duration recalculation for blob URLs
+          // Force duration recalculation for blob URLs (Infinity/-1 is common for webm blobs)
           const audio = e.currentTarget
-          if (audio.duration === Infinity || isNaN(audio.duration)) {
-            audio.currentTime = 1e101
-            audio.ontimeupdate = () => {
-              audio.ontimeupdate = null
+          if (!isFinite(audio.duration)) {
+            audio.currentTime = Number.MAX_SAFE_INTEGER
+            const onSeeked = () => {
+              audio.removeEventListener('seeked', onSeeked)
               audio.currentTime = 0
             }
+            audio.addEventListener('seeked', onSeeked)
           }
         }}
       >
