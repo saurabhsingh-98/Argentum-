@@ -8,6 +8,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { 
   Plus, 
   Search, 
+  MessageCircle, 
   Settings,
   LogOut,
   User as UserIcon,
