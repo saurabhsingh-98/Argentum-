@@ -49,8 +49,11 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [showDropdown, setShowDropdown] = useState(false)
   const [showStreakModal, setShowStreakModal] = useState(false)
   const [avatarError, setAvatarError] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { setIsOpen: setIsSearchOpen } = useSearch()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const islandRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const saveAccountSession = async (authUser: any, profileData: any) => {
@@ -118,15 +121,15 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
       else setProfile(null)
     })
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setShowDropdown(false)
-      }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
     }
+    window.addEventListener('scroll', handleScroll)
     document.addEventListener('mousedown', handleClickOutside)
     
     return () => {
       subscription.unsubscribe()
+      window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [supabase])
@@ -139,208 +142,202 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
   return (
     <>
-      <nav className="sticky top-0 z-[100] w-full bg-background/70 backdrop-blur-2xl border-b border-border/50 supports-[backdrop-filter]:bg-background/40 transition-colors duration-500">
-        <div className="mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
-          {/* Left Section: Logo */}
-          <div className="flex items-center gap-2 shrink-0">
-            <Link href="/" className="flex items-center gap-3 group logo-container relative">
-              <motion.div 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="relative overflow-visible"
-              >
-                <div className="logo-hover-glow" />
-                <img 
-                  src="/logo.png" 
-                  alt="Argentum" 
-                  className="h-10 w-auto object-contain logo-blend" 
-                />
-              </motion.div>
-              <div className="flex flex-col">
-                <span className="brand-text text-lg tracking-[0.3em] font-black">
-                  Argentum
-                </span>
-                <span className="text-[7px] text-muted font-bold uppercase tracking-[0.4em] -mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
-                  Protocol of Builders
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center Section: Navigation & Search */}
-          <div className="flex-1 flex items-center justify-center max-w-4xl gap-8">
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.name} 
-                  href={link.href} 
-                  className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all relative py-1
-                    ${pathname === link.href ? 'text-primary' : 'text-muted hover:text-primary'}
-                  `}
-                >
-                  <span className="glass:glass-text">{link.name}</span>
-                  {pathname === link.href && (
-                    <motion.div layoutId="nav-underline" className="absolute -bottom-1 left-0 right-0 h-px bg-primary-silver" />
+      {/* Dynamic Island Header */}
+      <div className="fixed top-6 left-0 right-0 z-[100] flex justify-center pointer-events-none px-4">
+        <motion.div
+          ref={islandRef}
+          layout
+          initial={false}
+          animate={{
+            width: isExpanded ? '90%' : isScrolled ? '320px' : '480px',
+            maxWidth: isExpanded ? '1100px' : '480px',
+            borderRadius: isExpanded ? '28px' : '32px',
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 30,
+            mass: 0.8
+          }}
+          className={`
+            pointer-events-auto relative
+            bg-black/80 backdrop-blur-2xl border border-white/10
+            shadow-[0_0_40px_rgba(0,0,0,0.5),0_0_1px_rgba(255,255,255,0.1)]
+            overflow-hidden group/island silver-glow-sm
+          `}
+        >
+          {/* Inner Content Wrapper */}
+          <div className="flex items-center h-14 px-3 relative">
+            
+            {/* Left: Logo (Always Visible) */}
+            <div className="flex items-center gap-3 shrink-0 ml-1">
+              <Link href="/" className="flex items-center gap-2.5 group/logo h-10 px-1 rounded-full hover:bg-white/5 transition-colors">
+                <motion.div layout className="w-8 h-8 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden shadow-inner">
+                  <img src="/logo.png" alt="Ag" className="w-6 h-6 object-contain" />
+                </motion.div>
+                <AnimatePresence mode="wait">
+                  {(isExpanded || !isScrolled) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      className="flex flex-col"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] leading-none mb-0.5">Argentum</span>
+                      <span className="text-[6px] text-muted font-bold uppercase tracking-widest opacity-40">Protocol</span>
+                    </motion.div>
                   )}
-                </Link>
-              ))}
-            </div>
-
-            {/* YouTube-style Search Bar */}
-            <div 
-              onClick={() => setIsSearchOpen(true)}
-              className="flex-1 max-w-xl relative hidden md:block group cursor-text"
-            >
-              <div className="flex items-center gap-3 px-4 py-2 rounded-full glass-search">
-                <Search size={16} className="text-muted" />
-                <div className="text-sm text-muted flex-1">Search builds, builders, tags...</div>
-                <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded border border-border bg-foreground/5">
-                  <span className="text-[8px] font-black text-muted tracking-widest uppercase">Cmd+K</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Section: Actions */}
-          <div className="flex items-center gap-1.5 md:gap-4 shrink-0">
-            {/* Theme Toggle (Premium Integration) */}
-            <div className="hidden sm:block mr-2">
-              <ThemeToggle />
-            </div>
-
-            {/* Mobile Search Trigger (Always Visible) */}
-            <button 
-              onClick={() => setIsSearchOpen(true)}
-              className="w-9 h-9 flex md:hidden items-center justify-center text-muted hover:text-primary hover:bg-foreground/5 rounded-full transition-all mr-1"
-            >
-              <Search size={18} />
-            </button>
-
-            {user ? (
-              <>
-                <div className="flex items-center gap-1 md:gap-3">
-                  <Link 
-                    href="/messages"
-                    className="w-9 h-9 flex items-center justify-center text-muted hover:text-primary hover:bg-foreground/5 rounded-full transition-all relative"
-                  >
-                    <MessageCircle size={18} />
-                    <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-green-500 rounded-full border-2 border-background" />
-                  </Link>
-
-                  <NotificationBell />
-
-                  <Link 
-                    href="/new" 
-                    className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full silver-metallic text-[10px] font-black uppercase tracking-widest shadow-premium hover:brightness-110 transition-all active:scale-95 silver-shine glass-perspective"
-                  >
-                    <Plus size={14} />
-                    <span>Build Log</span>
-                  </Link>
-                </div>
-
-                <div className="h-4 w-px bg-border hidden md:block mx-1" />
-
-                {/* Streak Counter */}
-                <button 
-                   onClick={() => setShowStreakModal(true)}
-                   className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 group/streak hover:border-orange-500/40 transition-all"
-                >
-                   <Flame size={14} className="text-orange-500 group-hover:scale-110 transition-transform" />
-                   <span className="text-xs font-black text-primary">{profile?.streak_count || 0}</span>
-                </button>
-
-                {/* Profile Circle */}
-                <div className="relative" ref={dropdownRef}>
-                  <button 
-                    onClick={() => setShowDropdown(!showDropdown)}
-                    className="w-9 h-9 rounded-full border border-border overflow-hidden bg-card flex items-center justify-center group/avatar hover:border-foreground/30 transition-all"
-                  >
-                    {profile?.avatar_url && !avatarError ? (
-                      <Image 
-                        src={profile.avatar_url} 
-                        alt="avatar" 
-                        width={36}
-                        height={36}
-                        className="w-full h-full object-cover"
-                        onError={() => setAvatarError(true)}
-                      />
-                    ) : (
-                      <span className="text-xs font-black text-foreground/40 group-hover/avatar:text-foreground transition-colors uppercase">
-                         {profile?.username?.[0] || user.email?.[0]}
-                      </span>
-                    )}
-                  </button>
-
-                  <AnimatePresence>
-                    {showDropdown && (
-                      <motion.div 
-                          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                          className="absolute right-0 mt-3 w-60 bg-card border border-border rounded-2xl shadow-3xl z-[150] shadow-2xl"
-                      >
-                          <div className="p-4 bg-foreground/[0.02] border-b border-border">
-                            <div className="flex items-center gap-3">
-                               <div className="w-10 h-10 rounded-full bg-foreground/5 border border-border flex items-center justify-center overflow-hidden">
-                                  {profile?.avatar_url ? (
-                                    <Image 
-                                      src={profile.avatar_url} 
-                                      alt="avatar"
-                                      width={40}
-                                      height={40}
-                                      className="w-full h-full object-cover" 
-                                    />
-                                  ) : (
-                                    <span className="font-black text-xs text-foreground/40">{profile?.username?.[0]}</span>
-                                  )}
-                               </div>
-                               <div className="flex flex-col min-w-0">
-                                  <span className="text-sm font-bold text-primary truncate">
-                                    {profile?.display_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Builder'}
-                                  </span>
-                                  <span className="text-[10px] text-muted font-mono truncate">
-                                    @{profile?.username || user?.user_metadata?.username || user?.email?.split('@')[0] || 'anonymous'}
-                                  </span>
-                               </div>
-                            </div>
-                          </div>
-                   
-                           <div className="p-1">
-                             <DropdownItem icon={<UserIcon size={14} />} label="View Profile" href={profile?.username ? `/profile/${profile.username}` : (user ? '/onboarding' : '/auth/login')} onClick={() => setShowDropdown(false)} />
-                             <DropdownItem icon={<Edit3 size={14} />} label="Edit Profile" href={profile?.username ? `/profile/${profile.username}?edit=true` : (user ? '/settings' : '/auth/login')} onClick={() => setShowDropdown(false)} />
-                             <DropdownItem icon={<Bell size={14} />} label="Notifications" href="/notifications" onClick={() => setShowDropdown(false)} />
-                             <DropdownItem icon={<MessageCircle size={14} />} label="Messages" href="/messages" onClick={() => setShowDropdown(false)} />
-                             <DropdownItem icon={<Settings size={14} />} label="Account Settings" href="/settings" onClick={() => setShowDropdown(false)} />
-                            
-                            <div className="h-px bg-border my-1" />
-                            <button 
-                              onClick={() => { setShowAccountSwitcher(true); setShowDropdown(false); }}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-secondary hover:text-primary hover:bg-foreground/5 rounded-xl transition-all"
-                            >
-                              <Users size={14} /> Switch Account
-                            </button>
-                            <button 
-                              onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
-                              className="w-full flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all"
-                            >
-                              <LogOut size={14} /> Sign Out
-                            </button>
-                          </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </>
-            ) : (
-              <Link 
-                href="/auth/login"
-                className="px-6 py-2 rounded-full glass-button-3d text-foreground text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all active:scale-95 shadow-premium"
-              >
-                Sign In
+                </AnimatePresence>
               </Link>
-            )}
+            </div>
+
+            {/* Separator (Visible when expanded or not scrolled) */}
+            <AnimatePresence>
+               {(isExpanded || !isScrolled) && (
+                 <motion.div 
+                   initial={{ opacity: 0, scaleY: 0 }}
+                   animate={{ opacity: 1, scaleY: 1 }}
+                   exit={{ opacity: 0, scaleY: 0 }}
+                   className="h-6 w-px bg-white/10 mx-2" 
+                 />
+               )}
+            </AnimatePresence>
+
+            {/* Center: Nav Links & Search */}
+            <div className="flex-1 flex items-center justify-center gap-2 overflow-hidden">
+               <AnimatePresence mode="wait">
+                  {isExpanded ? (
+                    <motion.div 
+                      key="expanded-nav"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-center gap-6 w-full px-4"
+                    >
+                      {navLinks.map((link) => (
+                        <Link 
+                          key={link.name} 
+                          href={link.href} 
+                          className={`text-[9px] font-black uppercase tracking-[0.2em] transition-all relative py-1
+                            ${pathname === link.href ? 'text-white' : 'text-muted hover:text-white'}
+                          `}
+                        >
+                          {link.name}
+                          {pathname === link.href && (
+                            <motion.div layoutId="nav-pill" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-silver rounded-full" />
+                          )}
+                        </Link>
+                      ))}
+                      
+                      {/* Expanded Search Bar */}
+                      <div className="flex-1 flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/5 hover:border-white/10 transition-all cursor-text" onClick={() => setIsSearchOpen(true)}>
+                         <Search size={14} className="text-muted" />
+                         <span className="text-[10px] text-muted font-bold uppercase tracking-widest">Search builds...</span>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div 
+                      key="collapsed-nav"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="flex items-center gap-4"
+                    >
+                       {/* Compact Search Trigger */}
+                       <button onClick={() => setIsSearchOpen(true)} className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-full transition-all">
+                         <Search size={16} />
+                       </button>
+                       <AnimatePresence>
+                         {!isScrolled && (
+                           <motion.div initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: 'auto' }} exit={{ opacity: 0, width: 0 }} className="flex gap-4 overflow-hidden">
+                              {navLinks.slice(0, 2).map((link) => (
+                                <Link key={link.name} href={link.href} className="text-[8px] font-black uppercase tracking-widest text-muted hover:text-white whitespace-nowrap">
+                                  {link.name}
+                                </Link>
+                              ))}
+                           </motion.div>
+                         )}
+                       </AnimatePresence>
+                    </motion.div>
+                  )}
+               </AnimatePresence>
+            </div>
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-2 shrink-0 pr-1">
+               {user ? (
+                 <>
+                   <div className="flex items-center gap-1">
+                      <Link href="/new" className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-full transition-all" title="New Build">
+                        <Plus size={18} />
+                      </Link>
+                      <button onClick={() => setShowStreakModal(true)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 group/streak hover:border-orange-500/40 transition-all">
+                        <Flame size={12} className="text-orange-500" />
+                        <span className="text-[10px] font-black">{profile?.streak_count || 0}</span>
+                      </button>
+                   </div>
+
+                   {/* Expand/Collapse Toggle */}
+                   <button 
+                     onClick={() => setIsExpanded(!isExpanded)}
+                     className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-full transition-all"
+                   >
+                     <motion.div animate={{ rotate: isExpanded ? 180 : 0 }}>
+                        <ChevronDown size={14} />
+                     </motion.div>
+                   </button>
+
+                   {/* User Avatar */}
+                   <div className="relative" ref={dropdownRef}>
+                      <button 
+                        onClick={() => setShowDropdown(!showDropdown)}
+                        className="w-8 h-8 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center group/avatar hover:border-white/30 transition-all"
+                      >
+                         {profile?.avatar_url && !avatarError ? (
+                            <Image src={profile.avatar_url} alt="A" width={32} height={32} className="w-full h-full object-cover" onError={() => setAvatarError(true)} />
+                         ) : (
+                            <span className="text-[10px] font-black opacity-40">{profile?.username?.[0] || 'B'}</span>
+                         )}
+                      </button>
+                      
+                      <AnimatePresence>
+                        {showDropdown && (
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 8 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 8 }}
+                            className="absolute right-0 mt-3 w-56 bg-black/90 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-3xl z-[150] overflow-hidden"
+                          >
+                             {/* Mini Profile Info */}
+                             <div className="p-4 bg-white/[0.03] border-b border-white/5">
+                                <span className="text-[10px] font-black uppercase text-white truncate block">{profile?.display_name || 'Builder'}</span>
+                                <span className="text-[8px] text-muted font-mono truncate block">@{profile?.username || 'anonymous'}</span>
+                             </div>
+                             <div className="p-1.5">
+                                <DropdownItem icon={<UserIcon size={12} />} label="Profile" href={`/profile/${profile?.username}`} onClick={() => setShowDropdown(false)} />
+                                <DropdownItem icon={<Settings size={12} />} label="Settings" href="/settings" onClick={() => setShowDropdown(false)} />
+                                <div className="h-px bg-white/5 my-1" />
+                                <button 
+                                  onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
+                                  className="w-full flex items-center gap-3 px-3 py-2 text-[9px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
+                                >
+                                  <LogOut size={12} /> Sign Out
+                                </button>
+                             </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                   </div>
+                 </>
+               ) : (
+                 <Link href="/auth/login" className="px-5 py-2 rounded-full silver-metallic text-[10px] font-black uppercase tracking-widest shadow-2xl">
+                   Join
+                 </Link>
+               )}
+            </div>
           </div>
-        </div>
-      </nav>
+        </motion.div>
+      </div>
 
       {/* Mobile Bottom Tab Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/90 backdrop-blur-xl border-t border-border z-[100] flex items-center justify-around px-4">
