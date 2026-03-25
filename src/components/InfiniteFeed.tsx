@@ -41,7 +41,7 @@ export default function InfiniteFeed({ initialPosts, category }: InfiniteFeedPro
 
     let query = supabase
       .from('posts')
-      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building)')
+      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building, created_at)')
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .range(start, end)

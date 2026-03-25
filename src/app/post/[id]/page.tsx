@@ -64,7 +64,7 @@ export default function PostDetail({ params }: { params: Promise<{ id: string }>
       const [{ data: postData }, { data: { user } }] = await Promise.all([
         supabase
           .from('posts')
-          .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building)')
+          .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building, created_at)')
           .eq('id', id)
           .single(),
         supabase.auth.getUser()

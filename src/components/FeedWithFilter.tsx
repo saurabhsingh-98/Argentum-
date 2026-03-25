@@ -23,7 +23,7 @@ export default function FeedWithFilter({ initialPosts }: { initialPosts: any[] }
     // Fetch first page for new category
     let query = supabase
       .from('posts')
-      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building)')
+      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building, created_at)')
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .limit(10)

@@ -28,7 +28,7 @@ export default async function FeedPage() {
   try {
     const { data: postsData, count: postsCount, error: postsError } = await supabase
       .from('posts')
-      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building)', { count: 'exact' })
+      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building, created_at)', { count: 'exact' })
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .limit(10)
@@ -45,7 +45,7 @@ export default async function FeedPage() {
   try {
     const { data: highlightsData, error: highlightsError } = await supabase
       .from('posts')
-      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building)')
+      .select('*, users!posts_user_id_fkey(id, username, display_name, avatar_url, bio, currently_building, created_at)')
       .eq('status', 'published')
       .eq('category', 'Speak')
       .order('created_at', { ascending: false })
