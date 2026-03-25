@@ -3,30 +3,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { 
   Plus, 
   Search, 
-  Loader2, 
   MessageCircle, 
-  Bell,
   Settings,
-  Users,
   LogOut,
   User as UserIcon,
   Flame,
-  MoreVertical,
   ChevronDown,
-  LayoutGrid,
   Home,
-  Compass,
-  Rocket,
-  Edit3
+  Compass
 } from 'lucide-react'
 import NotificationBell from './NotificationBell'
 import AccountSwitcher from './AccountSwitcher'
-import ThemeToggle from './ThemeToggle'
 import { motion, AnimatePresence } from 'framer-motion'
 import StreakModal from './StreakModal'
 import { useSearch } from '@/context/SearchContext'
@@ -40,9 +32,11 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onSearchClick }: NavbarProps) {
-  const supabase = createClient() as any
+  const supabase = createClient()
   const router = useRouter()
   const pathname = usePathname()
+  
+  // State
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [profile, setProfile] = useState<Profile | Partial<Profile> | null>(null)
   const [showAccountSwitcher, setShowAccountSwitcher] = useState(false)
@@ -51,79 +45,70 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [avatarError, setAvatarError] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  
   const { setIsOpen: setIsSearchOpen } = useSearch()
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  
+  // Refs
   const islandRef = useRef<HTMLDivElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const saveAccountSession = async (authUser: any, profileData: any) => {
-      if (!authUser) return
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (!session) return
+  // Handlers
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 20)
+  }, [])
 
-        const saved = JSON.parse(localStorage.getItem('saved_accounts') || '[]')
-        const exists = saved.find((a: any) => a.id === authUser.id)
-        
-        // If account exists but mission session tokens (from OAuth), or doesn't exist at all
-        if (!exists || !exists.session) {
-          const filtered = saved.filter((a: any) => a.id !== authUser.id)
-          filtered.unshift({
-            id: authUser.id,
-            email: authUser.email,
-            username: profileData?.username || authUser.user_metadata?.username || authUser.email?.split('@')[0],
-            display_name: profileData?.display_name || authUser.user_metadata?.full_name || null,
-            avatar_url: profileData?.avatar_url || authUser.user_metadata?.avatar_url || null,
-            session: { access_token: session.access_token, refresh_token: session.refresh_token }
-          })
-          localStorage.setItem('saved_accounts', JSON.stringify(filtered.slice(0, 5)))
-        }
-      } catch (e) { console.error('Failed to register account for switcher:', e) }
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    // If clicking outside the island, close both expansion and dropdown
+    if (islandRef.current && !islandRef.current.contains(event.target as Node)) {
+      setIsExpanded(false)
+      setShowDropdown(false)
     }
+  }, [])
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+    setShowDropdown(false)
+  }
+
+  // Effect: Close menu on route change
+  useEffect(() => {
+    setIsExpanded(false)
+    setShowDropdown(false)
+  }, [pathname])
+
+  // Effect: Main setup and listeners
+  useEffect(() => {
     const setup = async () => {
       const { data: { user: authUser } } = await supabase.auth.getUser()
       if (authUser) {
         setUser(authUser)
-        const { data: profileData, error: profileError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', authUser.id)
-        .maybeSingle()
-
-        if (profileError && profileError.code !== 'PGRST116') {
-          console.error('Navbar profile fetch error:', profileError)
-        }
+        const { data: profileData } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle()
 
         if (profileData) {
           setProfile(profileData)
-          saveAccountSession(authUser, profileData)
         } else {
-          // Create a minimal virtual profile from metadata
-          const virtualName = authUser.user_metadata?.full_name || authUser.user_metadata?.name || authUser.email?.split('@')[0] || 'Builder'
-          const virtualUsername = authUser.user_metadata?.username || authUser.user_metadata?.user_name || authUser.user_metadata?.preferred_username || null
-          
-          const virtualProfile = {
-            display_name: virtualName,
-            username: virtualUsername,
+          setProfile({
+            display_name: authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'Builder',
+            username: authUser.user_metadata?.username || null,
             avatar_url: authUser.user_metadata?.avatar_url || null
-          }
-          setProfile(virtualProfile)
-          saveAccountSession(authUser, virtualProfile)
+          })
         }
       }
     }
+
     setup()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
       if (session?.user) setup()
       else setProfile(null)
     })
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
     window.addEventListener('scroll', handleScroll)
     document.addEventListener('mousedown', handleClickOutside)
     
@@ -132,7 +117,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [supabase])
+  }, [supabase, handleScroll, handleClickOutside])
 
   const navLinks = [
     { name: 'Feed', href: '/feed' },
@@ -142,7 +127,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
   return (
     <>
-      {/* Dynamic Island Header */}
       <div className="fixed top-6 left-0 right-0 z-[100] flex justify-center pointer-events-none px-4">
         <motion.div
           ref={islandRef}
@@ -159,17 +143,9 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
             damping: 30,
             mass: 0.8
           }}
-          className={`
-            pointer-events-auto relative
-            bg-black/80 backdrop-blur-2xl border border-white/10
-            shadow-[0_0_40px_rgba(0,0,0,0.5),0_0_1px_rgba(255,255,255,0.1)]
-            overflow-hidden group/island silver-glow-sm island-shimmer
-          `}
+          className="pointer-events-auto relative bg-black/80 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5),0_0_1px_rgba(255,255,255,0.1)] overflow-hidden group/island silver-glow-sm island-shimmer"
         >
-          {/* Inner Content Wrapper */}
           <div className="flex items-center h-14 px-3 relative">
-            
-            {/* Left: Logo (Always Visible) */}
             <div className="flex items-center gap-3 shrink-0 ml-1">
               <Link href="/" className="flex items-center gap-2.5 group/logo h-10 px-1 rounded-full hover:bg-white/5 transition-colors">
                 <motion.div layout className="w-8 h-8 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden shadow-inner">
@@ -191,7 +167,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
               </Link>
             </div>
 
-            {/* Separator (Visible when expanded or not scrolled) */}
             <AnimatePresence>
                {(isExpanded || !isScrolled) && (
                  <motion.div 
@@ -203,7 +178,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                )}
             </AnimatePresence>
 
-            {/* Center: Nav Links & Search */}
             <div className="flex-1 flex items-center justify-center gap-2 overflow-hidden">
                <AnimatePresence mode="wait">
                   {isExpanded ? (
@@ -229,7 +203,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                         </Link>
                       ))}
                       
-                      {/* Expanded Search Bar */}
                       <div className="flex-1 flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/5 hover:border-white/10 transition-all cursor-text" onClick={() => setIsSearchOpen(true)}>
                          <Search size={14} className="text-muted" />
                          <span className="text-[10px] text-muted font-bold uppercase tracking-widest">Search builds...</span>
@@ -243,7 +216,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                       exit={{ opacity: 0, y: 10 }}
                       className="flex items-center gap-4"
                     >
-                       {/* Compact Search Trigger */}
                        <button onClick={() => setIsSearchOpen(true)} className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-full transition-all">
                          <Search size={16} />
                        </button>
@@ -263,7 +235,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                </AnimatePresence>
             </div>
 
-            {/* Right: Actions */}
             <div className="flex items-center gap-2 shrink-0 pr-1">
                {user ? (
                  <>
@@ -277,7 +248,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                       </button>
                    </div>
 
-                   {/* Expand/Collapse Toggle */}
                    <button 
                      onClick={() => setIsExpanded(!isExpanded)}
                      className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-full transition-all"
@@ -287,7 +257,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                      </motion.div>
                    </button>
 
-                   {/* User Avatar */}
                    <div className="relative" ref={dropdownRef}>
                       <button 
                         onClick={() => setShowDropdown(!showDropdown)}
@@ -308,17 +277,16 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
                             exit={{ opacity: 0, scale: 0.9, y: 8 }}
                             className="absolute right-0 mt-3 w-56 bg-black/90 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-3xl z-[150] overflow-hidden"
                           >
-                             {/* Mini Profile Info */}
                              <div className="p-4 bg-white/[0.03] border-b border-white/5">
                                 <span className="text-[10px] font-black uppercase text-white truncate block">{profile?.display_name || 'Builder'}</span>
                                 <span className="text-[8px] text-muted font-mono truncate block">@{profile?.username || 'anonymous'}</span>
                              </div>
                              <div className="p-1.5">
-                                <DropdownItem icon={<UserIcon size={12} />} label="Profile" href={`/profile/${profile?.username}`} onClick={() => setShowDropdown(false)} />
-                                <DropdownItem icon={<Settings size={12} />} label="Settings" href="/settings" onClick={() => setShowDropdown(false)} />
+                                <DropdownItem icon={<UserIcon size={12} />} label="Profile" href={`/profile/${profile?.username}`} />
+                                <DropdownItem icon={<Settings size={12} />} label="Settings" href="/settings" />
                                 <div className="h-px bg-white/5 my-1" />
                                 <button 
-                                  onClick={async () => { await supabase.auth.signOut(); router.push('/'); }}
+                                  onClick={handleSignOut}
                                   className="w-full flex items-center gap-3 px-3 py-2 text-[9px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
                                 >
                                   <LogOut size={12} /> Sign Out
@@ -339,7 +307,6 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         </motion.div>
       </div>
 
-      {/* Mobile Bottom Tab Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/90 backdrop-blur-xl border-t border-border z-[100] flex items-center justify-around px-4">
         <MobileNavItem icon={<Home size={20} />} label="Feed" href="/feed" active={pathname === '/feed'} />
         <MobileNavItem icon={<Compass size={20} />} label="Explore" href="/explore" active={pathname === '/explore'} />
