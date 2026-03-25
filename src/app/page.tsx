@@ -4,6 +4,7 @@ import FeedWithFilter from '@/components/FeedWithFilter'
 import { CheckCircle2, Users, Zap, Activity, ArrowRight, Github } from 'lucide-react'
 import Link from 'next/link'
 import * as motion from 'framer-motion/client'
+import BrandIntro from '@/components/BrandIntro'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -24,7 +25,8 @@ export default async function Home() {
   ])
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden pb-20 relative transition-colors duration-500">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden pb-20 relative transition-colors duration-500">
+      <BrandIntro />
       {/* Hero Section */}
       <section className="relative pt-32 pb-40 px-4 lg:px-6">
         <div className="container mx-auto text-center relative z-10">

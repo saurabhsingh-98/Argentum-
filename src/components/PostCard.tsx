@@ -17,9 +17,9 @@ import {
 } from 'lucide-react'
 import { Database } from '@/types/database'
 import ReactionButton from './ReactionButton'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion'
 import { getGradientFromUsername, getInitials } from '@/lib/utils/ui'
 import GitHubEmbed from './GitHubEmbed'
 
@@ -41,6 +41,41 @@ export default function PostCard({
   const [reactions, setReactions] = useState<PostReaction[]>(post.post_reactions || [])
   const [commentCount, setCommentCount] = useState<number>(post.comments_count ?? 0)
   const [avatarError, setAvatarError] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
+  
+  // 3D Tilt Motion Values
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], ["7deg", "-7deg"]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], ["-7deg", "7deg"]), { stiffness: 300, damping: 30 })
+  
+  const shimmerOpacity = useSpring(useMotionValue(0))
+  const shimmerX = useSpring(mouseX)
+  const shimmerY = useSpring(mouseY)
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
+    const mouseXRatio = (event.clientX - rect.left) / width - 0.5
+    const mouseYRatio = (event.clientY - rect.top) / height - 0.5
+    
+    x.set(mouseXRatio)
+    y.set(mouseYRatio)
+    mouseX.set(event.clientX - rect.left)
+    mouseY.set(event.clientY - rect.top)
+    shimmerOpacity.set(1)
+  }
+
+  const handleMouseLeave = () => {
+    x.set(0)
+    y.set(0)
+    shimmerOpacity.set(0)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,10 +106,17 @@ export default function PostCard({
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -2 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ 
+        rotateX, 
+        rotateY, 
+        transformStyle: "preserve-3d" 
+      }}
       className={`
         relative group bg-card glass-card rounded-2xl border border-border transition-all duration-300 hover:border-border-accent hover:shadow-2xl
         ${post.verification_status === 'verified' ? 'border-l-2 border-l-green-500 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)]' : ''}
@@ -82,7 +124,23 @@ export default function PostCard({
         ${post.category === 'Speak' && !post.is_priority ? 'border-amber-500/40 bg-bg-surface hover:border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.03)]' : ''}
       `}
     >
-      <div className="p-5 flex flex-col h-full">
+      {/* Dynamic Metallic Shimmer */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none z-0 rounded-2xl overflow-hidden"
+        style={{ opacity: shimmerOpacity }}
+      >
+        <motion.div 
+          className="absolute inset-0"
+          style={{ 
+            background: useTransform(
+              [shimmerX, shimmerY], 
+              ([x, y]) => `radial-gradient(circle 300px at ${x}px ${y}px, rgba(255,255,255,0.08), transparent 80%)`
+            )
+          }}
+        />
+      </motion.div>
+
+      <div className="p-5 flex flex-col h-full relative z-10">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -248,10 +306,16 @@ export default function PostCard({
                 </span>
              </div>
              {post.verification_status === 'verified' && (
-               <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-500/10 border border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.05)]">
+               <motion.div 
+                 animate={{ 
+                   boxShadow: ["0 0 10px rgba(34,197,94,0.05)", "0 0 20px rgba(34,197,94,0.2)", "0 0 10px rgba(34,197,94,0.05)"]
+                 }}
+                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                 className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-500/10 border border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.05)]"
+               >
                  <Check size={10} className="text-green-500" />
                  <span className="text-[8px] font-black text-green-500 uppercase tracking-[0.2em]">Verified</span>
-               </div>
+               </motion.div>
              )}
           </div>
         </div>
