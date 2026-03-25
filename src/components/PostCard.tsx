@@ -23,6 +23,7 @@ import { createClient } from '@/lib/supabase/client'
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion'
 import { getGradientFromUsername, getInitials } from '@/lib/utils/ui'
 import GitHubEmbed from './GitHubEmbed'
+import UpvoteButton from './UpvoteButton'
 
 import { Post, PostReaction } from '@/types/post'
 
@@ -285,10 +286,7 @@ export default function PostCard({
                 <MessageCircle size={16} className="group-hover/action:scale-110 transition-transform" />
                 <span className="text-[10px] font-black">{commentCount}</span>
               </Link>
-              <button className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors group/action">
-                <ArrowUp size={16} className="group-hover/action:scale-110 transition-transform" />
-                <span className="text-[10px] font-black">{post.upvotes || 0}</span>
-              </button>
+              <UpvoteButton postId={post.id} initialUpvotes={post.upvotes || 0} />
               <Link href={`/collab?post=${post.id}`} className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors group/action">
                 <Handshake size={16} className="group-hover/action:scale-110 transition-transform" />
                 <span className="text-[10px] font-black hidden md:inline">Collab</span>
