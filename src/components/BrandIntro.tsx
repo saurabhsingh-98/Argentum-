@@ -57,35 +57,36 @@ export default function BrandIntro() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full h-screen flex flex-col items-center justify-center bg-black overflow-hidden z-[200]"
+      className="relative w-full h-screen flex flex-col items-center justify-center bg-background overflow-hidden z-[200] transition-colors duration-1000"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(192,192,192,0.08),transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(192,192,192,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(192,192,192,0.05),transparent_70%)]" />
       
       <div ref={containerRef} className="relative flex items-center gap-8 md:gap-12">
         {/* Logo Slide-In */}
         <div ref={logoRef} className="relative">
-            <div className="absolute inset-0 bg-white/20 blur-2xl rounded-full" />
+            <div className="absolute inset-0 bg-foreground/5 blur-3xl rounded-full" />
             <img 
               src="/logo.png" 
               alt="Argentum" 
-              className="h-32 md:h-48 w-auto object-contain logo-blend relative z-10" 
+              className="h-32 md:h-48 w-auto object-contain logo-blend relative z-10 filter" 
+              style={{ filter: "drop-shadow(0 0 20px rgba(192,192,192,0.2))" }}
             />
         </div>
 
         {/* Brand Text Slide-In */}
         <div ref={textRef} className="flex flex-col">
-            <h1 className="text-7xl md:text-[120px] font-black tracking-[-0.05em] text-white silver-glow-text leading-[0.8] mb-2">
+            <h1 className="text-7xl md:text-[120px] font-black tracking-[-0.05em] text-foreground silver-glow-text leading-[0.8] mb-2">
                 ARGENTUM
             </h1>
-            <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.5em] text-white/30 ml-2">
+            <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.5em] text-foreground/30 ml-2">
                 The Protocol of Builders
             </p>
         </div>
       </div>
 
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/40">Scroll to Enter</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/20 to-transparent" />
+        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-foreground/40">Scroll to Enter</span>
+        <div className="w-px h-10 bg-gradient-to-b from-foreground/20 to-transparent" />
       </div>
     </section>
   )
