@@ -53,6 +53,31 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    const saveAccountSession = async (authUser: any, profileData: any) => {
+      if (!authUser) return
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) return
+
+        const saved = JSON.parse(localStorage.getItem('saved_accounts') || '[]')
+        const exists = saved.find((a: any) => a.id === authUser.id)
+        
+        // If account exists but mission session tokens (from OAuth), or doesn't exist at all
+        if (!exists || !exists.session) {
+          const filtered = saved.filter((a: any) => a.id !== authUser.id)
+          filtered.unshift({
+            id: authUser.id,
+            email: authUser.email,
+            username: profileData?.username || authUser.user_metadata?.username || authUser.email?.split('@')[0],
+            display_name: profileData?.display_name || authUser.user_metadata?.full_name || null,
+            avatar_url: profileData?.avatar_url || authUser.user_metadata?.avatar_url || null,
+            session: { access_token: session.access_token, refresh_token: session.refresh_token }
+          })
+          localStorage.setItem('saved_accounts', JSON.stringify(filtered.slice(0, 5)))
+        }
+      } catch (e) { console.error('Failed to register account for switcher:', e) }
+    }
+
     const setup = async () => {
       const { data: { user: authUser } } = await supabase.auth.getUser()
       if (authUser) {
@@ -63,22 +88,25 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
         .eq('id', authUser.id)
         .maybeSingle()
 
-      if (profileError && profileError.code !== 'PGRST116') {
-        console.error('Navbar profile fetch error:', profileError)
-      }
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.error('Navbar profile fetch error:', profileError)
+        }
 
         if (profileData) {
           setProfile(profileData)
+          saveAccountSession(authUser, profileData)
         } else {
           // Create a minimal virtual profile from metadata
           const virtualName = authUser.user_metadata?.full_name || authUser.user_metadata?.name || authUser.email?.split('@')[0] || 'Builder'
           const virtualUsername = authUser.user_metadata?.username || authUser.user_metadata?.user_name || authUser.user_metadata?.preferred_username || null
           
-          setProfile({
+          const virtualProfile = {
             display_name: virtualName,
             username: virtualUsername,
             avatar_url: authUser.user_metadata?.avatar_url || null
-          })
+          }
+          setProfile(virtualProfile)
+          saveAccountSession(authUser, virtualProfile)
         }
       }
     }

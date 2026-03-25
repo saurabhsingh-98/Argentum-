@@ -209,7 +209,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
 
       <div className="container mx-auto px-4 py-12 max-w-4xl relative z-10">
         <header className="flex items-center justify-between mb-16">
-          <Link href="/" className="flex items-center gap-3 text-foreground/40 hover:text-foreground transition-all group px-4 py-2 rounded-xl bg-foreground/[0.02] border border-border/50 hover:border-border">
+          <Link href="/" className="flex items-center gap-3 text-muted hover:text-foreground transition-all group px-4 py-2 rounded-xl bg-foreground/[0.02] border border-border/50 hover:border-border">
             <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             <span className="text-[10px] font-black uppercase tracking-widest">Abort / Back</span>
           </Link>
@@ -218,7 +218,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
             <div className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center silver-glow-sm">
                 <Plus size={20} className="text-silver" />
             </div>
-            <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40">New Transmission</h1>
+            <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">New Transmission</h1>
           </div>
 
           <div className="w-[120px]" /> {/* Spacer */}
@@ -286,7 +286,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
           >
             {/* Top Section: Title */}
             <div className="flex flex-col gap-3 mb-12">
-              <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-2 transition-colors ${isSpeak ? 'text-amber-500' : 'text-foreground/40'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-[0.3em] ml-2 transition-colors ${isSpeak ? 'text-amber-500' : 'text-muted'}`}>
                 {isSpeak ? 'Broadcast Headline' : 'Project Identity'}
               </label>
               <input
@@ -305,7 +305,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               {!isSpeak && (
                 <div className="flex flex-col gap-3">
-                  <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest ml-1">Sector / Category</label>
+                  <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">Sector / Category</label>
                   <div className="relative group">
                     <select
                       value={category}
@@ -324,7 +324,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
               )}
 
               <div className={`flex flex-col gap-3 ${isSpeak ? 'md:col-span-2' : ''}`}>
-                <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest ml-1">Status / Visibility</label>
+                <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">Status / Visibility</label>
                 <div className="flex gap-3 bg-background/50 p-1.5 rounded-2xl border border-border/50">
                   <button
                     type="button"
@@ -356,7 +356,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
 
             {/* Content Area */}
             <div className="flex flex-col gap-3 mb-10">
-              <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest ml-1">
+              <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">
                 {isSpeak ? 'Broadcast Payload' : 'The Build Log'}
               </label>
               <div className={`rounded-3xl border transition-all duration-700 overflow-hidden ${
@@ -368,7 +368,7 @@ export default function NewPostClient({ initialUser }: NewPostClientProps) {
 
             {/* Bottom Meta */}
             <div className="flex flex-col gap-3 mb-12">
-              <label className="text-[10px] font-black text-foreground/40 uppercase tracking-widest ml-1">Tags</label>
+              <label className="text-[10px] font-black text-muted uppercase tracking-widest ml-1">Tags</label>
               <input
                 type="text"
                 value={tags}

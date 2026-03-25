@@ -86,7 +86,7 @@ export default function AccountSwitcher({ isOpen, onClose }: { isOpen: boolean, 
         <div className="flex justify-between items-center mb-8 relative">
           <div>
             <h2 className="text-2xl font-black tracking-tighter text-foreground">Switch Account</h2>
-            <p className="text-xs text-foreground/40 font-bold uppercase tracking-widest mt-1">Manage your identities</p>
+            <p className="text-xs text-muted font-bold uppercase tracking-widest mt-1">Manage your identities</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-foreground/5 rounded-full transition-all text-foreground/40 hover:text-foreground">
             <X size={20} />
@@ -105,7 +105,7 @@ export default function AccountSwitcher({ isOpen, onClose }: { isOpen: boolean, 
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold truncate text-foreground">{acc.display_name || acc.username}</p>
-                <p className="text-[10px] text-foreground/40 font-mono tracking-tight font-bold">@{acc.username}</p>
+                <p className="text-[10px] text-muted font-mono tracking-tight font-bold">@{acc.username}</p>
               </div>
               
               {loading === acc.id ? (
@@ -125,10 +125,10 @@ export default function AccountSwitcher({ isOpen, onClose }: { isOpen: boolean, 
             onClick={addAccount}
             className="w-full flex items-center gap-4 p-4 rounded-2xl border border-dashed border-border hover:border-foreground/30 hover:bg-foreground/5 transition-all group"
           >
-            <div className="w-12 h-12 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-foreground/40 group-hover:text-foreground transition-colors">
+            <div className="w-12 h-12 rounded-xl bg-foreground/5 border border-border flex items-center justify-center text-muted group-hover:text-foreground transition-colors">
               <Plus size={20} />
             </div>
-            <span className="text-sm font-black uppercase tracking-widest text-foreground/40 group-hover:text-foreground">Add another account</span>
+            <span className="text-sm font-black uppercase tracking-widest text-muted group-hover:text-foreground">Add another account</span>
           </button>
         </div>
 
