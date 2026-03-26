@@ -5,49 +5,55 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 export default function BrandIntro() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
 
-    if (!sectionRef.current || !logoRef.current || !textRef.current) return
+    if (!containerRef.current || !logoRef.current || !textRef.current || !scrollIndicatorRef.current) return
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: sectionRef.current,
+        trigger: containerRef.current,
         start: "top top",
-        end: "+=120%",
+        end: "bottom top", 
         scrub: 1.2,
-        pin: true,
-        anticipatePin: 1,
-      },
+        pin: true, // Pin the content while scrolling the 120vh
+      }
     })
 
-    // Initial states
-    gsap.set(logoRef.current, { x: -200, opacity: 0, filter: "blur(10px)" })
-    gsap.set(textRef.current, { x: 200, opacity: 0, filter: "blur(10px)" })
+    // Cinematic Intro Sequence
+    tl.to(scrollIndicatorRef.current, { opacity: 0, duration: 0.2 }, 0)
     
-    tl.to([logoRef.current, textRef.current], {
-      x: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-      duration: 2,
-      stagger: 0.1,
-      ease: "power3.out",
-    })
-    .to(containerRef.current, {
-        scale: 1.05,
-        duration: 2,
-    }, "-=1")
-    .to(sectionRef.current, {
-      opacity: 0,
-      scale: 1.1,
-      filter: "blur(20px)",
-      duration: 1,
-    })
+    tl.to(logoRef.current, {
+        scale: 2,
+        y: -150,
+        opacity: 0,
+        filter: "blur(12px)",
+        duration: 1,
+        ease: "power2.inOut",
+        force3D: true
+    }, 0)
+
+    tl.to(textRef.current, {
+        scale: 0.7,
+        y: 150,
+        letterSpacing: "4em",
+        opacity: 0,
+        filter: "blur(12px)",
+        duration: 1,
+        ease: "power2.inOut",
+        force3D: true
+    }, 0)
+
+    tl.to(containerRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "none"
+    }, 0.8) // Fade out at the very end
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill())
@@ -55,39 +61,57 @@ export default function BrandIntro() {
   }, [])
 
   return (
-    <section 
-      ref={sectionRef} 
-      className="relative w-full h-screen flex flex-col items-center justify-center bg-background overflow-hidden z-[200] transition-colors duration-1000"
+    <div 
+      ref={containerRef} 
+      className="relative w-full h-[120vh] bg-black z-[100] perspective-[1200px] overflow-hidden"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(192,192,192,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(192,192,192,0.05),transparent_70%)]" />
-      
-      <div ref={containerRef} className="relative flex items-center gap-8 md:gap-12">
-        {/* Logo Slide-In */}
-        <div ref={logoRef} className="relative">
-            <div className="absolute inset-0 bg-foreground/5 blur-3xl rounded-full" />
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center pointer-events-none w-full">
+        
+        {/* Backdrop Spectral Glow */}
+        <div className="absolute inset-0 bg-white/5 blur-[120px] rounded-full scale-110 opacity-30 pointer-events-none" />
+
+        {/* Logo Layer */}
+        <div ref={logoRef} className="relative mb-16 md:mb-24 will-change-transform transform-gpu">
+            <div className="absolute inset-0 bg-white/5 blur-[60px] rounded-full scale-125 pointer-events-none" />
             <img 
               src="/logo.png" 
-              alt="Argentum" 
-              className="h-32 md:h-48 w-auto object-contain logo-blend relative z-10 filter" 
-              style={{ filter: "drop-shadow(0 0 20px rgba(192,192,192,0.2))" }}
+              alt="Logo" 
+              className="h-32 md:h-48 w-auto object-contain relative z-10 filter"
+              style={{ filter: "drop-shadow(0 0 30px rgba(255,255,255,0.2))" }}
             />
         </div>
 
-        {/* Brand Text Slide-In */}
-        <div ref={textRef} className="flex flex-col">
-            <h1 className="text-7xl md:text-[120px] font-black tracking-[-0.05em] text-foreground silver-glow-text leading-[0.8] mb-2">
-                ARGENTUM
+        {/* Typographic Layer */}
+        <div ref={textRef} className="flex flex-col items-center text-center w-full px-4 transform-gpu will-change-[transform,letter-spacing]">
+            <h1 className="text-6xl md:text-[150px] font-black italic tracking-tighter text-white silver-glow-text leading-[0.8] mb-10 select-none">
+              ARGENTUM
             </h1>
-            <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.5em] text-foreground/30 ml-2">
-                The Protocol of Builders
+            <p className="text-[10px] md:text-xs font-black uppercase text-white/20 ml-4 italic tracking-[0.8em]">
+              The Protocol of Builders
             </p>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div 
+          ref={scrollIndicatorRef}
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6"
+        >
+          <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 animate-pulse text-center">Scroll to Enter</span>
+          <div className="w-[1px] h-20 bg-gradient-to-b from-white/20 via-white/40 to-transparent relative overflow-hidden">
+            <div className="absolute inset-0 bg-white animate-scroll-line" />
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-foreground/40">Scroll to Enter</span>
-        <div className="w-px h-10 bg-gradient-to-b from-foreground/20 to-transparent" />
-      </div>
-    </section>
+      <style jsx>{`
+        @keyframes scroll-line {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+        .animate-scroll-line {
+          animation: scroll-line 2.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+        }
+      `}</style>
+    </div>
   )
 }

@@ -48,6 +48,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   const [avatarError, setAvatarError] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
   
   const { setIsOpen: setIsSearchOpen } = useSearch()
   
@@ -57,8 +58,16 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
 
   // Handlers
   const handleScroll = useCallback(() => {
-    setIsScrolled(window.scrollY > 20)
-  }, [])
+    const scrollY = window.scrollY
+    setIsScrolled(scrollY > 20)
+    
+    // On home page, hide navbar until the intro is nearly done
+    if (pathname === '/') {
+      setIsVisible(scrollY > 1000)
+    } else {
+      setIsVisible(true)
+    }
+  }, [pathname])
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (islandRef.current && !islandRef.current.contains(event.target as Node)) {
@@ -130,7 +139,7 @@ export default function Navbar({ onSearchClick }: NavbarProps) {
   return (
     <>
       <div 
-        className="fixed top-6 left-0 right-0 z-[100] flex justify-center pointer-events-none px-4"
+        className={`fixed top-6 left-0 right-0 z-[100] flex justify-center pointer-events-none px-4 transition-opacity duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => {
           if (!showDropdown) setIsExpanded(false)

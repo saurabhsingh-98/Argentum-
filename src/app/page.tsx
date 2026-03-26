@@ -5,6 +5,7 @@ import { CheckCircle2, Users, Zap, Activity, ArrowRight, Github, ChevronDown } f
 import Link from 'next/link'
 import * as motion from 'framer-motion/client'
 import BrandIntro from '@/components/BrandIntro'
+import Hero from '@/components/Hero'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -27,72 +28,8 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden pb-20 relative transition-colors duration-500">
       <BrandIntro />
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-40 px-4 lg:px-6">
-        <div className="container mx-auto text-center relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-border text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 mb-10 backdrop-blur-md"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            Proof of Work Social Protocol
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-6xl md:text-8xl lg:text-[130px] font-black tracking-tighter leading-[0.85] mb-10 text-foreground"
-          >
-            Build in Public. <br />
-            <span className="silver-glow-text dark:text-silver glass:glass-text">Prove it forever.</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="max-w-2xl mx-auto text-foreground/50 text-lg md:text-xl leading-relaxed mb-16 font-medium tracking-tight"
-          >
-            The premium social network for ambitious builders. 
-            Log your progress, verify your shipping history on-chain, 
-            and build a legacy that lasts in Argentum.
-          </motion.p>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-5"
-          >
-             <Link href="/new" className="px-12 py-5 silver-metallic rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-premium active:scale-95">
-                Start Building Now
-             </Link>
-             <Link href="/explore" className="px-12 py-5 hero-sub-button rounded-2xl font-black uppercase tracking-widest text-[11px]">
-                Explore Network
-             </Link>
-          </motion.div>
-
-          {/* Scroll Down Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          >
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground/20">Scroll to Explore</span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="text-foreground/20"
-            >
-              <ChevronDown size={20} />
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      
+      <Hero />
 
       {/* Stats Row */}
       <section className="py-20 border-y border-border bg-foreground/[0.01]">
