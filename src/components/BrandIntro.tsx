@@ -4,11 +4,14 @@ import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
+import { useTheme } from '@/context/ThemeContext'
+
 export default function BrandIntro() {
   const containerRef = useRef<HTMLDivElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const scrollIndicatorRef = useRef<HTMLDivElement>(null)
+  const { theme } = useTheme()
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -60,33 +63,40 @@ export default function BrandIntro() {
     }
   }, [])
 
+  // Theme-based colors
+  const isLight = theme === 'light'
+  const bgColor = isLight ? 'bg-white' : 'bg-black'
+  const textColor = isLight ? 'text-black' : 'text-white'
+  const subTextColor = isLight ? 'text-black/30' : 'text-white/20'
+  const glowColor = isLight ? 'bg-black/5' : 'bg-white/5'
+
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full h-[120vh] bg-black z-[100] perspective-[1200px] overflow-hidden"
+      className={`relative w-full h-[120vh] ${bgColor} z-[100] perspective-[1200px] overflow-hidden transition-colors duration-500`}
     >
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center pointer-events-none w-full">
         
         {/* Backdrop Spectral Glow */}
-        <div className="absolute inset-0 bg-white/5 blur-[120px] rounded-full scale-110 opacity-30 pointer-events-none" />
+        <div className={`absolute inset-0 ${glowColor} blur-[120px] rounded-full scale-110 opacity-30 pointer-events-none`} />
 
         {/* Logo Layer */}
         <div ref={logoRef} className="relative mb-16 md:mb-24 will-change-transform transform-gpu">
-            <div className="absolute inset-0 bg-white/5 blur-[60px] rounded-full scale-125 pointer-events-none" />
+            <div className={`absolute inset-0 ${glowColor} blur-[60px] rounded-full scale-125 pointer-events-none`} />
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="h-32 md:h-48 w-auto object-contain relative z-10 filter"
-              style={{ filter: "drop-shadow(0 0 30px rgba(255,255,255,0.2))" }}
+              className={`h-32 md:h-48 w-auto object-contain relative z-10 transition-all duration-500 ${isLight ? 'invert brightness-0' : ''}`}
+              style={{ filter: isLight ? "none" : "drop-shadow(0 0 30px rgba(255,255,255,0.2))" }}
             />
         </div>
 
         {/* Typographic Layer */}
         <div ref={textRef} className="flex flex-col items-center text-center w-full px-4 transform-gpu will-change-[transform,letter-spacing]">
-            <h1 className="text-6xl md:text-[150px] font-black italic tracking-tighter text-white silver-glow-text leading-[0.8] mb-10 select-none">
+            <h1 className={`text-6xl md:text-[150px] font-black italic tracking-tighter ${textColor} silver-glow-text leading-[0.8] mb-10 select-none`}>
               ARGENTUM
             </h1>
-            <p className="text-[10px] md:text-xs font-black uppercase text-white/20 ml-4 italic tracking-[0.8em]">
+            <p className={`text-[10px] md:text-xs font-black uppercase ${subTextColor} ml-4 italic tracking-[0.8em]`}>
               The Protocol of Builders
             </p>
         </div>
@@ -96,9 +106,9 @@ export default function BrandIntro() {
           ref={scrollIndicatorRef}
           className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6"
         >
-          <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 animate-pulse text-center">Scroll to Enter</span>
-          <div className="w-[1px] h-20 bg-gradient-to-b from-white/20 via-white/40 to-transparent relative overflow-hidden">
-            <div className="absolute inset-0 bg-white animate-scroll-line" />
+          <span className={`text-[10px] font-black uppercase tracking-[0.5em] ${subTextColor} animate-pulse text-center`}>Scroll to Enter</span>
+          <div className={`w-[1px] h-20 bg-gradient-to-b ${isLight ? 'from-black/10 via-black/20 to-transparent' : 'from-white/20 via-white/40 to-transparent'} relative overflow-hidden`}>
+            <div className={`absolute inset-0 ${isLight ? 'bg-black/40' : 'bg-white'} animate-scroll-line`} />
           </div>
         </div>
       </div>

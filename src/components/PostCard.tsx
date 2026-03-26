@@ -14,8 +14,10 @@ import {
   Check,
   Zap,
   Users,
-  Activity
+  Activity,
+  Trash2
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { Database } from '@/types/database'
 import ReactionButton from './ReactionButton'
 import { useEffect, useState, useRef } from 'react'
@@ -44,6 +46,8 @@ export default function PostCard({
   const [commentCount, setCommentCount] = useState<number>(post.comments_count ?? 0)
   const [avatarError, setAvatarError] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
   
   // 3D Tilt Motion Values
   const x = useMotionValue(0)
@@ -98,6 +102,29 @@ export default function PostCard({
     navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`)
     // Toast would be nice here
     setShowMenu(false)
+  }
+
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) return
+    
+    setIsDeleting(true)
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', post.id)
+
+      if (error) throw error
+      
+      // Successfully deleted
+      router.refresh()
+    } catch (error: any) {
+      console.error('Delete error:', error)
+      alert(`Failed to delete post: ${error.message}`)
+    } finally {
+      setIsDeleting(false)
+      setShowMenu(false)
+    }
   }
 
   const skills: string[] = post.users?.skills || []
@@ -220,6 +247,15 @@ export default function PostCard({
                   {!isOwner && (
                     <button onClick={() => { onReport?.(post.id); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-all">
                       <Flag size={14} /> Report post
+                    </button>
+                  )}
+                  {isOwner && (
+                    <button 
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-all"
+                    >
+                      <Trash2 size={14} /> {isDeleting ? 'Deleting...' : 'Delete post'}
                     </button>
                   )}
                 </motion.div>
