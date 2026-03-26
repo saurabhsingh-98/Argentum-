@@ -32,13 +32,17 @@ ADD CONSTRAINT post_reactions_post_id_fkey
   REFERENCES public.posts(id) 
   ON DELETE CASCADE;
 
--- reports (target_post_id)
-ALTER TABLE IF EXISTS public.reports
-DROP CONSTRAINT IF EXISTS reports_target_post_id_fkey,
-ADD CONSTRAINT reports_target_post_id_fkey 
-  FOREIGN KEY (target_post_id) 
-  REFERENCES public.posts(id) 
-  ON DELETE CASCADE;
+-- reports (check for both target_post_id and post_id)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'reports' AND column_name = 'target_post_id') THEN
+    ALTER TABLE public.reports DROP CONSTRAINT IF EXISTS reports_target_post_id_fkey;
+    ALTER TABLE public.reports ADD CONSTRAINT reports_target_post_id_fkey FOREIGN KEY (target_post_id) REFERENCES public.posts(id) ON DELETE CASCADE;
+  ELSIF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'reports' AND column_name = 'post_id') THEN
+    ALTER TABLE public.reports DROP CONSTRAINT IF EXISTS reports_post_id_fkey;
+    ALTER TABLE public.reports ADD CONSTRAINT reports_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON DELETE CASCADE;
+  END IF;
+END $$;
 
 -- 2. Fix View Increment Function Permissions
 GRANT EXECUTE ON FUNCTION public.increment_post_views(UUID) TO public;
